@@ -1,5 +1,9 @@
-import 'package:my_dinner/features/history_orders/domain/diet.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:my_dinner/features/my_diet/data/models/diet.dart';
 
+part 'meal.g.dart';
+
+@JsonSerializable()
 class Meal {
   final String name;
   final String description;
@@ -12,4 +16,6 @@ class Meal {
     this.servingDate,
     this.diet,
   });
+
+  factory Meal.fromJson(Map<String, dynamic> json) => _$MealFromJson(json);
 }

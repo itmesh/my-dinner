@@ -19,13 +19,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_cupertino_localizations: ^1.0.1
   get_it: ^3.1.0
-  intl: ^0.16.1
+  intl: ^0.16.0
   flutter_svg: ^0.17.0
   table_calendar: ^2.2.2
   getflutter: ^1.0.2
   flutter_rating_bar: ^3.0.1+1
   flutter_bloc: ^3.2.0
+  injectable: ^0.2.2
+  provider: ^4.0.2
+  intl_translation: ^0.17.9
+  equatable: ^1.1.0
+  either_option: ^1.0.5
+  mockito: ^4.1.1
+  bloc_test: ^3.1.0
+  json_serializable: ^3.2.5
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -35,6 +46,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  injectable_generator:
+  build_runner:
 
 
 # For information on the generic Dart part of this file, see the
@@ -45,6 +58,7 @@ flutter:
   assets:
     - assets/images/logo-white.svg
     - assets/images/food-background.jpg
+    - assets/demo/diet.json
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

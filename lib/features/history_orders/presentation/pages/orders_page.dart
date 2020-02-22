@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_dinner/features/address/pages/domain/entities/address.dart';
-import 'package:my_dinner/features/history_orders/domain/diet.dart';
+import 'package:my_dinner/features/my_diet/data/models/diet.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
 import 'package:my_dinner/features/new_order/pages/new_order_page.dart';
 import 'package:my_dinner/features/new_order/widgets/diet_card.dart';
@@ -37,11 +37,12 @@ class OrdersPage extends StatelessWidget {
                           .push(OrderDetailsPage.routeWithParams(index));
                     },
                     diet: Diet(
-                        calories: 4000,
-                        name: 'Dieta sportowa',
-                        dietCounts: 14,
-                        address: Address(),
-                        remarks: 'Dieta bardzo dobra ale za słona'),
+                      calories: 4000,
+                      name: 'Dieta sportowa',
+                      dietCounts: 14,
+                      address: Address(),
+                      remarks: 'Dieta bardzo dobra ale za słona',
+                    ),
                   )).toList(),
           SizedBox(
             height: 88.0,

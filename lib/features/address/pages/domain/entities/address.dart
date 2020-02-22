@@ -1,5 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import 'package:my_dinner/features/address/pages/domain/entities/delivery_hours.dart';
 
+part 'address.g.dart';
+
+@JsonSerializable()
 class Address {
   final String street;
   final String homeFlatNumber;
@@ -16,4 +21,7 @@ class Address {
     this.deliveryHours,
     this.remarks,
   });
+
+  factory Address.fromJson(Map<String, dynamic> json) =>
+      _$AddressFromJson(json);
 }

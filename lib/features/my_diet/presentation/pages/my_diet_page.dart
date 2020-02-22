@@ -1,19 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:my_dinner/features/history_orders/domain/diet.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_dinner/core/services/date_service.dart';
+import 'package:my_dinner/core/services/injection.dart';
+import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
+import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_event.dart';
+import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/meal_page.dart';
 import 'package:my_dinner/features/new_order/pages/edit_address_details_page.dart';
 import 'package:my_dinner/features/new_order/pages/new_order_page.dart';
-import 'package:my_dinner/model/meal.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class MyDietPage extends StatelessWidget {
-  final _calendarController = CalendarController();
-
+class MyDietPage extends StatefulWidget {
   static ModalRoute<dynamic> get route {
     return MaterialPageRoute(
       builder: (_) => MyDietPage(),
     );
+  }
+
+  @override
+  _MyDietPageState createState() => _MyDietPageState();
+}
+
+class _MyDietPageState extends State<MyDietPage> {
+  final CalendarController _calendarController = CalendarController();
+  final MyDietBloc _bloc = locator.get();
+
+  @override
+  void initState() {
+    super.initState();
+    DateService dateService = locator.get();
+    _bloc.add(LoadMyDiet(dateService.getCurrentDate()));
   }
 
   @override
@@ -22,41 +39,18 @@ class MyDietPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Moja dieta'),
       ),
-      body: Column(
-        children: <Widget>[
-          Calendar(
-            calendarController: _calendarController,
-          ),
-          Expanded(
-            child: PageView.builder(
-              itemBuilder: (context, position) => ListView(
-                children: <Widget>[
-                  ...meals
-                      .map((meal) => Card(
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.of(context)
-                                    .push(MealPage.routeWithParams(meal));
-                              },
-                              title: Text(meal.name),
-                              subtitle: Text(
-                                'Kasza z marynowanym kurczakiem w sosie własnym',
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                  SizedBox(height: 32.0),
-                ],
+      body: BlocBuilder(
+        bloc: _bloc,
+        builder: (context, state) {
+          return Column(
+            children: <Widget>[
+              Calendar(
+                calendarController: _calendarController,
               ),
-              onPageChanged: (position) {
-                _calendarController.setSelectedDay(
-                  _calendarController.selectedDay.add(Duration(days: 2)),
-                  isProgrammatic: false,
-                );
-              },
-            ),
-          ),
-        ],
+              _mapStateToWidget(state),
+            ],
+          );
+        },
       ),
       drawer: NavigationDrawer(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -93,39 +87,64 @@ class MyDietPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  static List<Meal> meals = [
-    Meal(
-      name: 'Śniadanie',
-      description: 'Kasza z marynowanym kurczakiem w sosie własnym',
-      diet: Diet(calories: 3000, name: 'Dieta sportowa 3000 kalorii'),
+Widget _mapStateToWidget(MyDietState state) {
+  if (state is InitialMyDiet) {
+    return _initialState();
+  } else if (state is LoadingMyDiet) {
+    return _loadingState();
+  } else if (state is LoadedMyDiet) {
+    return _loadedState(state);
+  } else if (state is Error) {
+    return _errorState();
+  }
+
+  throw UnimplementedError();
+}
+
+Widget _initialState() {
+  return SizedBox();
+}
+
+Widget _loadedState(LoadedMyDiet state) {
+  return Expanded(
+    child: PageView.builder(
+      itemBuilder: (context, position) => ListView(
+        children: <Widget>[
+          ...state.diet.meals
+              .map((meal) => Card(
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MealPage.routeWithParams(meal));
+                      },
+                      title: Text(meal.name),
+                      subtitle: Text(meal.description),
+                    ),
+                  ))
+              .toList(),
+          SizedBox(height: 32.0),
+        ],
+      ),
+      onPageChanged: (position) {},
     ),
-    Meal(
-      name: 'Drugie śniadanie',
-      description: 'Kasza z marynowanym kurczakiem w sosie własnym',
-      diet: Diet(calories: 3000, name: 'Dieta sportowa 3000 kalorii'),
+  );
+}
+
+Widget _loadingState() {
+  return LinearProgressIndicator();
+}
+
+Widget _errorState() {
+  return Expanded(
+    child: Center(
+      child: Text(
+        'Błąd sieci',
+        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
+      ),
     ),
-    Meal(
-      name: 'Obiad',
-      description: 'Kasza z marynowanym kurczakiem w sosie własnym',
-      diet: Diet(calories: 3000, name: 'Dieta sportowa 3000 kalorii'),
-    ),
-    Meal(
-      name: 'Podwieczorek',
-      description: 'Kasza z marynowanym kurczakiem w sosie własnym',
-      diet: Diet(calories: 3000, name: 'Dieta sportowa 3000 kalorii'),
-    ),
-    Meal(
-      name: 'Kolacja',
-      description: 'Kasza z marynowanym kurczakiem w sosie własnym',
-      diet: Diet(calories: 3000, name: 'Dieta sportowa 3000 kalorii'),
-    ),
-    Meal(
-      name: 'Dodatkowy posiłek nr. 1',
-      description: 'Kasza z marynowanym kurczakiem w sosie własnym',
-      diet: Diet(calories: 3000, name: 'Dieta sportowa 3000 kalorii'),
-    ),
-  ];
+  );
 }
 
 class Calendar extends StatefulWidget {

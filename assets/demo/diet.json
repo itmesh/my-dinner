@@ -1,0 +1,52 @@
+{
+  "meals" : [
+    {
+      "name": "Śniadanie",
+      "description": "Kasza z marynowanym kurczakiem w sosie własnym",
+      "diet": {
+        "calories": 3000,
+        "name": "Dieta sportowa 3000 kalorii"
+      }
+    },
+    {
+      "name": "Drugie śniadanie",
+      "description": "Kasza z marynowanym kurczakiem w sosie własnym",
+      "diet": {
+        "calories": 3000,
+        "name": "Dieta sportowa 3000 kalorii"
+      }
+    },
+    {
+      "name": "Obiad",
+      "description": "Kasza z marynowanym kurczakiem w sosie własnym",
+      "diet": {
+        "calories": 3000,
+        "name": "Dieta sportowa 3000 kalorii"
+      }
+    },
+    {
+      "name": "Podwieczorek",
+      "description": "Kasza z marynowanym kurczakiem w sosie własnym",
+      "diet": {
+        "calories": 3000,
+        "name": "Dieta sportowa 3000 kalorii"
+      }
+    },
+    {
+      "name": "Kolacja",
+      "description": "Kasza z marynowanym kurczakiem w sosie własnym",
+      "diet": {
+        "calories": 3000,
+        "name": "Dieta sportowa 3000 kalorii"
+      }
+    },
+    {
+      "name": "Dodatkowy posiłek 1",
+      "description": "Kasza z marynowanym kurczakiem w sosie własnym",
+      "diet": {
+        "calories": 3000,
+        "name": "Dieta sportowa 3000 kalorii"
+      }
+    }
+  ]
+}

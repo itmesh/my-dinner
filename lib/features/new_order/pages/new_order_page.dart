@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:my_dinner/features/address/pages/domain/entities/address.dart';
 import 'package:my_dinner/features/address/pages/domain/entities/delivery_hours.dart';
-import 'package:my_dinner/features/history_orders/domain/diet.dart';
+import 'package:my_dinner/features/my_diet/data/models/diet.dart';
 import 'package:my_dinner/features/new_order/pages/edit_address_details_page.dart';
 import 'package:my_dinner/features/new_order/pages/edit_diet_page.dart';
 import 'package:my_dinner/features/new_order/pages/edit_profile_page.dart';
@@ -296,7 +296,8 @@ class NewOrderPage extends StatelessWidget {
     Address(
       street: 'Spokojna',
       homeFlatNumber: '8/5',
-      deliveryHours: FakeDeliveryHours(),
+      deliveryHours:
+          DeliveryHours(DateTime(0, 0, 0, 8, 0), DateTime(0, 0, 0, 10, 0)),
       city: 'Kraków',
       postalCode: '30-054',
       remarks: 'Pin do bramki to 12344',
@@ -306,7 +307,8 @@ class NewOrderPage extends StatelessWidget {
     return Address(
       street: 'Spokojna',
       homeFlatNumber: '8/5',
-      deliveryHours: FakeDeliveryHours(),
+      deliveryHours:
+          DeliveryHours(DateTime(0, 0, 0, 8, 0), DateTime(0, 0, 0, 10, 0)),
       city: 'Kraków',
       postalCode: '30-054',
       remarks: 'Pin do bramki to 12344',
@@ -316,7 +318,8 @@ class NewOrderPage extends StatelessWidget {
   static List<Diet> mealsData1 = [
     Diet(
       address: Address(
-        deliveryHours: FakeDeliveryHours(),
+        deliveryHours:
+            DeliveryHours(DateTime(0, 0, 0, 8, 0), DateTime(0, 0, 0, 10, 0)),
       ),
       calories: 3000,
       name: 'Dieta 3000 kalorii',
@@ -327,7 +330,8 @@ class NewOrderPage extends StatelessWidget {
   static List<Diet> mealsData2 = List.generate(5, (index) {
     return Diet(
       address: Address(
-        deliveryHours: FakeDeliveryHours(),
+        deliveryHours:
+            DeliveryHours(DateTime(0, 0, 0, 8, 0), DateTime(0, 0, 0, 10, 0)),
       ),
       calories: 3000,
       name: 'Dieta 3000 kalorii',
