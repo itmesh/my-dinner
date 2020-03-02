@@ -11,14 +11,16 @@ import 'package:my_dinner/features/companies/domain/usecases/get_companies.dart'
 class CompanySelector extends ChangeNotifier {
   final GetCompanies _getCompanies;
   final List<Company> _companies = [];
+  bool isLoaded = false;
 
   CompanySelector(this._getCompanies);
 
   UnmodifiableListView<Company> get companies =>
       UnmodifiableListView(_companies);
 
-  void initailize() async {
+  void initialize() async {
     _companies.addAll(_eitherLoadedOrError(await _getCompanies(NoParams())));
+    isLoaded = true;
     notifyListeners();
   }
 
