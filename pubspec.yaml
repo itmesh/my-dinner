@@ -37,6 +37,8 @@ dependencies:
   mockito: ^4.1.1
   bloc_test: ^3.1.0
   json_serializable: ^3.2.5
+  meta: ^1.1.8
+  freezed_annotation:
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -48,6 +50,7 @@ dev_dependencies:
     sdk: flutter
   injectable_generator:
   build_runner:
+  freezed:
 
 
 # For information on the generic Dart part of this file, see the

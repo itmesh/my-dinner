@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_dinner/model/meal.dart';
+import 'package:my_dinner/features/my_diet/domain/models/meal.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class MealPage extends StatelessWidget {

@@ -6,8 +6,8 @@ part of 'meal.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Meal _$MealFromJson(Map<String, dynamic> json) {
-  return Meal(
+_$_Meal _$_$_MealFromJson(Map<String, dynamic> json) {
+  return _$_Meal(
     name: json['name'] as String,
     description: json['description'] as String,
     servingDate: json['servingDate'] == null
@@ -19,7 +19,7 @@ Meal _$MealFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$MealToJson(Meal instance) => <String, dynamic>{
+Map<String, dynamic> _$_$_MealToJson(_$_Meal instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'servingDate': instance.servingDate?.toIso8601String(),

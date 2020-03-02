@@ -2,7 +2,7 @@ import 'package:either_option/either_option.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:my_dinner/core/services/failures.dart';
-import 'package:my_dinner/features/my_diet/data/models/diet.dart';
+import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository_mock.dart';
 import 'package:my_dinner/features/my_diet/domain/usecases/get_diet.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_dinner/features/my_diet/data/models/diet.dart';
+import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 
 class DietCard extends StatelessWidget {
   final Diet diet;

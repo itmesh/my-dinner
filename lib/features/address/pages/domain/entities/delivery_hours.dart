@@ -1,15 +1,18 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:json_annotation/json_annotation.dart';
+
+part 'delivery_hours.freezed.dart';
 
 part 'delivery_hours.g.dart';
 
-@JsonSerializable()
-class DeliveryHours {
+@freezed
+abstract class DeliveryHours with _$DeliveryHours {
   static final DateFormat dateFormat = DateFormat('HH:mm');
-  final DateTime fromHour;
-  final DateTime toHour;
 
-  DeliveryHours(this.fromHour, this.toHour);
+  const factory DeliveryHours({
+    DateTime fromHour,
+    DateTime toHour,
+  }) = _DeliveryHours;
 
   @override
   String toString() => '$fromHour - $toHour';

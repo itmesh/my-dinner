@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_dinner/features/my_diet/data/models/diet.dart';
+import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 
 abstract class MyDietState extends Equatable {
   @override

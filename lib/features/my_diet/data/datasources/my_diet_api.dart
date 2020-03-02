@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:my_dinner/core/services/injection.dart';
-import 'package:my_dinner/features/my_diet/data/models/diet.dart';
+import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 
 abstract class MyDietApi {
   Future<Diet> getDiet(DateTime day);
@@ -17,7 +17,7 @@ class MyDietApiHttp implements MyDietApi {
 
   @override
   Future<Diet> getDiet(DateTime day) async {
-    return Diet();
+    throw UnimplementedError();
   }
 }
 
@@ -27,7 +27,12 @@ class MyDietApiDemo implements MyDietApi {
   @override
   Future<Diet> getDiet(DateTime day) async {
     await Future.delayed(Duration(seconds: 2));
-    String response = await rootBundle.loadString('assets/demo/diet.json');
+    String response;
+    if (day.day % 2 == 0) {
+      response = await rootBundle.loadString('assets/demo/diet.json');
+    } else {
+      response = await rootBundle.loadString('assets/demo/no_diet.json');
+    }
 
     // throw Exception();
     return Diet.fromJson(json.decode(response));

@@ -6,8 +6,8 @@ part of 'diet.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Diet _$DietFromJson(Map<String, dynamic> json) {
-  return Diet(
+_$_Diet _$_$_DietFromJson(Map<String, dynamic> json) {
+  return _$_Diet(
     name: json['name'] as String,
     calories: json['calories'] as int,
     dietCounts: json['dietCounts'] as int,
@@ -22,7 +22,7 @@ Diet _$DietFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$DietToJson(Diet instance) => <String, dynamic>{
+Map<String, dynamic> _$_$_DietToJson(_$_Diet instance) => <String, dynamic>{
       'name': instance.name,
       'calories': instance.calories,
       'dietCounts': instance.dietCounts,

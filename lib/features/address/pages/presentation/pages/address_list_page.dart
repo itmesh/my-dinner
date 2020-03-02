@@ -37,7 +37,9 @@ class AddressListPage extends StatelessWidget {
                     trailingIconType: TrailingIconType.arrow,
                     address: Address(
                       deliveryHours: DeliveryHours(
-                          DateTime(0, 0, 0, 8, 0), DateTime(0, 0, 0, 10, 0)),
+                        fromHour: DateTime(0, 0, 0, 8, 0),
+                        toHour: DateTime(0, 0, 0, 10, 0),
+                      ),
                       remarks: 'Jakieś tam uwagi 123',
                       postalCode: '30-054',
                       city: 'Kraków',

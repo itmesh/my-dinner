@@ -1,7 +1,7 @@
 import 'package:either_option/either_option.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_dinner/features/my_diet/data/models/diet.dart';
+import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/my_diet/domain/usecases/my_diet_mock.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/bloc.dart';
 

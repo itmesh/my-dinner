@@ -1,26 +1,20 @@
-import 'package:json_annotation/json_annotation.dart';
-
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:my_dinner/features/address/pages/domain/entities/delivery_hours.dart';
+
+part 'address.freezed.dart';
 
 part 'address.g.dart';
 
-@JsonSerializable()
-class Address {
-  final String street;
-  final String homeFlatNumber;
-  final String postalCode;
-  final String city;
-  final DeliveryHours deliveryHours;
-  final String remarks;
-
-  Address({
-    this.street,
-    this.homeFlatNumber,
-    this.postalCode,
-    this.city,
-    this.deliveryHours,
-    this.remarks,
-  });
+@freezed
+abstract class Address with _$Address {
+  const factory Address({
+    String street,
+    String homeFlatNumber,
+    String postalCode,
+    String city,
+    DeliveryHours deliveryHours,
+    String remarks,
+  }) = _Address;
 
   factory Address.fromJson(Map<String, dynamic> json) =>
       _$AddressFromJson(json);
