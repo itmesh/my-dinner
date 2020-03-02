@@ -10,11 +10,11 @@ import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart'
 @injectable
 class MyDietBloc extends Bloc<MyDietEvent, MyDietState> {
   final MyDietState _initialState;
-  final GetDiet getDiet;
+  final GetDiet getDiets;
 
   MyDietBloc(
     this._initialState,
-    this.getDiet,
+    this.getDiets,
   );
 
   @override
@@ -25,15 +25,15 @@ class MyDietBloc extends Bloc<MyDietEvent, MyDietState> {
     if (event is LoadMyDiet) {
       yield LoadingMyDiet();
       yield* _eitherLoadedOrError(
-          await getDiet(GetDietParams(event.selectedDay)));
+          await getDiets(GetDietParams(event.selectedDay)));
     }
   }
 
   Stream<MyDietState> _eitherLoadedOrError(
-      Either<Failure, Diet> either) async* {
+      Either<Failure, List<Diet>> either) async* {
     yield either.fold(
       (_) => Error(),
-      (diet) => LoadedMyDiet(diet),
+      (diets) => diets.isEmpty ? EmptyMyDiet() : LoadedMyDiet(diets),
     );
   }
 

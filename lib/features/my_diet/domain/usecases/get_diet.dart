@@ -8,14 +8,14 @@ import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository.dart';
 
 @singleton
-class GetDiet extends UseCase<Diet, GetDietParams> {
+class GetDiet extends UseCase<List<Diet>, GetDietParams> {
   final MyDietRepository myDietRepository;
 
   GetDiet(this.myDietRepository);
 
   @override
-  Future<Either<Failure, Diet>> call(params) async {
-    return await myDietRepository.getDiet(params.day);
+  Future<Either<Failure, List<Diet>>> call(params) async {
+    return await myDietRepository.getDiets(params.day);
   }
 }
 

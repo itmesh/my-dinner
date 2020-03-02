@@ -112,7 +112,7 @@ Widget _loadedState(LoadedMyDiet state) {
     child: PageView.builder(
       itemBuilder: (context, position) => ListView(
         children: <Widget>[
-          ...state.diet.meals
+          ...state.diets[0].meals
               .map((meal) => Card(
                     child: ListTile(
                       onTap: () {

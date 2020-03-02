@@ -6,7 +6,7 @@ import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository_mock.dart';
 import 'package:my_dinner/features/my_diet/domain/usecases/get_diet.dart';
 
-final Diet mockedDiet = Diet(name: 'some diet');
+final List<Diet> mockedDiets = [Diet(name: 'some diet')];
 
 main() {
   GetDiet getDiet;
@@ -17,29 +17,29 @@ main() {
     getDiet = GetDiet(myDietRepositoryMock);
   });
 
-  Future<Diet> _callGetDiet() async {
+  Future<List<Diet>> _callGetDiet() async {
     return (await getDiet(GetDietParams(DateTime.now()))).fold(
       (_) => null,
-      (_) => mockedDiet,
+      (_) => mockedDiets,
     );
   }
 
   test('GetDiet - get diet from mocked repository - should return mocked diet', () async {
     // arrange
-    when(myDietRepositoryMock.getDiet(any))
-        .thenAnswer((_) async => Right(mockedDiet));
+    when(myDietRepositoryMock.getDiets(any))
+        .thenAnswer((_) async => Right(mockedDiets));
     // act
-    Diet receivedDiet = await _callGetDiet();
+    List<Diet> receivedDiet = await _callGetDiet();
     // assert
-    expect(receivedDiet, mockedDiet);
+    expect(receivedDiet, mockedDiets);
   });
 
   test('GetDiet - get diet when server down - should return failure', () async {
     // arrange
-    when(myDietRepositoryMock.getDiet(any))
+    when(myDietRepositoryMock.getDiets(any))
         .thenAnswer((_) async => Left(Failure()));
     // act
-    Diet receivedDiet = await _callGetDiet();
+    List<Diet> receivedDiet = await _callGetDiet();
     // assert
     expect(receivedDiet, isNull);
   });

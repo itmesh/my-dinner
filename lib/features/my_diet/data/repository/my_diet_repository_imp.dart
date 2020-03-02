@@ -12,9 +12,9 @@ class MyDietRepositoryImp implements MyDietRepository {
 
   MyDietRepositoryImp(this.myDietApi);
 
-  Future<Either<Failure, Diet>> getDiet(DateTime day) async {
+  Future<Either<Failure, List<Diet>>> getDiets(DateTime day) async {
     try {
-      return Right(await myDietApi.getDiet(day));
+      return Right(await myDietApi.getDiets(day));
     } catch (e) {
       return Left(Failure());
     }
