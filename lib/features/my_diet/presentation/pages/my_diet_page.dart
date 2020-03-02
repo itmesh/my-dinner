@@ -29,8 +29,7 @@ class _MyDietPageState extends State<MyDietPage> {
   @override
   void initState() {
     super.initState();
-    DateService dateService = locator.get();
-    _bloc.add(LoadMyDiet(dateService.getCurrentDate()));
+    _bloc.add(LoadMyDiet(_calendarController.selectedDay));
   }
 
   @override
@@ -46,6 +45,8 @@ class _MyDietPageState extends State<MyDietPage> {
             children: <Widget>[
               Calendar(
                 calendarController: _calendarController,
+                onDaySelected: () =>
+                    _bloc.add(LoadMyDiet(_calendarController.selectedDay)),
               ),
               _mapStateToWidget(state),
             ],
@@ -87,70 +88,114 @@ class _MyDietPageState extends State<MyDietPage> {
       ),
     );
   }
-}
 
-Widget _mapStateToWidget(MyDietState state) {
-  if (state is InitialMyDiet) {
-    return _initialState();
-  } else if (state is LoadingMyDiet) {
-    return _loadingState();
-  } else if (state is LoadedMyDiet) {
-    return _loadedState(state);
-  } else if (state is Error) {
-    return _errorState();
+  Widget _mapStateToWidget(MyDietState state) {
+    if (state is InitialMyDiet) {
+      return _initialState();
+    } else if (state is LoadingMyDiet) {
+      return _loadingState();
+    } else if (state is LoadedMyDiet) {
+      return _loadedState(state);
+    } else if (state is Error) {
+      return _errorState();
+    } else if (state is EmptyMyDiet) {
+      return _emptyMyDiet();
+    }
+
+    throw UnimplementedError();
   }
 
-  throw UnimplementedError();
-}
+  Widget _initialState() {
+    return SizedBox();
+  }
 
-Widget _initialState() {
-  return SizedBox();
-}
-
-Widget _loadedState(LoadedMyDiet state) {
-  return Expanded(
-    child: PageView.builder(
-      itemBuilder: (context, position) => ListView(
-        children: <Widget>[
-          ...state.diets[0].meals
-              .map((meal) => Card(
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MealPage.routeWithParams(meal));
-                      },
-                      title: Text(meal.name),
-                      subtitle: Text(meal.description),
-                    ),
-                  ))
-              .toList(),
-          SizedBox(height: 32.0),
-        ],
+  Widget _emptyMyDiet() {
+    return Expanded(
+      child: Center(
+        child: Card(
+          child: InkWell(
+            onTap: () {},
+            child: SizedBox(
+              height: 150,
+              child: FractionallySizedBox(
+                widthFactor: 0.7,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Złóż zamówienie',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.add,
+                          size: 48.0,
+                          color: IconTheme.of(context).color.withOpacity(0.3),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
-      onPageChanged: (position) {},
-    ),
-  );
-}
+    );
+  }
 
-Widget _loadingState() {
-  return LinearProgressIndicator();
-}
-
-Widget _errorState() {
-  return Expanded(
-    child: Center(
-      child: Text(
-        'Błąd sieci',
-        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
+  Widget _loadedState(LoadedMyDiet state) {
+    return Expanded(
+      child: PageView.builder(
+        itemBuilder: (context, position) => ListView(
+          children: <Widget>[
+            ...state.diets[0].meals
+                .map((meal) => Card(
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(MealPage.routeWithParams(meal));
+                        },
+                        title: Text(meal.name),
+                        subtitle: Text(meal.description),
+                      ),
+                    ))
+                .toList(),
+            SizedBox(height: 32.0),
+          ],
+        ),
+        onPageChanged: (position) {},
       ),
-    ),
-  );
+    );
+  }
+
+  Widget _loadingState() {
+    return LinearProgressIndicator();
+  }
+
+  Widget _errorState() {
+    return Expanded(
+      child: Center(
+        child: Text(
+          'Błąd sieci',
+          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
 }
 
 class Calendar extends StatefulWidget {
   final CalendarController calendarController;
+  final VoidCallback onDaySelected;
 
-  const Calendar({Key key, this.calendarController}) : super(key: key);
+  const Calendar({
+    Key key,
+    this.calendarController,
+    this.onDaySelected,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -189,6 +234,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
         CalendarFormat.month: 'Month',
         CalendarFormat.week: 'Week',
       },
+      initialSelectedDay: widget.calendarController.selectedDay,
       key: GlobalKey(),
       calendarController: widget.calendarController,
       locale: 'pl_PL',
@@ -236,13 +282,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   void _onDaySelected(DateTime date) {
     widget.calendarController.setCalendarFormat(CalendarFormat.week);
     _animationController.forward();
-    /*
-    setState(() {
-      if (_selectedDays.contains(date)) {
-        _selectedDays.remove(date);
-      } else {
-        _selectedDays.add(date);
-      }
-    });*/
+    if (widget.onDaySelected != null) {
+      widget.onDaySelected();
+    }
   }
 }
