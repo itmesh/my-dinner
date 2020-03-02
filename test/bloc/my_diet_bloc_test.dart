@@ -24,7 +24,7 @@ main() {
 
   test('mapEventToState.LoadMyDiet - initial state - should emit LoadedMyDiet state with diet', () {
     // arrange
-    Diet diet = Diet.fromJson(jsonFixture('diet.json'));
+    Diet diet = Diet.fromJson(jsonFixture('diets.json'));
     when(getDietMock.call(any)).thenAnswer((_) async => Right([diet]));
     // assert later
     final expected = [

@@ -1,5 +1,6 @@
 import 'package:either_option/either_option.dart';
 import 'package:injectable/injectable.dart';
+import 'package:logger/logger.dart';
 import 'package:my_dinner/core/services/failures.dart';
 import 'package:my_dinner/features/my_diet/data/datasources/my_diet_api.dart';
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
@@ -16,7 +17,8 @@ class MyDietRepositoryImp implements MyDietRepository {
     try {
       return Right(await myDietApi.getDiets(day));
     } catch (e) {
-      return Left(Failure());
+      Logger().e(e);
+      return Left(ApiFailure());
     }
   }
 }

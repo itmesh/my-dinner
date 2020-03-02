@@ -1,5 +1,206 @@
 [
   {
-    "name": "FreshFit"
+    "name": "Oh my food",
+    "logoURL": "https://catering-logo-images.s3.eu-central-1.amazonaws.com/catering-ohmyfood.png",
+    "availDiets": [
+      "INSULIN CARE",
+      "Optimal",
+      "Paleo",
+      "INSULIN CARE WEGE + RYBA",
+      "Samuraj"
+    ],
+    "rating": {
+      "rate": 4.23,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Catering dietetyczny Divine Food",
+    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-divinefood.png",
+    "availDiets": [
+      "Fit Mama",
+      "Gluten Free",
+      "Gluten&Lactose Free",
+      "Kids",
+      "NISKI IG",
+      "Odchudzająca",
+      "Office Box",
+      "Sport",
+      "Standard",
+      "Vegan",
+      "Vege + Fish",
+      "Lactose Free"
+    ],
+    "rating": {
+      "rate": 2.31,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Love Catering",
+    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
+    "availDiets": [
+      "Dieta premium",
+      "Fit Woman",
+      "Slim fit",
+      "Sport Man"
+    ],
+    "rating": {
+      "rate": 5.0,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Oh my food",
+    "logoURL": "https://catering-logo-images.s3.eu-central-1.amazonaws.com/catering-ohmyfood.png",
+    "availDiets": [
+      "INSULIN CARE",
+      "Optimal",
+      "Paleo",
+      "INSULIN CARE WEGE + RYBA",
+      "Samuraj"
+    ],
+    "rating": {
+      "rate": 4.23,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Catering dietetyczny Divine Food",
+    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-divinefood.png",
+    "availDiets": [
+      "Fit Mama",
+      "Gluten Free",
+      "Gluten&Lactose Free",
+      "Kids",
+      "NISKI IG",
+      "Odchudzająca",
+      "Office Box",
+      "Sport",
+      "Standard",
+      "Vegan",
+      "Vege + Fish",
+      "Lactose Free"
+    ],
+    "rating": {
+      "rate": 2.31,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Love Catering",
+    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
+    "availDiets": [
+      "Dieta premium",
+      "Fit Woman",
+      "Slim fit",
+      "Sport Man"
+    ],
+    "rating": {
+      "rate": 5.0,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Oh my food",
+    "logoURL": "https://catering-logo-images.s3.eu-central-1.amazonaws.com/catering-ohmyfood.png",
+    "availDiets": [
+      "INSULIN CARE",
+      "Optimal",
+      "Paleo",
+      "INSULIN CARE WEGE + RYBA",
+      "Samuraj"
+    ],
+    "rating": {
+      "rate": 4.23,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Catering dietetyczny Divine Food",
+    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-divinefood.png",
+    "availDiets": [
+      "Fit Mama",
+      "Gluten Free",
+      "Gluten&Lactose Free",
+      "Kids",
+      "NISKI IG",
+      "Odchudzająca",
+      "Office Box",
+      "Sport",
+      "Standard",
+      "Vegan",
+      "Vege + Fish",
+      "Lactose Free"
+    ],
+    "rating": {
+      "rate": 2.31,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Love Catering",
+    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
+    "availDiets": [
+      "Dieta premium",
+      "Fit Woman",
+      "Slim fit",
+      "Sport Man"
+    ],
+    "rating": {
+      "rate": 5.0,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Oh my food",
+    "logoURL": "https://catering-logo-images.s3.eu-central-1.amazonaws.com/catering-ohmyfood.png",
+    "availDiets": [
+      "INSULIN CARE",
+      "Optimal",
+      "Paleo",
+      "INSULIN CARE WEGE + RYBA",
+      "Samuraj"
+    ],
+    "rating": {
+      "rate": 4.23,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Catering dietetyczny Divine Food",
+    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-divinefood.png",
+    "availDiets": [
+      "Fit Mama",
+      "Gluten Free",
+      "Gluten&Lactose Free",
+      "Kids",
+      "NISKI IG",
+      "Odchudzająca",
+      "Office Box",
+      "Sport",
+      "Standard",
+      "Vegan",
+      "Vege + Fish",
+      "Lactose Free"
+    ],
+    "rating": {
+      "rate": 2.31,
+      "votesCount": 238
+    }
+  },
+  {
+    "name": "Love Catering",
+    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
+    "availDiets": [
+      "Dieta premium",
+      "Fit Woman",
+      "Slim fit",
+      "Sport Man"
+    ],
+    "rating": {
+      "rate": 5.0,
+      "votesCount": 238
+    }
   }
 ]

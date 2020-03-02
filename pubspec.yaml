@@ -39,6 +39,8 @@ dependencies:
   json_serializable: ^3.2.5
   meta: ^1.1.8
   freezed_annotation:
+  cached_network_image: ^2.0.0
+  logger: ^0.6.0
 
 
   # The following adds the Cupertino Icons font to your application.

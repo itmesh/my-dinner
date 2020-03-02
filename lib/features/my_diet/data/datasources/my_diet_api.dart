@@ -30,9 +30,9 @@ class MyDietApiDemo implements MyDietApi {
     await DemoUtils.smallDelay;
     String response;
     if (day.day % 2 == 0) {
-      response = await rootBundle.loadString('assets/demo/diet.json');
+      response = await rootBundle.loadString('assets/demo/diets.json');
     } else {
-      response = await rootBundle.loadString('assets/demo/no_diet.json');
+      response = await rootBundle.loadString('assets/demo/no_diets.json');
     }
 
     // throw Exception();

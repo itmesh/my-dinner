@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_dinner/core/services/date_service.dart';
 import 'package:my_dinner/core/services/injection.dart';
+import 'package:my_dinner/features/companies/presentation/companies.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_event.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
@@ -29,7 +30,7 @@ class _MyDietPageState extends State<MyDietPage> {
   @override
   void initState() {
     super.initState();
-    _bloc.add(LoadMyDiet(_calendarController.selectedDay));
+    _bloc.add(LoadMyDiet(locator.get<DateService>().getCurrentDate()));
   }
 
   @override
@@ -111,37 +112,56 @@ class _MyDietPageState extends State<MyDietPage> {
 
   Widget _emptyMyDiet() {
     return Expanded(
-      child: Center(
-        child: Card(
-          child: InkWell(
-            onTap: () {},
-            child: SizedBox(
-              height: 150,
-              child: FractionallySizedBox(
-                widthFactor: 0.7,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'Złóż zamówienie',
-                        style: TextStyle(fontSize: 16.0),
+      child: PageView.builder(
+        itemCount: 3,
+        controller: PageController(initialPage: 1),
+        onPageChanged: (index) {
+          print(index);
+          _calendarController.setSelectedDay(
+            _calendarController.selectedDay.add(
+              Duration(days: index - 1),
+            ),
+            runCallback: true,
+          );
+        },
+        itemBuilder: (_, index) {
+          if (index != 1) return SizedBox();
+          return Center(
+            child: Card(
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(Companies.route);
+                },
+                child: SizedBox(
+                  height: 150,
+                  child: FractionallySizedBox(
+                    widthFactor: 0.7,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Złóż zamówienie',
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.add,
+                              size: 48.0,
+                              color:
+                                  IconTheme.of(context).color.withOpacity(0.3),
+                            ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.add,
-                          size: 48.0,
-                          color: IconTheme.of(context).color.withOpacity(0.3),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -149,24 +169,39 @@ class _MyDietPageState extends State<MyDietPage> {
   Widget _loadedState(LoadedMyDiet state) {
     return Expanded(
       child: PageView.builder(
-        itemBuilder: (context, position) => ListView(
-          children: <Widget>[
-            ...state.diets[0].meals
-                .map((meal) => Card(
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.of(context)
-                              .push(MealPage.routeWithParams(meal));
-                        },
-                        title: Text(meal.name),
-                        subtitle: Text(meal.description),
-                      ),
-                    ))
-                .toList(),
-            SizedBox(height: 32.0),
-          ],
+        controller: PageController(
+          initialPage: 1,
         ),
-        onPageChanged: (position) {},
+        itemCount: 3,
+        itemBuilder: (context, position) {
+          if (position != 1) return SizedBox();
+          return ListView(
+            children: <Widget>[
+              ...state.diets[0].meals
+                  .map((meal) => Card(
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(MealPage.routeWithParams(meal));
+                          },
+                          title: Text(meal.name),
+                          subtitle: Text(meal.description),
+                        ),
+                      ))
+                  .toList(),
+              SizedBox(height: 32.0),
+            ],
+          );
+        },
+        onPageChanged: (index) {
+          print(index);
+          _calendarController.setSelectedDay(
+            _calendarController.selectedDay.add(
+              Duration(days: index - 1),
+            ),
+            runCallback: true,
+          );
+        },
       ),
     );
   }

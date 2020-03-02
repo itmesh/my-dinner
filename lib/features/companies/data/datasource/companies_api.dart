@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:injectable/injectable.dart';
+
+import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/utils/demo.dart';
 import 'package:my_dinner/features/companies/domain/models/company.dart';
 
@@ -8,6 +11,8 @@ abstract class CompaniesApi {
   Future<List<Company>> getCompanies();
 }
 
+@RegisterAs(CompaniesApi)
+@singleton
 class CompaniesApiHttp extends CompaniesApi {
   @override
   Future<List<Company>> getCompanies() async {
@@ -15,6 +20,8 @@ class CompaniesApiHttp extends CompaniesApi {
   }
 }
 
+@RegisterAs(CompaniesApi, env: Env.demo)
+@singleton
 class CompaniesApiDemo extends CompaniesApi {
   @override
   Future<List<Company>> getCompanies() async {
@@ -22,6 +29,9 @@ class CompaniesApiDemo extends CompaniesApi {
 
     String response = await rootBundle.loadString('assets/demo/companies.json');
 
-    return json.decode(response).map((e) => Company.fromJson(e)).toList();
+    return json
+        .decode(response)
+        .map<Company>((e) => Company.fromJson(e))
+        .toList();
   }
 }
