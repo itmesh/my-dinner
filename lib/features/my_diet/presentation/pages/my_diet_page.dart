@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_dinner/core/services/date_service.dart';
 import 'package:my_dinner/core/services/injection.dart';
-import 'package:my_dinner/features/companies/presentation/companies.dart';
+import 'package:my_dinner/features/companies/presentation/pages/companies.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_event.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
