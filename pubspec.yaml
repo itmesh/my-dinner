@@ -41,6 +41,9 @@ dependencies:
   freezed_annotation:
   cached_network_image: ^2.0.0
   logger: ^0.6.0
+  mobx: ^1.0.2+1
+  sticky_headers: ^0.1.8+1
+  flutter_redux: ^0.6.0
 
 
   # The following adds the Cupertino Icons font to your application.

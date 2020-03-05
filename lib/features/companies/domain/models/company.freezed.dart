@@ -14,11 +14,16 @@ Company _$CompanyFromJson(Map<String, dynamic> json) {
 mixin _$Company {
   String get name;
   String get logoURL;
-  List<String> get availDiets;
+  List<DietOffer> get availDiets;
   Rating get rating;
+  int get priceLevel;
 
   Company copyWith(
-      {String name, String logoURL, List<String> availDiets, Rating rating});
+      {String name,
+      String logoURL,
+      List<DietOffer> availDiets,
+      Rating rating,
+      int priceLevel});
 
   Map<String, dynamic> toJson();
 }
@@ -27,12 +32,17 @@ class _$CompanyTearOff {
   const _$CompanyTearOff();
 
   _Company call(
-      {String name, String logoURL, List<String> availDiets, Rating rating}) {
+      {String name,
+      String logoURL,
+      List<DietOffer> availDiets,
+      Rating rating,
+      int priceLevel}) {
     return _Company(
       name: name,
       logoURL: logoURL,
       availDiets: availDiets,
       rating: rating,
+      priceLevel: priceLevel,
     );
   }
 }
@@ -41,7 +51,8 @@ const $Company = _$CompanyTearOff();
 
 @JsonSerializable()
 class _$_Company implements _Company {
-  const _$_Company({this.name, this.logoURL, this.availDiets, this.rating});
+  const _$_Company(
+      {this.name, this.logoURL, this.availDiets, this.rating, this.priceLevel});
 
   factory _$_Company.fromJson(Map<String, dynamic> json) =>
       _$_$_CompanyFromJson(json);
@@ -51,13 +62,15 @@ class _$_Company implements _Company {
   @override
   final String logoURL;
   @override
-  final List<String> availDiets;
+  final List<DietOffer> availDiets;
   @override
   final Rating rating;
+  @override
+  final int priceLevel;
 
   @override
   String toString() {
-    return 'Company(name: $name, logoURL: $logoURL, availDiets: $availDiets, rating: $rating)';
+    return 'Company(name: $name, logoURL: $logoURL, availDiets: $availDiets, rating: $rating, priceLevel: $priceLevel)';
   }
 
   @override
@@ -73,7 +86,10 @@ class _$_Company implements _Company {
                 const DeepCollectionEquality()
                     .equals(other.availDiets, availDiets)) &&
             (identical(other.rating, rating) ||
-                const DeepCollectionEquality().equals(other.rating, rating)));
+                const DeepCollectionEquality().equals(other.rating, rating)) &&
+            (identical(other.priceLevel, priceLevel) ||
+                const DeepCollectionEquality()
+                    .equals(other.priceLevel, priceLevel)));
   }
 
   @override
@@ -82,7 +98,8 @@ class _$_Company implements _Company {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(logoURL) ^
       const DeepCollectionEquality().hash(availDiets) ^
-      const DeepCollectionEquality().hash(rating);
+      const DeepCollectionEquality().hash(rating) ^
+      const DeepCollectionEquality().hash(priceLevel);
 
   @override
   _$_Company copyWith({
@@ -90,13 +107,16 @@ class _$_Company implements _Company {
     Object logoURL = freezed,
     Object availDiets = freezed,
     Object rating = freezed,
+    Object priceLevel = freezed,
   }) {
     return _$_Company(
       name: name == freezed ? this.name : name as String,
       logoURL: logoURL == freezed ? this.logoURL : logoURL as String,
-      availDiets:
-          availDiets == freezed ? this.availDiets : availDiets as List<String>,
+      availDiets: availDiets == freezed
+          ? this.availDiets
+          : availDiets as List<DietOffer>,
       rating: rating == freezed ? this.rating : rating as Rating,
+      priceLevel: priceLevel == freezed ? this.priceLevel : priceLevel as int,
     );
   }
 
@@ -110,8 +130,9 @@ abstract class _Company implements Company {
   const factory _Company(
       {String name,
       String logoURL,
-      List<String> availDiets,
-      Rating rating}) = _$_Company;
+      List<DietOffer> availDiets,
+      Rating rating,
+      int priceLevel}) = _$_Company;
 
   factory _Company.fromJson(Map<String, dynamic> json) = _$_Company.fromJson;
 
@@ -120,11 +141,17 @@ abstract class _Company implements Company {
   @override
   String get logoURL;
   @override
-  List<String> get availDiets;
+  List<DietOffer> get availDiets;
   @override
   Rating get rating;
+  @override
+  int get priceLevel;
 
   @override
   _Company copyWith(
-      {String name, String logoURL, List<String> availDiets, Rating rating});
+      {String name,
+      String logoURL,
+      List<DietOffer> availDiets,
+      Rating rating,
+      int priceLevel});
 }

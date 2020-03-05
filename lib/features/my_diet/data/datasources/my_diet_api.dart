@@ -32,7 +32,7 @@ class MyDietApiDemo implements MyDietApi {
     if (day.day % 2 == 0) {
       response = await rootBundle.loadString('assets/demo/diets.json');
     } else {
-      response = await rootBundle.loadString('assets/demo/no_diets.json');
+      response = await rootBundle.loadString('assets/demo/empty_array.json');
     }
 
     // throw Exception();

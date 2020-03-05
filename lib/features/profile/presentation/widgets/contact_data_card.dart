@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_dinner/features/profile/domain/entities/contact_data.dart';
+import 'package:my_dinner/features/profile/domain/entities/profile.dart';
 
 class ContactDataCard extends StatelessWidget {
-  final ContactData contactData;
+  final Profile contactData;
   final GestureTapCallback onEdit;
 
   const ContactDataCard({Key key, this.contactData, this.onEdit})

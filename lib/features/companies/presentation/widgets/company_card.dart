@@ -2,28 +2,40 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
-import 'package:getflutter/components/button/gf_icon_button.dart';
 import 'package:getflutter/components/card/gf_card.dart';
 import 'package:getflutter/components/list_tile/gf_list_tile.dart';
 import 'package:getflutter/size/gf_size.dart';
 import 'package:my_dinner/features/companies/domain/models/company.dart';
+import 'package:my_dinner/features/companies/domain/models/diet_offer.dart';
+import 'package:my_dinner/widgets/selectable_card.dart';
+
+typedef OnSelect = void Function(Company value);
 
 class CompanyCard extends StatefulWidget {
   final Company company;
+  final OnSelect onSelect;
+  final bool selected;
 
-  const CompanyCard(this.company);
+  const CompanyCard({
+    this.company,
+    this.onSelect,
+    this.selected = false,
+  });
 
   @override
   State<StatefulWidget> createState() {
-    return CompanyCardState();
+    return _CompanyCardState(selected);
   }
 }
 
-class CompanyCardState extends State<CompanyCard>
+class _CompanyCardState extends State<CompanyCard>
     with TickerProviderStateMixin {
   final _showAllChipsDuration = Duration(milliseconds: 400);
   final ValueNotifier<bool> _showAllChips = ValueNotifier<bool>(false);
   AnimationController _showingAllChipsController;
+  bool selected = false;
+
+  _CompanyCardState(this.selected);
 
   @override
   void initState() {
@@ -37,81 +49,114 @@ class CompanyCardState extends State<CompanyCard>
 
   @override
   Widget build(BuildContext context) {
-    return GFCard(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      title: GFListTile(
-        avatar: GFAvatar(
-          size: GFSize.large,
-          backgroundImage: CachedNetworkImageProvider(widget.company.logoURL),
-        ),
-        icon: GFIconButton(
-          icon: Icon(Icons.shopping_cart),
-          onPressed: () {},
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              widget.company.name,
+    return SelectableGFCard(
+      selected: selected,
+      card: GFCard(
+        margin: EdgeInsets.only(bottom: 8.0),
+        title: GFListTile(
+          avatar: GFAvatar(
+            size: GFSize.large,
+            backgroundImage: CachedNetworkImageProvider(widget.company.logoURL),
+          ),
+          icon: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Text(
+              '\$\$',
               style: TextStyle(fontSize: 18.0),
             ),
-            SizedBox(
-              height: 4.0,
-            ),
-            Row(
-              children: <Widget>[
-                RatingBar(
-                  initialRating: widget.company.rating.rate,
-                  itemSize: 20.0,
-                  itemBuilder: (context, _) => Icon(
-                    Icons.star,
-                    color: Colors.amber,
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                widget.company.name,
+                style: TextStyle(fontSize: 18.0),
+              ),
+              SizedBox(
+                height: 4.0,
+              ),
+              Row(
+                children: <Widget>[
+                  AbsorbPointer(
+                    child: RatingBar(
+                      allowHalfRating: true,
+                      initialRating: widget.company.rating.rate,
+                      itemSize: 20.0,
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (_) {},
+                    ),
                   ),
-                  onRatingUpdate: (_) {},
-                ),
-                SizedBox(width: 8.0),
-                Text(widget.company.rating.rate.toString()),
-                SizedBox(width: 4.0),
-                Text(widget.company.rating.votesCount.toString()),
+                  SizedBox(width: 8.0),
+                  Text(widget.company.rating.rate.toString()),
+                  SizedBox(width: 4.0),
+                  Text(widget.company.rating.votesCount.toString()),
+                ],
+              )
+            ],
+          ),
+        ),
+        content: Column(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: ValueListenableBuilder(
+                valueListenable: _showAllChips,
+                builder: (_, __, ___) {
+                  return AnimatedSize(
+                    vsync: this,
+                    duration: _showAllChipsDuration,
+                    alignment: Alignment.topCenter,
+                    child: Wrap(
+                      spacing: 6.0,
+                      alignment: WrapAlignment.start,
+                      children: _buildLimitedChips(widget.company.availDiets),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                FlatButton(
+                  textColor: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    if (widget.onSelect != null)
+                      widget.onSelect(widget.company);
+                  },
+                  child: Text('Wybierz'),
+                )
               ],
             )
           ],
         ),
       ),
-      content: Container(
-        width: double.infinity,
-        child: ValueListenableBuilder(
-          valueListenable: _showAllChips,
-          builder: (_, __, ___) {
-            return AnimatedSize(
-              vsync: this,
-              duration: _showAllChipsDuration,
-              alignment: Alignment.topCenter,
-              child: Wrap(
-                spacing: 6.0,
-                alignment: WrapAlignment.start,
-                children: _buildLimitedChips(widget.company.availDiets),
-              ),
-            );
-          },
-        ),
-      ),
     );
   }
 
-  List<Widget> _buildLimitedChips(List<String> diets, {int limit = 5}) {
+  List<Widget> _buildLimitedChips(List<DietOffer> diets, {int limit = 5}) {
     if (_showAllChips.value) {
-      return diets.sublist(0, limit).map((e) => _buildChip(label: e)).toList()
-        ..addAll(diets
-            .sublist(limit)
-            .map((e) => _buildChip(label: e, withAnimation: true))
-            .toList());
+      return diets
+          .sublist(0, limit)
+          .map((e) => _buildChip(label: e.name))
+          .toList()
+            ..addAll(diets
+                .sublist(limit)
+                .map((e) => _buildChip(label: e.name, withAnimation: true))
+                .toList());
     } else {
       if (diets.length > limit) {
-        return diets.sublist(0, limit).map((e) => _buildChip(label: e)).toList()
-          ..add(_buildChip(label: '...', onTap: _showMoreChips));
+        return diets
+            .sublist(0, limit)
+            .map((e) => _buildChip(label: e.name))
+            .toList()
+              ..add(_buildChip(label: '...', onTap: _showMoreChips));
       } else {
-        return diets.map((e) => _buildChip(label: e)).toList();
+        return diets.map((e) => _buildChip(label: e.name)).toList();
       }
     }
   }

@@ -11,7 +11,7 @@ import 'package:my_dinner/features/new_order/pages/edit_profile_page.dart';
 import 'package:my_dinner/features/address/pages/presentation/pages/widgets/address_card.dart';
 import 'package:my_dinner/features/profile/presentation/widgets/contact_data_card.dart';
 import 'package:my_dinner/features/new_order/widgets/diet_card.dart';
-import 'package:my_dinner/features/profile/domain/entities/contact_data.dart';
+import 'package:my_dinner/features/profile/domain/entities/profile.dart';
 
 class NewOrderPage extends StatelessWidget {
   static Route<dynamic> get route {
@@ -87,7 +87,7 @@ class NewOrderPage extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 12.0),
           child: Container(
             child: ContactDataCard(
-              contactData: ContactData(
+              contactData: Profile(
                 name: 'Krzysztof',
                 surname: 'Wizner',
                 email: 'krzysztofwiz93@gmail.com',
