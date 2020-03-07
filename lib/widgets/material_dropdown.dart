@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 typedef OnChange<T> = void Function(T value);
 
-class MaterialDropDown<T> extends StatelessWidget {
+class MaterialDropdown<T> extends StatelessWidget {
   final DropdownButtonFormField dropDown;
   final String title;
 
-  const MaterialDropDown({
+  const MaterialDropdown({
     Key key,
     this.title,
     this.dropDown,

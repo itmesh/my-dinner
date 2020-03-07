@@ -19,6 +19,8 @@ import 'package:my_dinner/features/pick_diet/data/repository/companies_repositor
 import 'package:my_dinner/features/pick_diet/domain/repositories/companies_repository.dart';
 import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
 import 'package:my_dinner/features/pick_diet/presentation/provider/company_selector.dart';
+import 'package:my_dinner/features/address/domain/usecases/add_address.dart';
+import 'package:my_dinner/features/address/domain/usecases/update_address.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -67,4 +69,6 @@ void _registerEagerSingletons(GetIt g, String environment) {
   g.registerSingleton<GetCompanies>(GetCompanies(
     g<CompaniesRepository>(),
   ));
+  g.registerSingleton<AddAddress>(AddAddress());
+  g.registerSingleton<UpdateAddress>(UpdateAddress());
 }

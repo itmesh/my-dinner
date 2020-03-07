@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
@@ -9,6 +8,10 @@ import 'package:my_dinner/features/address/domain/models/address.dart';
 
 abstract class AddressApi {
   Future<List<Address>> getAddresses();
+
+  Future<Address> addAddress(Address address);
+
+  Future<Address> updateAddress(Address address);
 }
 
 @RegisterAs(AddressApi)
@@ -16,6 +19,16 @@ abstract class AddressApi {
 class AddressHttpApi extends AddressApi {
   @override
   Future<List<Address>> getAddresses() {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Address> addAddress(Address address) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Address> updateAddress(Address address) {
     throw UnimplementedError();
   }
 }
@@ -26,9 +39,21 @@ class AddressDemoApi extends AddressApi {
   @override
   Future<List<Address>> getAddresses() async {
     await DemoUtils.smallDelay;
-    String response = await rootBundle.loadString('asset/demo/addresses.json');
+    String response = await rootBundle.loadString('assets/demo/addresses.json');
     return jsonDecode(response)
         .map<Address>((e) => Address.fromJson(e))
         .toList();
+  }
+
+  @override
+  Future<Address> addAddress(Address address) async {
+    await DemoUtils.smallDelay;
+    return address;
+  }
+
+  @override
+  Future<Address> updateAddress(Address address) async {
+    await DemoUtils.smallDelay;
+    throw address;
   }
 }

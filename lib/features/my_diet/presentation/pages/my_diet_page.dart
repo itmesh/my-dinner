@@ -13,7 +13,7 @@ import 'package:my_dinner/widgets/navigation_drawer.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class MyDietPage extends StatefulWidget {
-  static ModalRoute<dynamic> get route {
+  static ModalRoute<void> get route {
     return MaterialPageRoute(
       builder: (_) => MyDietPage(),
     );
