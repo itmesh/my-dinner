@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:my_dinner/features/address/pages/domain/entities/address.dart';
+import 'package:my_dinner/features/address/domain/models/address.dart';
 import 'package:my_dinner/features/my_diet/domain/models/meal.dart';
 
 part 'diet.freezed.dart';

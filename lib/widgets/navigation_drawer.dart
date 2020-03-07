@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:my_dinner/features/address/pages/presentation/pages/address_list_page.dart';
+import 'package:my_dinner/features/address/presentation/pages/address_list_page.dart';
 import 'package:my_dinner/features/history_meals/history_meals_page.dart';
 import 'package:my_dinner/features/history_orders/presentation/pages/orders_page.dart';
 import 'package:my_dinner/features/login/login_page.dart';

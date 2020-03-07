@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_dinner/core/services/date_service.dart';
 import 'package:my_dinner/core/services/injection.dart';
-import 'package:my_dinner/features/companies/presentation/pages/companies.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_event.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/meal_page.dart';
-import 'package:my_dinner/features/new_order/pages/edit_address_details_page.dart';
-import 'package:my_dinner/features/new_order/pages/new_order_page.dart';
+import 'package:my_dinner/features/new_order/presentation/pages/edit_address_details_page.dart';
+import 'package:my_dinner/features/new_order/presentation/pages/new_order_page.dart';
+import 'package:my_dinner/features/pick_diet/presentation/pages/companies.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -56,14 +56,38 @@ class _MyDietPageState extends State<MyDietPage> {
       ),
       drawer: NavigationDrawer(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: BlocBuilder(
+        bloc: _bloc,
+        builder: (_, __) {
+          return _buildFloatingButton();
+        },
+      ),
+      bottomNavigationBar: BlocBuilder(
+        bloc: _bloc,
+        builder: (_, __) {
+          return _buildBottomBar();
+        },
+      ),
+    );
+  }
+
+  Widget _buildFloatingButton() {
+    if (_bloc.state is LoadedMyDiet) {
+      return FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(NewOrderPage.route);
         },
         child: Icon(Icons.add),
         backgroundColor: Theme.of(context).primaryColor,
-      ),
-      bottomNavigationBar: BottomAppBar(
+      );
+    }
+
+    return SizedBox();
+  }
+
+  Widget _buildBottomBar() {
+    if (_bloc.state is LoadedMyDiet) {
+      return BottomAppBar(
         shape: CircularNotchedRectangle(),
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,8 +110,10 @@ class _MyDietPageState extends State<MyDietPage> {
             )
           ],
         ),
-      ),
-    );
+      );
+    }
+
+    return SizedBox();
   }
 
   Widget _mapStateToWidget(MyDietState state) {
