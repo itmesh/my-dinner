@@ -9,5 +9,38 @@
       "to": ""
     },
     "remarks": "Proszę wejść do budynku SSE II i zostawić po lewej stronie w kuchni. Kod do bramki to 1234#"
+  },
+  {
+    "street": "ul. Spokojna",
+    "homeFlatNumber": "8/5",
+    "postalCode": "30054",
+    "city": "Kraków",
+    "deliveryHours": {
+      "from": "",
+      "to": ""
+    },
+    "remarks": "Proszę wejść do budynku SSE II i zostawić po lewej stronie w kuchni. Kod do bramki to 1234#"
+  },
+  {
+    "street": "ul. Spokojna",
+    "homeFlatNumber": "8/5",
+    "postalCode": "30054",
+    "city": "Kraków",
+    "deliveryHours": {
+      "from": "",
+      "to": ""
+    },
+    "remarks": "Proszę wejść do budynku SSE II i zostawić po lewej stronie w kuchni. Kod do bramki to 1234#"
+  },
+  {
+    "street": "ul. Spokojna",
+    "homeFlatNumber": "8/5",
+    "postalCode": "30054",
+    "city": "Kraków",
+    "deliveryHours": {
+      "from": "",
+      "to": ""
+    },
+    "remarks": "Proszę wejść do budynku SSE II i zostawić po lewej stronie w kuchni. Kod do bramki to 1234#"
   }
 ]

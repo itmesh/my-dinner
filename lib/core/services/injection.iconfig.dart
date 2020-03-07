@@ -5,18 +5,22 @@
 // **************************************************************************
 
 import 'package:my_dinner/core/services/date_service.dart';
+import 'package:my_dinner/features/address/data/datasources/address_api.dart';
+import 'package:my_dinner/features/address/data/repositories/address_repository_imp.dart';
+import 'package:my_dinner/features/address/domain/repositories/address_repository.dart';
+import 'package:my_dinner/features/address/domain/usecases/get_addresses.dart';
 import 'package:my_dinner/features/my_diet/data/datasources/my_diet_api.dart';
 import 'package:my_dinner/features/my_diet/data/repository/my_diet_repository_imp.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository.dart';
 import 'package:my_dinner/features/my_diet/domain/usecases/get_diet.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
-import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:my_dinner/features/pick_diet/data/datasource/companies_api.dart';
 import 'package:my_dinner/features/pick_diet/data/repository/companies_repository_imp.dart';
 import 'package:my_dinner/features/pick_diet/domain/repositories/companies_repository.dart';
 import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
 import 'package:my_dinner/features/pick_diet/presentation/provider/company_selector.dart';
+import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 void $initGetIt(GetIt g, {String environment}) {
   g.registerFactory<DateService>(() => DateService());
@@ -33,12 +37,15 @@ void $initGetIt(GetIt g, {String environment}) {
 
 // Eager singletons must be registered in the right order
 void _registerEagerSingletons(GetIt g, String environment) {
-  g.registerSingleton<CompaniesApi>(CompaniesApiHttp());
+  g.registerSingleton<AddressApi>(AddressHttpApi());
   if (environment == 'demo') {
-    g.registerSingleton<CompaniesApi>(CompaniesApiDemo());
+    g.registerSingleton<AddressApi>(AddressDemoApi());
   }
-  g.registerSingleton<CompaniesRepository>(CompaniesRepositoryImp(
-    g<CompaniesApi>(),
+  g.registerSingleton<AddressRepository>(AddressRepositoryImp(
+    g<AddressApi>(),
+  ));
+  g.registerSingleton<GetAddresses>(GetAddresses(
+    g<AddressRepository>(),
   ));
   g.registerSingleton<MyDietApi>(MyDietApiHttp());
   if (environment == 'demo') {
@@ -49,6 +56,13 @@ void _registerEagerSingletons(GetIt g, String environment) {
   ));
   g.registerSingleton<GetDiet>(GetDiet(
     g<MyDietRepository>(),
+  ));
+  g.registerSingleton<CompaniesApi>(CompaniesApiHttp());
+  if (environment == 'demo') {
+    g.registerSingleton<CompaniesApi>(CompaniesApiDemo());
+  }
+  g.registerSingleton<CompaniesRepository>(CompaniesRepositoryImp(
+    g<CompaniesApi>(),
   ));
   g.registerSingleton<GetCompanies>(GetCompanies(
     g<CompaniesRepository>(),
