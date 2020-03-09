@@ -46,17 +46,23 @@ class _DietOfferCardState extends State<DietOfferCard> {
               initiallyExpanded: true,
               title: Text(widget.dietOffer.name),
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    widget.dietOffer.description,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                FlatButton(
-                  child: Text('Pokaż więcej...'),
-                  onPressed: () {},
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          widget.dietOffer.description,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    FlatButton(
+                      child: Text('Pokaż\nwięcej'),
+                      onPressed: () => _showDialogWithDiet(),
+                    ),
+                  ],
                 ),
                 Row(
                   children: <Widget>[
@@ -145,6 +151,21 @@ class _DietOfferCardState extends State<DietOfferCard> {
           ),
         ),
       ],
+    );
+  }
+
+  void _showDialogWithDiet() {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        child: LayoutBuilder(
+          builder: (_, constraints) {
+            print(constraints.maxHeight);
+            print(constraints.maxWidth);
+            return Container();
+          },
+        ),
+      ),
     );
   }
 

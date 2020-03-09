@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
 import 'package:my_dinner/features/address/domain/models/delivery_hours.dart';
+import 'package:my_dinner/widgets/selectable_card.dart';
 
 class AddressCard extends StatelessWidget {
   final Address address;
@@ -20,28 +21,32 @@ class AddressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: selected
-          ? RoundedRectangleBorder(
-              side: BorderSide(color: Theme.of(context).primaryColor),
-              borderRadius: BorderRadius.circular(4.0),
-            )
-          : null,
-      child: ListTile(
-        onTap: onTap,
-        title: Text('${address.street} ${address.homeFlatNumber}'),
-        trailing: _trailing,
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 2.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text('${address.postalCode} ${address.city}'),
-              SizedBox(height: 4.0),
-              Text('Godziny dostawy: ${_hoursToString(address.deliveryHours)}'),
-              SizedBox(height: 2.0),
-              Text('Dodatkowe uwagi: ${address.remarks}'),
-            ],
+    return SelectableCard(
+      onTap: () {},
+      card: Card(
+        shape: selected
+            ? RoundedRectangleBorder(
+                side: BorderSide(color: Theme.of(context).primaryColor),
+                borderRadius: BorderRadius.circular(4.0),
+              )
+            : null,
+        child: ListTile(
+          onTap: onTap,
+          title: Text('${address.street} ${address.homeFlatNumber}'),
+          trailing: _trailing,
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 2.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('${address.postalCode} ${address.city}'),
+                SizedBox(height: 4.0),
+                Text(
+                    'Godziny dostawy: ${_hoursToString(address.deliveryHours)}'),
+                SizedBox(height: 2.0),
+                Text('Dodatkowe uwagi: ${address.remarks}'),
+              ],
+            ),
           ),
         ),
       ),

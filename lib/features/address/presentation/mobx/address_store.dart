@@ -39,7 +39,10 @@ abstract class _AddressStore with Store {
     );
   }
 
-  void _updateAddressInList(int index, Address address) {}
+  void _updateAddressInList(int index, Address address) {
+    addresses.removeAt(index);
+    addresses.insert(index, address);
+  }
 
   @action
   Future<void> add(Address address) async {

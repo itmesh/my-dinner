@@ -10,6 +10,7 @@ import 'package:my_dinner/features/new_order/presentation/pages/edit_address_det
 import 'package:my_dinner/features/new_order/presentation/pages/edit_diet_page.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/edit_profile_page.dart';
 import 'package:my_dinner/features/new_order/presentation/widgets/diet_card.dart';
+import 'package:my_dinner/features/pick_diet/presentation/pages/companies.dart';
 import 'package:my_dinner/features/profile/domain/models/profile.dart';
 import 'package:my_dinner/features/profile/presentation/widgets/contact_data_card.dart';
 
@@ -31,14 +32,11 @@ class NewOrderPage extends StatelessWidget {
           Expanded(
             child: ListView(
               children: <Widget>[
-                _buildContactData(context),
-                Container(
-                  height: 8.0,
-                  color: Colors.black12,
-                ),
-                _buildAddressData(context),
-                Container(height: 8.0, color: Colors.black12),
                 _buildDietInfo(context),
+                Container(height: 8.0, color: Colors.black12),
+                _buildContactData(context),
+                Container(height: 8.0, color: Colors.black12),
+                _buildAddressData(context),
                 Container(
                   height: 16.0,
                   color: Colors.black12,
@@ -222,15 +220,16 @@ class NewOrderPage extends StatelessWidget {
                 Expanded(
                   child: SizedBox(),
                 ),
-                OutlineButton(
-                  onPressed: () {
-                    Navigator.of(context).push(EditDietPage.route);
-                  },
-                  borderSide: BorderSide(
-                    color: Color(0xFF2196f3),
+                if (mealsData.isNotEmpty)
+                  OutlineButton(
+                    onPressed: () {
+                      Navigator.of(context).push(Companies.route);
+                    },
+                    borderSide: BorderSide(
+                      color: Color(0xFF2196f3),
+                    ),
+                    child: Text('Wybierz inny'),
                   ),
-                  child: Text('Wybierz inny'),
-                ),
               ],
             ),
           ),
@@ -238,7 +237,7 @@ class NewOrderPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: _buildEmptyCard(context, () {
-                Navigator.of(context).push(EditDietPage.route);
+                Navigator.of(context).push(Companies.route);
               }),
             ),
           if (mealsData.length == 1)

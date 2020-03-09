@@ -142,23 +142,46 @@ class _CompanyCardState extends State<CompanyCard>
     if (_showAllChips.value) {
       return diets
           .sublist(0, limit)
-          .map((e) => _buildChip(label: e.name))
+          .map((e) => _buildChip(
+              label: e.name, onTap: (diet) => _showDialogWithDiet(diet)))
           .toList()
             ..addAll(diets
                 .sublist(limit)
-                .map((e) => _buildChip(label: e.name, withAnimation: true))
+                .map((e) => _buildChip(
+                    label: e.name,
+                    withAnimation: true,
+                    onTap: (diet) => _showDialogWithDiet(diet)))
                 .toList());
     } else {
       if (diets.length > limit) {
         return diets
             .sublist(0, limit)
-            .map((e) => _buildChip(label: e.name))
+            .map((e) => _buildChip(
+                label: e.name, onTap: (diet) => _showDialogWithDiet(diet)))
             .toList()
-              ..add(_buildChip(label: '...', onTap: _showMoreChips));
+              ..add(_buildChip(label: '...', onTap: (_) => _showMoreChips));
       } else {
-        return diets.map((e) => _buildChip(label: e.name)).toList();
+        return diets
+            .map((e) => _buildChip(
+                label: e.name, onTap: (diet) => _showDialogWithDiet(diet)))
+            .toList();
       }
     }
+  }
+
+  void _showDialogWithDiet(String diet) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        child: LayoutBuilder(
+          builder: (_, constraints) {
+            print(constraints.maxHeight);
+            print(constraints.maxWidth);
+            return Container();
+          },
+        ),
+      ),
+    );
   }
 
   void _showMoreChips() {
@@ -168,11 +191,11 @@ class _CompanyCardState extends State<CompanyCard>
 
   Widget _buildChip({
     String label,
-    VoidCallback onTap,
+    Function onTap,
     bool withAnimation = false,
   }) {
     Widget chip = GestureDetector(
-      onTap: onTap,
+      onTap: () => onTap(label),
       child: Chip(
         backgroundColor: _chipBackgroundColor(context),
         label: Text(

@@ -37,19 +37,23 @@ class _LoginFormState extends State<LoginForm> {
             },
           ),
           SizedBox(
-            height: 16.0,
+            height: 8.0,
           ),
-          SwitchListTile(
-            title: Text('Zapamiętaj'),
-            value: _rememberUser,
-            onChanged: (value) {
-              setState(() {
-                _rememberUser = value;
-              });
-            },
+          Align(
+            alignment: Alignment.centerRight,
+            child: FlatButton(
+              onPressed: () {},
+              child: Text(
+                'Zapomniałeś hasła?',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
           ),
           SizedBox(
-            height: 24.0,
+            height: 12.0,
           ),
           ButtonTheme(
             minWidth: 160.0,
@@ -58,7 +62,7 @@ class _LoginFormState extends State<LoginForm> {
               textColor: Colors.white,
               color: Theme.of(context).primaryColor,
               onPressed: () {
-                Navigator.of(context).pushReplacement(MyDietPage.route);
+                _formKey.currentState.validate();
               },
               icon: Icon(Icons.send),
               label: Text('Zaloguj'),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/date_symbol_data_local.dart';
+
 import 'package:my_dinner/core/services/injection.dart';
-import 'package:my_dinner/features/login/login_page.dart';
+import 'package:my_dinner/features/login/presentation/pages/login_page.dart';
 import 'package:my_dinner/generated/l10n.dart';
 
 void main() {
