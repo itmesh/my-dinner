@@ -26,6 +26,23 @@ mixin _$AddressStore on _AddressStore, Store {
     }, _$addressesAtom, name: '${_$addressesAtom.name}_set');
   }
 
+  final _$loadingAtom = Atom(name: '_AddressStore.loading');
+
+  @override
+  bool get loading {
+    _$loadingAtom.context.enforceReadPolicy(_$loadingAtom);
+    _$loadingAtom.reportObserved();
+    return super.loading;
+  }
+
+  @override
+  set loading(bool value) {
+    _$loadingAtom.context.conditionallyRunInAction(() {
+      super.loading = value;
+      _$loadingAtom.reportChanged();
+    }, _$loadingAtom, name: '${_$loadingAtom.name}_set');
+  }
+
   final _$downloadAsyncAction = AsyncAction('download');
 
   @override
@@ -33,23 +50,10 @@ mixin _$AddressStore on _AddressStore, Store {
     return _$downloadAsyncAction.run(() => super.download());
   }
 
-  final _$updateAsyncAction = AsyncAction('update');
-
-  @override
-  Future<void> update(Address address) {
-    return _$updateAsyncAction.run(() => super.update(address));
-  }
-
-  final _$addAsyncAction = AsyncAction('add');
-
-  @override
-  Future<void> add(Address address) {
-    return _$addAsyncAction.run(() => super.add(address));
-  }
-
   @override
   String toString() {
-    final string = 'addresses: ${addresses.toString()}';
+    final string =
+        'addresses: ${addresses.toString()},loading: ${loading.toString()}';
     return '{$string}';
   }
 }

@@ -3,12 +3,10 @@ import 'package:my_dinner/features/address/domain/models/address.dart';
 import 'package:my_dinner/widgets/material_dropdown.dart';
 
 class AddressForm extends StatefulWidget {
-  final bool canDelete;
   final Address address;
 
   const AddressForm({
     Key key,
-    this.canDelete = false,
     this.address,
   }) : super(key: key);
 
@@ -23,6 +21,7 @@ class _AddressFormState extends State<AddressForm> {
 
   @override
   Widget build(BuildContext context) {
+    bool canDelete = widget.address != null;
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -109,11 +108,11 @@ class _AddressFormState extends State<AddressForm> {
             padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: widget.canDelete
+              mainAxisAlignment: canDelete
                   ? MainAxisAlignment.spaceBetween
                   : MainAxisAlignment.end,
               children: <Widget>[
-                if (widget.canDelete)
+                if (canDelete)
                   OutlineButton(
                     onPressed: () {},
                     borderSide: BorderSide(

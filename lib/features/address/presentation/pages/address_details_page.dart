@@ -10,9 +10,15 @@ class AddressDetailsPage extends StatelessWidget {
     this.address,
   }) : super(key: key);
 
-  static ModalRoute<Address> routeWithParams(Address address) {
+  static ModalRoute<Address> routeWithParams({
+    Address address,
+    bool canDelete,
+  }) {
     return MaterialPageRoute(
-        builder: (_) => AddressDetailsPage(address: address));
+      builder: (_) => AddressDetailsPage(
+        address: address,
+      ),
+    );
   }
 
   @override

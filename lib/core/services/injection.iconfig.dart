@@ -30,6 +30,7 @@ import 'package:my_dinner/features/pick_diet/data/repository/companies_repositor
 import 'package:my_dinner/features/pick_diet/domain/repositories/companies_repository.dart';
 import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
 import 'package:my_dinner/features/pick_diet/presentation/provider/company_selector.dart';
+import 'package:my_dinner/features/address/domain/usecases/delete_address.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -60,11 +61,15 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerSingleton<AddressRepository>(AddressRepositoryImp(
     g<AddressApi>(),
   ));
-  g.registerSingleton<AddAddress>(AddAddress());
+  g.registerSingleton<CreateAddress>(CreateAddress(
+    g<AddressRepository>(),
+  ));
   g.registerSingleton<GetAddresses>(GetAddresses(
     g<AddressRepository>(),
   ));
-  g.registerSingleton<UpdateAddress>(UpdateAddress());
+  g.registerSingleton<UpdateAddress>(UpdateAddress(
+    g<AddressRepository>(),
+  ));
   g.registerSingleton<AuthApi>(AuthApiHttp());
   if (environment == 'demo') {
     g.registerSingleton<AuthApi>(AuthApiDemo());
@@ -100,5 +105,8 @@ void $initGetIt(GetIt g, {String environment}) {
   ));
   g.registerSingleton<GetCompanies>(GetCompanies(
     g<CompaniesRepository>(),
+  ));
+  g.registerSingleton<DeleteAddress>(DeleteAddress(
+    g<AddressRepository>(),
   ));
 }

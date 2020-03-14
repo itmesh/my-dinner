@@ -12,6 +12,8 @@ abstract class AddressApi {
   Future<Address> addAddress(Address address);
 
   Future<Address> updateAddress(Address address);
+
+  Future<Address> deleteAddress(Address address);
 }
 
 @RegisterAs(AddressApi)
@@ -31,6 +33,11 @@ class AddressHttpApi extends AddressApi {
   Future<Address> updateAddress(Address address) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Address> deleteAddress(Address address) {
+    throw UnimplementedError();
+  }
 }
 
 @RegisterAs(AddressApi, env: Env.demo)
@@ -38,7 +45,7 @@ class AddressHttpApi extends AddressApi {
 class AddressDemoApi extends AddressApi {
   @override
   Future<List<Address>> getAddresses() async {
-    await DemoUtils.smallDelay;
+    await DemoUtils.mediumDelay;
     String response = await rootBundle.loadString('assets/demo/addresses.json');
     return jsonDecode(response)
         .map<Address>((e) => Address.fromJson(e))
@@ -47,13 +54,19 @@ class AddressDemoApi extends AddressApi {
 
   @override
   Future<Address> addAddress(Address address) async {
-    await DemoUtils.smallDelay;
+    await DemoUtils.mediumDelay;
     return address;
   }
 
   @override
   Future<Address> updateAddress(Address address) async {
-    await DemoUtils.smallDelay;
-    throw address;
+    await DemoUtils.mediumDelay;
+    return address;
+  }
+
+  @override
+  Future<Address> deleteAddress(Address address) async {
+    await DemoUtils.mediumDelay;
+    return address;
   }
 }

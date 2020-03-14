@@ -8,7 +8,7 @@ class Session {
     _context = context;
   }
 
-  bool isLogged() => _context.token != null;
+  bool isLogged() => _context?.token != null;
 
   SessionContext get() => _context;
 }

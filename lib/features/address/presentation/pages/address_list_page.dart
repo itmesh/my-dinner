@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
-import 'package:my_dinner/features/address/domain/usecases/add_address.dart';
 import 'package:my_dinner/features/address/domain/usecases/get_addresses.dart';
-import 'package:my_dinner/features/address/domain/usecases/update_address.dart';
 import 'package:my_dinner/features/address/presentation/mobx/address_store.dart';
 import 'package:my_dinner/features/address/presentation/pages/address_details_page.dart';
 import 'package:my_dinner/features/address/presentation/widgets/address_card.dart';
@@ -14,11 +13,7 @@ import 'package:my_dinner/features/new_order/presentation/pages/edit_address_det
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 
 class AddressListPage extends StatelessWidget {
-  final AddressStore addressStore = AddressStore(
-    locator.get<GetAddresses>(),
-    locator.get<UpdateAddress>(),
-    locator.get<AddAddress>(),
-  );
+  final AddressStore addressStore = AddressStore(locator.get<GetAddresses>());
 
   static Route<dynamic> get route {
     return MaterialPageRoute(
@@ -39,11 +34,13 @@ class AddressListPage extends StatelessWidget {
           title: Text('Moje adresy'),
         ),
         drawer: NavigationDrawer(),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Observer(
-            builder: (_) => ListView(
+        body: Observer(
+          builder: (_) => RefreshIndicator(
+            onRefresh: () => addressStore.download(),
+            child: ListView(
+              padding: const EdgeInsets.all(8.0),
               children: [
+                if (addressStore.loading) LinearProgressIndicator(),
                 ...addressStore.addresses
                     .map((e) => _mapToAddressCard(context, e))
                     .toList(),
@@ -66,9 +63,10 @@ class AddressListPage extends StatelessWidget {
   Widget _mapToAddressCard(BuildContext context, Address address) {
     return AddressCard(
       onTap: () {
-        Navigator.of(context)
-            .push(AddressDetailsPage.routeWithParams(address))
-            .then((address) => addressStore.update(address));
+        Navigator.of(context).push(AddressDetailsPage.routeWithParams(
+          address: address,
+          canDelete: true,
+        ));
       },
       trailingIconType: TrailingIconType.arrow,
       address: address,
