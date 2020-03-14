@@ -8,7 +8,15 @@ import 'package:my_dinner/core/services/date_service.dart';
 import 'package:my_dinner/features/address/data/datasources/address_api.dart';
 import 'package:my_dinner/features/address/data/repositories/address_repository_imp.dart';
 import 'package:my_dinner/features/address/domain/repositories/address_repository.dart';
+import 'package:my_dinner/features/address/domain/usecases/add_address.dart';
 import 'package:my_dinner/features/address/domain/usecases/get_addresses.dart';
+import 'package:my_dinner/features/address/domain/usecases/update_address.dart';
+import 'package:my_dinner/features/auth/data/datasources/auth_api.dart';
+import 'package:my_dinner/features/auth/data/repositories/auth_repository_imp.dart';
+import 'package:my_dinner/features/auth/domain/repositories/auth_repository.dart';
+import 'package:my_dinner/features/auth/domain/usecases/login.dart';
+import 'package:my_dinner/features/auth/domain/usecases/register.dart';
+import 'package:my_dinner/features/auth/presentation/provider/auth_provider.dart';
 import 'package:my_dinner/features/my_diet/data/datasources/my_diet_api.dart';
 import 'package:my_dinner/features/my_diet/data/repository/my_diet_repository_imp.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository.dart';
@@ -19,26 +27,31 @@ import 'package:my_dinner/features/pick_diet/data/repository/companies_repositor
 import 'package:my_dinner/features/pick_diet/domain/repositories/companies_repository.dart';
 import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
 import 'package:my_dinner/features/pick_diet/presentation/provider/company_selector.dart';
-import 'package:my_dinner/features/address/domain/usecases/add_address.dart';
-import 'package:my_dinner/features/address/domain/usecases/update_address.dart';
+import 'package:my_dinner/core/services/context.dart';
+import 'package:my_dinner/features/auth/domain/usecases/password_forgotten.dart';
+import 'package:my_dinner/features/auth/presentation/provider/password_forgotten_provider.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 void $initGetIt(GetIt g, {String environment}) {
   g.registerFactory<DateService>(() => DateService());
+  g.registerFactory<AuthProvider>(() => AuthProvider(
+        g<Login>(),
+        g<Register>(),
+      ));
   g.registerFactory<MyDietState>(() => InitialMyDiet());
   g.registerFactory<CompanySelector>(() => CompanySelector(
         g<GetCompanies>(),
+      ));
+  g.registerFactory<PasswordForgottenProvider>(() => PasswordForgottenProvider(
+        g<PasswordForgotten>(),
       ));
   g.registerFactory<MyDietBloc>(() => MyDietBloc(
         g<MyDietState>(),
         g<GetDiet>(),
       ));
-  _registerEagerSingletons(g, environment);
-}
 
-// Eager singletons must be registered in the right order
-void _registerEagerSingletons(GetIt g, String environment) {
+  //Eager singletons must be registered in the right order
   g.registerSingleton<AddressApi>(AddressHttpApi());
   if (environment == 'demo') {
     g.registerSingleton<AddressApi>(AddressDemoApi());
@@ -46,8 +59,23 @@ void _registerEagerSingletons(GetIt g, String environment) {
   g.registerSingleton<AddressRepository>(AddressRepositoryImp(
     g<AddressApi>(),
   ));
+  g.registerSingleton<AddAddress>(AddAddress());
   g.registerSingleton<GetAddresses>(GetAddresses(
     g<AddressRepository>(),
+  ));
+  g.registerSingleton<UpdateAddress>(UpdateAddress());
+  g.registerSingleton<AuthApi>(AuthApiHttp());
+  if (environment == 'demo') {
+    g.registerSingleton<AuthApi>(AuthApiDemo());
+  }
+  g.registerSingleton<AuthRepository>(AuthRepositoryImp(
+    g<AuthApi>(),
+  ));
+  g.registerSingleton<Login>(Login(
+    g<AuthRepository>(),
+  ));
+  g.registerSingleton<Register>(Register(
+    authRepository: g<AuthRepository>(),
   ));
   g.registerSingleton<MyDietApi>(MyDietApiHttp());
   if (environment == 'demo') {
@@ -69,6 +97,8 @@ void _registerEagerSingletons(GetIt g, String environment) {
   g.registerSingleton<GetCompanies>(GetCompanies(
     g<CompaniesRepository>(),
   ));
-  g.registerSingleton<AddAddress>(AddAddress());
-  g.registerSingleton<UpdateAddress>(UpdateAddress());
+  g.registerSingleton<Context>(Context());
+  g.registerSingleton<PasswordForgotten>(PasswordForgotten(
+    g<AuthRepository>(),
+  ));
 }

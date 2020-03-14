@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
 
+typedef OnRegister = void Function(String user, String password);
+
 class RegistrationForm extends StatefulWidget {
+  final OnRegister onRegister;
+
+  const RegistrationForm({
+    Key key,
+    this.onRegister,
+  }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _RegistrationFormState();

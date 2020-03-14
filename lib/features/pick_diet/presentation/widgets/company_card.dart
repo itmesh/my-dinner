@@ -55,7 +55,7 @@ class _CompanyCardState extends State<CompanyCard>
         margin: EdgeInsets.only(bottom: 8.0),
         title: GFListTile(
           avatar: GFAvatar(
-            size: GFSize.large,
+            size: GFSize.LARGE,
             backgroundImage: CachedNetworkImageProvider(widget.company.logoURL),
           ),
           icon: Padding(

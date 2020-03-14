@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
+import 'package:my_dinner/features/auth/presentation/widgets/password_forgotten_dialog.dart';
+
+typedef OnLogin = void Function(String user, String password);
+typedef OnForgottenPassword = void Function(String email);
 
 class LoginForm extends StatefulWidget {
+  final OnLogin onLogin;
+  final OnForgottenPassword onPasswordForgotten;
+
+  const LoginForm({
+    Key key,
+    this.onLogin,
+    this.onPasswordForgotten,
+  }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _LoginFormState();
@@ -10,7 +22,9 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>(debugLabel: '_loginFormKey');
-  bool _rememberUser = false;
+
+  String email;
+  String password;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +41,7 @@ class _LoginFormState extends State<LoginForm> {
             validator: (value) {
               return value.isEmpty ? 'Pole nie może być puste' : null;
             },
+            onChanged: (value) => email = value,
           ),
           TextFormField(
             decoration: InputDecoration(
@@ -35,6 +50,7 @@ class _LoginFormState extends State<LoginForm> {
             validator: (value) {
               return value.isEmpty ? 'Pole nie może być puste' : null;
             },
+            onChanged: (value) => password = value,
           ),
           SizedBox(
             height: 8.0,
@@ -42,11 +58,21 @@ class _LoginFormState extends State<LoginForm> {
           Align(
             alignment: Alignment.centerRight,
             child: FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(context: context, child: PasswordForgottenDialog())
+                    .then((value) {
+                  if (value ?? false) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          'Wiadomość z linkiem do zmiany hasła została wysłana na podany adres email'),
+                    ));
+                  }
+                });
+              },
               child: Text(
                 'Zapomniałeś hasła?',
                 style: TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 14.0,
                   decoration: TextDecoration.underline,
                 ),
               ),
@@ -62,7 +88,11 @@ class _LoginFormState extends State<LoginForm> {
               textColor: Colors.white,
               color: Theme.of(context).primaryColor,
               onPressed: () {
-                _formKey.currentState.validate();
+                if (_formKey.currentState.validate()) {
+                  if (widget.onLogin != null) {
+                    widget.onLogin(email, password);
+                  }
+                }
               },
               icon: Icon(Icons.send),
               label: Text('Zaloguj'),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:my_dinner/features/address/presentation/pages/address_list_page.dart';
+import 'package:my_dinner/features/auth/presentation/pages/auth_page.dart';
 import 'package:my_dinner/features/history_meals/history_meals_page.dart';
 import 'package:my_dinner/features/history_orders/presentation/pages/orders_page.dart';
-import 'package:my_dinner/features/login/presentation/pages/login_page.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
 import 'package:my_dinner/features/profile/presentation/pages/profile_page.dart';
 
@@ -56,7 +57,7 @@ class NavigationDrawer extends StatelessWidget {
             ListTile(
               title: Text('Wyloguj'),
               onTap: () {
-                Navigator.of(context).pushReplacement(LoginPage.route);
+                Navigator.of(context).pushReplacement(AuthPage.route);
               },
             ),
           ],
