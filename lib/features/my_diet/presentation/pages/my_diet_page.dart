@@ -35,38 +35,67 @@ class _MyDietPageState extends State<MyDietPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Moja dieta'),
-      ),
-      body: BlocBuilder(
-        bloc: _bloc,
-        builder: (context, state) {
-          return Column(
-            children: <Widget>[
-              Calendar(
-                calendarController: _calendarController,
-                onDaySelected: () =>
-                    _bloc.add(LoadMyDiet(_calendarController.selectedDay)),
-              ),
-              _mapStateToWidget(state),
-            ],
-          );
-        },
-      ),
-      drawer: NavigationDrawer(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: BlocBuilder(
-        bloc: _bloc,
-        builder: (_, __) {
-          return _buildFloatingButton();
-        },
-      ),
-      bottomNavigationBar: BlocBuilder(
-        bloc: _bloc,
-        builder: (_, __) {
-          return _buildBottomBar();
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        bool closeApp = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Zamknięcie aplikacji'),
+              content: Text('Czy na penwno chcesz zamknąć aplikacje?'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Nie'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                FlatButton(
+                  child: Text('Tak'),
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                )
+              ],
+            );
+          },
+        );
+        return closeApp;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Moja dieta'),
+        ),
+        body: BlocBuilder(
+          bloc: _bloc,
+          builder: (context, state) {
+            return Column(
+              children: <Widget>[
+                Calendar(
+                  calendarController: _calendarController,
+                  onDaySelected: () =>
+                      _bloc.add(LoadMyDiet(_calendarController.selectedDay)),
+                ),
+                _mapStateToWidget(state),
+              ],
+            );
+          },
+        ),
+        drawer: NavigationDrawer(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: BlocBuilder(
+          bloc: _bloc,
+          builder: (_, __) {
+            return _buildFloatingButton();
+          },
+        ),
+        bottomNavigationBar: BlocBuilder(
+          bloc: _bloc,
+          builder: (_, __) {
+            return _buildBottomBar();
+          },
+        ),
       ),
     );
   }
@@ -266,7 +295,6 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   AnimationController _animationController;
-  List<DateTime> _selectedDays = [];
 
   @override
   void initState() {
