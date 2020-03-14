@@ -22,11 +22,12 @@ abstract class _AddressStore with Store {
 
   @action
   Future<void> download() async {
+    loading = true;
     Either either = await getAddresses(NoParams());
     addresses = either.fold(
       (error) => [],
       (addresses) => addresses,
     );
+    loading = false;
   }
-
 }

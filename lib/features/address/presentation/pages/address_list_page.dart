@@ -35,17 +35,27 @@ class AddressListPage extends StatelessWidget {
         ),
         drawer: NavigationDrawer(),
         body: Observer(
-          builder: (_) => RefreshIndicator(
-            onRefresh: () => addressStore.download(),
-            child: ListView(
-              padding: const EdgeInsets.all(8.0),
-              children: [
-                if (addressStore.loading) LinearProgressIndicator(),
-                ...addressStore.addresses
-                    .map((e) => _mapToAddressCard(context, e))
-                    .toList(),
-              ],
-            ),
+          builder: (_) => Column(
+            children: <Widget>[
+              if (addressStore.loading)
+                Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: LinearProgressIndicator(),
+                ),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () => addressStore.download(),
+                  child: ListView(
+                    padding: const EdgeInsets.all(8.0),
+                    children: [
+                      ...addressStore.addresses
+                          .map((e) => _mapToAddressCard(context, e))
+                          .toList(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         floatingActionButton: FloatingActionButton(

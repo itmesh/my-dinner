@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
+import 'package:my_dinner/features/address/domain/models/delivery_hours.dart';
 import 'package:my_dinner/widgets/material_dropdown.dart';
 
 class AddressForm extends StatefulWidget {
@@ -18,6 +19,16 @@ class AddressForm extends StatefulWidget {
 
 class _AddressFormState extends State<AddressForm> {
   final _formKey = GlobalKey<FormState>();
+
+  String street;
+  String homeFlatNumber;
+  String city;
+  String postalCode;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +54,7 @@ class _AddressFormState extends State<AddressForm> {
                       }
                       return null;
                     },
+                    onSaved: (value) => street = value,
                   ),
                   TextFormField(
                     initialValue: widget.address?.homeFlatNumber ?? '',
@@ -55,6 +67,7 @@ class _AddressFormState extends State<AddressForm> {
                       }
                       return null;
                     },
+                    onSaved: (value) => homeFlatNumber = value,
                   ),
                   TextFormField(
                     initialValue: widget.address?.city ?? '',
@@ -67,6 +80,7 @@ class _AddressFormState extends State<AddressForm> {
                       }
                       return null;
                     },
+                    onSaved: (value) => city = value,
                   ),
                   TextFormField(
                     initialValue: widget.address?.postalCode ?? '',
@@ -79,6 +93,7 @@ class _AddressFormState extends State<AddressForm> {
                       }
                       return null;
                     },
+                    onSaved: (value) => postalCode = value,
                   ),
                   MaterialDropdown(
                     title: 'Godziny dostawy',
@@ -108,29 +123,36 @@ class _AddressFormState extends State<AddressForm> {
             padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: canDelete
-                  ? MainAxisAlignment.spaceBetween
-                  : MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 if (canDelete)
                   OutlineButton(
                     onPressed: () {},
                     borderSide: BorderSide(
-                      color: Color(0xFF2196f3),
+                      color: Color(0xffd32f2f),
                     ),
                     child: Text('Usuń'),
                   ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: RaisedButton.icon(
-                    textColor: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      _formKey.currentState.validate();
-                    },
-                    icon: Icon(Icons.save),
-                    label: Text('Zapisz'),
+                OutlineButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  borderSide: BorderSide(
+                    color: Color(0xFF2196f3),
                   ),
+                  child: Text('Anuluj'),
+                ),
+                RaisedButton.icon(
+                  textColor: Colors.white,
+                  color: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  icon: Icon(Icons.save),
+                  label: Text('Zapisz'),
                 )
               ],
             ),

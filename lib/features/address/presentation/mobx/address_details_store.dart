@@ -6,16 +6,16 @@ import 'package:my_dinner/features/address/domain/usecases/add_address.dart';
 import 'package:my_dinner/features/address/domain/usecases/delete_address.dart';
 import 'package:my_dinner/features/address/domain/usecases/update_address.dart';
 
-part 'address_details.g.dart';
+part 'address_details_store.g.dart';
 
-class AddressDetails = _AddressDetails with _$AddressDetails;
+class AddressDetailsStore = _AddressDetailsStore with _$AddressDetailsStore;
 
-abstract class _AddressDetails with Store {
+abstract class _AddressDetailsStore with Store {
   final UpdateAddress updateAddress;
   final CreateAddress addAddress;
   final DeleteAddress deleteAddress;
 
-  _AddressDetails(this.updateAddress, this.addAddress, this.deleteAddress);
+  _AddressDetailsStore(this.updateAddress, this.addAddress, this.deleteAddress);
 
   @action
   Future<void> update(Address address) async {
