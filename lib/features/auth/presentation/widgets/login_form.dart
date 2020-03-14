@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:my_dinner/core/services/input_form_validators.dart';
 import 'package:my_dinner/features/auth/presentation/widgets/password_forgotten_dialog.dart';
 
 typedef OnLogin = void Function(String user, String password);
-typedef OnForgottenPassword = void Function(String email);
 
 class LoginForm extends StatefulWidget {
   final OnLogin onLogin;
-  final OnForgottenPassword onPasswordForgotten;
 
   const LoginForm({
     Key key,
     this.onLogin,
-    this.onPasswordForgotten,
   }) : super(key: key);
 
   @override
@@ -23,8 +21,8 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>(debugLabel: '_loginFormKey');
 
-  String email;
-  String password;
+  String _email;
+  String _password;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +36,18 @@ class _LoginFormState extends State<LoginForm> {
             decoration: InputDecoration(
               labelText: 'Adres email',
             ),
+            keyboardType: TextInputType.emailAddress,
             validator: (value) {
-              return value.isEmpty ? 'Pole nie może być puste' : null;
+              if (value.isEmpty) {
+                return 'Pole nie może być puste';
+              }
+              if (!InputValidators.validateEmail(value)) {
+                return 'Wprowadź poprawny adres email';
+              }
+
+              return null;
             },
-            onChanged: (value) => email = value,
+            onSaved: (value) => _email = value,
           ),
           TextFormField(
             decoration: InputDecoration(
@@ -50,7 +56,7 @@ class _LoginFormState extends State<LoginForm> {
             validator: (value) {
               return value.isEmpty ? 'Pole nie może być puste' : null;
             },
-            onChanged: (value) => password = value,
+            onSaved: (value) => _password = value,
           ),
           SizedBox(
             height: 8.0,
@@ -90,7 +96,7 @@ class _LoginFormState extends State<LoginForm> {
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   if (widget.onLogin != null) {
-                    widget.onLogin(email, password);
+                    widget.onLogin(_email, _password);
                   }
                 }
               },

@@ -1,19 +1,22 @@
 import 'package:injectable/injectable.dart';
-import 'package:my_dinner/features/auth/domain/models/user.dart';
 
 @singleton
-class Context {
+class Session {
   SessionContext _context;
 
   void initialize(SessionContext context) {
     _context = context;
   }
 
+  bool isLogged() => _context.token != null;
+
   SessionContext get() => _context;
 }
 
 class SessionContext {
-  final User user;
+  final String _token;
 
-  SessionContext({this.user});
+  SessionContext(this._token);
+
+  String get token => _token;
 }

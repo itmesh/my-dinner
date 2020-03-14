@@ -22,14 +22,19 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  AuthProvider authProvider;
+  AuthProvider _authProvider;
   bool inputData = false;
   KeyboardVisibilityNotification keyboardVisibilityNotification;
 
   @override
   void initState() {
     super.initState();
-    authProvider = locator.get();
+    _authProvider = locator.get();
+    _authProvider.addListener(() {
+      if (_authProvider.loginSuccess) {
+        Navigator.of(context).pushReplacement(MyDietPage.route);
+      }
+    });
     keyboardVisibilityNotification = KeyboardVisibilityNotification();
     keyboardVisibilityNotification.addNewListener(
       onChange: (bool visible) {
@@ -50,7 +55,7 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Provider(
-        create: (_) => authProvider,
+        create: (_) => _authProvider,
         child: SafeArea(
           child: DefaultTabController(
             length: 2,
@@ -97,124 +102,8 @@ class _AuthPageState extends State<AuthPage> {
                       children: <Widget>[
                         TabBarView(
                           children: <Widget>[
-                            Stack(
-                              children: <Widget>[
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: CustomPaint(
-                                    painter: TrianglePainter(
-                                      color: Theme.of(context).primaryColor,
-                                      trianglePainterSide:
-                                          TrianglePainterSide.left,
-                                    ),
-                                    size: Size(
-                                      MediaQuery.of(context).size.width / 4,
-                                      MediaQuery.of(context).size.width / 4,
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 16.0,
-                                    ),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      elevation: 8.0,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(4.0)),
-                                          color: Theme.of(context)
-                                              .cardColor
-                                              .withOpacity(0.8),
-                                        ),
-                                        width: MediaQuery.of(context).size.width *
-                                            0.8,
-                                        child: SingleChildScrollView(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16.0),
-                                            child: LoginForm(),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (!inputData)
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 16.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          RaisedButton(
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                      MyDietPage.route);
-                                            },
-                                            child: Row(
-                                              children: <Widget>[
-                                                Text('Otwórz bez logowania'),
-                                                SizedBox(
-                                                  width: 16.0,
-                                                ),
-                                                Icon(Icons.arrow_forward)
-                                              ],
-                                            ),
-                                            elevation: 8.0,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.0),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                              ],
-                            ),
-                            Stack(
-                              children: <Widget>[
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: CustomPaint(
-                                    painter: TrianglePainter(
-                                      color: Theme.of(context).primaryColor,
-                                      trianglePainterSide:
-                                          TrianglePainterSide.right,
-                                    ),
-                                    size: Size(
-                                      MediaQuery.of(context).size.width / 4,
-                                      MediaQuery.of(context).size.width / 4,
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(4.0)),
-                                      color: Theme.of(context)
-                                          .cardColor
-                                          .withOpacity(0.8),
-                                    ),
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    child: SingleChildScrollView(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: RegistrationForm(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            _buildLoginForm(context),
+                            _buildRegisterForm(context),
                           ],
                         ),
                       ],
@@ -226,6 +115,119 @@ class _AuthPageState extends State<AuthPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Stack _buildRegisterForm(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.topRight,
+          child: CustomPaint(
+            painter: TrianglePainter(
+              color: Theme.of(context).primaryColor,
+              trianglePainterSide: TrianglePainterSide.right,
+            ),
+            size: Size(
+              MediaQuery.of(context).size.width / 4,
+              MediaQuery.of(context).size.width / 4,
+            ),
+          ),
+        ),
+        Center(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+              color: Theme.of(context).cardColor.withOpacity(0.8),
+            ),
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: RegistrationForm(),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Stack _buildLoginForm(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.topLeft,
+          child: CustomPaint(
+            painter: TrianglePainter(
+              color: Theme.of(context).primaryColor,
+              trianglePainterSide: TrianglePainterSide.left,
+            ),
+            size: Size(
+              MediaQuery.of(context).size.width / 4,
+              MediaQuery.of(context).size.width / 4,
+            ),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 16.0,
+            ),
+            child: Material(
+              color: Colors.transparent,
+              elevation: 8.0,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                  color: Theme.of(context).cardColor.withOpacity(0.8),
+                ),
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: LoginForm(
+                      onLogin: (email, password) {
+                        _authProvider.loginUser(email, password);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (!inputData)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MyDietPage.route);
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Text('Otwórz bez logowania'),
+                        SizedBox(
+                          width: 16.0,
+                        ),
+                        Icon(Icons.arrow_forward)
+                      ],
+                    ),
+                    elevation: 8.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+      ],
     );
   }
 }

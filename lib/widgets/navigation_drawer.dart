@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:my_dinner/core/services/context.dart';
+import 'package:my_dinner/core/services/injection.dart';
 
 import 'package:my_dinner/features/address/presentation/pages/address_list_page.dart';
 import 'package:my_dinner/features/auth/presentation/pages/auth_page.dart';
@@ -54,15 +56,28 @@ class NavigationDrawer extends StatelessWidget {
                 Navigator.of(context).pushReplacement(ProfilePage.route);
               },
             ),
-            ListTile(
-              title: Text('Wyloguj'),
-              onTap: () {
-                Navigator.of(context).pushReplacement(AuthPage.route);
-              },
-            ),
+            _loginOrLogout(context),
           ],
         ),
       ),
     );
+  }
+
+  Widget _loginOrLogout(BuildContext context) {
+    if (locator.get<Session>().isLogged()) {
+      return ListTile(
+        title: Text('Wyloguj'),
+        onTap: () {
+          Navigator.of(context).pushReplacement(AuthPage.route);
+        },
+      );
+    } else {
+      return ListTile(
+        title: Text('Zaloguj'),
+        onTap: () {
+          Navigator.of(context).pushReplacement(AuthPage.route);
+        },
+      );
+    }
   }
 }
