@@ -11,42 +11,65 @@ part 'address_details_store.g.dart';
 class AddressDetailsStore = _AddressDetailsStore with _$AddressDetailsStore;
 
 abstract class _AddressDetailsStore with Store {
-  final UpdateAddress updateAddress;
-  final CreateAddress addAddress;
-  final DeleteAddress deleteAddress;
+  final UpdateAddress _updateAddress;
+  final CreateAddress _createAddress;
+  final DeleteAddress _deleteAddress;
 
-  _AddressDetailsStore(this.updateAddress, this.addAddress, this.deleteAddress);
+  _AddressDetailsStore(
+    this._updateAddress,
+    this._createAddress,
+    this._deleteAddress,
+  );
+
+  @observable
+  ObservableFuture _addressFuture;
+
+  @computed
+  bool get loading =>
+      _addressFuture != null && _addressFuture.status == FutureStatus.pending;
+
+  @observable
+  bool createSuccess = false;
+
+  @observable
+  bool updateSuccess = false;
+
+  @observable
+  bool deleteSuccess = false;
 
   @action
   Future<void> update(Address address) async {
     if (address == null) return;
-
-    Either either = await updateAddress(UpdateAddressParams(address: address));
+    _addressFuture =
+        ObservableFuture(_updateAddress(UpdateAddressParams(address: address)));
+    Either either = await _addressFuture;
     either.fold(
       (error) {},
-      (address) {},
+      (address) => updateSuccess = true,
     );
   }
 
   @action
   Future<void> create(Address address) async {
     if (address == null) return;
-
-    Either either = await addAddress(AddAddressParams(address: address));
+    _addressFuture =
+        ObservableFuture(_createAddress(AddAddressParams(address: address)));
+    Either either = await _addressFuture;
     either.fold(
       (error) {},
-      (address) {},
+      (address) => createSuccess = true,
     );
   }
 
   @action
   Future<void> delete(Address address) async {
     if (address == null) return;
-
-    Either either = await deleteAddress(DeleteAddressParams(address: address));
+    _addressFuture =
+        ObservableFuture(_deleteAddress(DeleteAddressParams(address: address)));
+    Either either = await _addressFuture;
     either.fold(
       (error) {},
-      (address) {},
+      (address) => deleteSuccess = true,
     );
   }
 }

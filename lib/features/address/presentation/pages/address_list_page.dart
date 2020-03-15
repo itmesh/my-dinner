@@ -9,7 +9,6 @@ import 'package:my_dinner/features/address/presentation/mobx/address_store.dart'
 import 'package:my_dinner/features/address/presentation/pages/address_details_page.dart';
 import 'package:my_dinner/features/address/presentation/widgets/address_card.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
-import 'package:my_dinner/features/new_order/presentation/pages/edit_address_details_page.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 
 class AddressListPage extends StatelessWidget {
@@ -37,11 +36,11 @@ class AddressListPage extends StatelessWidget {
         body: Observer(
           builder: (_) => Column(
             children: <Widget>[
-              if (addressStore.loading)
-                Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: LinearProgressIndicator(),
-                ),
+              AnimatedOpacity(
+                child: const LinearProgressIndicator(),
+                duration: const Duration(milliseconds: 200),
+                opacity: addressStore.loading ? 1.0 : 0.0,
+              ),
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () => addressStore.download(),
@@ -61,9 +60,7 @@ class AddressListPage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.of(context)
-                .push(EditAddressDetailsPage.route)
-                .then((address) {});
+            Navigator.of(context).push(AddressDetailsPage.routeWithParams());
           },
         ),
       ),
@@ -73,10 +70,8 @@ class AddressListPage extends StatelessWidget {
   Widget _mapToAddressCard(BuildContext context, Address address) {
     return AddressCard(
       onTap: () {
-        Navigator.of(context).push(AddressDetailsPage.routeWithParams(
-          address: address,
-          canDelete: true,
-        ));
+        Navigator.of(context)
+            .push(AddressDetailsPage.routeWithParams(address: address));
       },
       trailingIconType: TrailingIconType.arrow,
       address: address,

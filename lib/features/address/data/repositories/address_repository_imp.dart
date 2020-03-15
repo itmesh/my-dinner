@@ -25,9 +25,9 @@ class AddressRepositoryImp extends AddressRepository {
   }
 
   @override
-  Future<Either<Failure, Address>> addAddress(Address address) async {
+  Future<Either<Failure, Address>> createAddress(Address address) async {
     try {
-      return Right(await addressApi.addAddress(address));
+      return Right(await addressApi.createAddress(address));
     } catch (e) {
       Logger().e(e);
       return Left(ApiFailure());

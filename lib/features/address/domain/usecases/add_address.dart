@@ -14,7 +14,7 @@ class CreateAddress extends UseCase<Address, AddAddressParams> {
 
   @override
   Future<Either<Failure, Address>> call(AddAddressParams params) async {
-    return await addressRepository.addAddress(params.address);
+    return await addressRepository.createAddress(params.address);
   }
 }
 

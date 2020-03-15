@@ -10,6 +10,7 @@ import 'package:my_dinner/features/address/data/datasources/address_api.dart';
 import 'package:my_dinner/features/address/data/repositories/address_repository_imp.dart';
 import 'package:my_dinner/features/address/domain/repositories/address_repository.dart';
 import 'package:my_dinner/features/address/domain/usecases/add_address.dart';
+import 'package:my_dinner/features/address/domain/usecases/delete_address.dart';
 import 'package:my_dinner/features/address/domain/usecases/get_addresses.dart';
 import 'package:my_dinner/features/address/domain/usecases/update_address.dart';
 import 'package:my_dinner/features/auth/data/datasources/auth_api.dart';
@@ -30,7 +31,6 @@ import 'package:my_dinner/features/pick_diet/data/repository/companies_repositor
 import 'package:my_dinner/features/pick_diet/domain/repositories/companies_repository.dart';
 import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
 import 'package:my_dinner/features/pick_diet/presentation/provider/company_selector.dart';
-import 'package:my_dinner/features/address/domain/usecases/delete_address.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -62,6 +62,9 @@ void $initGetIt(GetIt g, {String environment}) {
     g<AddressApi>(),
   ));
   g.registerSingleton<CreateAddress>(CreateAddress(
+    g<AddressRepository>(),
+  ));
+  g.registerSingleton<DeleteAddress>(DeleteAddress(
     g<AddressRepository>(),
   ));
   g.registerSingleton<GetAddresses>(GetAddresses(
@@ -105,8 +108,5 @@ void $initGetIt(GetIt g, {String environment}) {
   ));
   g.registerSingleton<GetCompanies>(GetCompanies(
     g<CompaniesRepository>(),
-  ));
-  g.registerSingleton<DeleteAddress>(DeleteAddress(
-    g<AddressRepository>(),
   ));
 }

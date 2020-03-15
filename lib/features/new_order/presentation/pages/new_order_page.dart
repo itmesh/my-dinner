@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
 import 'package:my_dinner/features/address/domain/models/delivery_hours.dart';
+import 'package:my_dinner/features/address/presentation/pages/address_details_page.dart';
 import 'package:my_dinner/features/address/presentation/widgets/address_card.dart';
 
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
-import 'package:my_dinner/features/new_order/presentation/pages/edit_address_details_page.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/edit_diet_page.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/edit_profile_page.dart';
 import 'package:my_dinner/features/new_order/presentation/widgets/diet_card.dart';
@@ -115,23 +115,26 @@ class NewOrderPage extends StatelessWidget {
                 Expanded(
                   child: SizedBox(),
                 ),
-                OutlineButton(
-                  onPressed: () {
-                    Navigator.of(context).push(EditAddressDetailsPage.route);
-                  },
-                  borderSide: BorderSide(
-                    color: Color(0xFF2196f3),
+                if (addressData.isNotEmpty)
+                  OutlineButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(AddressDetailsPage.routeWithParams());
+                    },
+                    borderSide: BorderSide(
+                      color: Color(0xFF2196f3),
+                    ),
+                    child: Text('Dodaj'),
                   ),
-                  child: Text('Dodaj'),
-                ),
               ],
             ),
           ),
-          if (addressData.length == 0)
+          if (addressData.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: _buildEmptyCard(context, () {
-                Navigator.of(context).push(EditAddressDetailsPage.route);
+                Navigator.of(context)
+                    .push(AddressDetailsPage.routeWithParams());
               }),
             ),
           if (addressData.length == 1)
@@ -191,7 +194,9 @@ class NewOrderPage extends StatelessWidget {
   }) {
     AddressCard addressCard = AddressCard(
       onEdit: () {
-        Navigator.of(context).push(EditAddressDetailsPage.route);
+        Navigator.of(context).push(
+          AddressDetailsPage.routeWithParams(address: address),
+        );
       },
       address: address,
     );

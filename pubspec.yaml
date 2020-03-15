@@ -45,7 +45,9 @@ dependencies:
   flutter_mobx: ^1.0.0
   sticky_headers: ^0.1.8+1
   flutter_redux: ^0.6.0
+  sized_context: ^0.2.1
   keyboard_visibility: ^0.5.6
+  validators: ^2.0.0+1
 
 
   # The following adds the Cupertino Icons font to your application.

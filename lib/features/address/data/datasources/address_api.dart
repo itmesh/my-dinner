@@ -9,7 +9,7 @@ import 'package:my_dinner/features/address/domain/models/address.dart';
 abstract class AddressApi {
   Future<List<Address>> getAddresses();
 
-  Future<Address> addAddress(Address address);
+  Future<Address> createAddress(Address address);
 
   Future<Address> updateAddress(Address address);
 
@@ -25,7 +25,7 @@ class AddressHttpApi extends AddressApi {
   }
 
   @override
-  Future<Address> addAddress(Address address) {
+  Future<Address> createAddress(Address address) {
     throw UnimplementedError();
   }
 
@@ -53,7 +53,7 @@ class AddressDemoApi extends AddressApi {
   }
 
   @override
-  Future<Address> addAddress(Address address) async {
+  Future<Address> createAddress(Address address) async {
     await DemoUtils.mediumDelay;
     return address;
   }

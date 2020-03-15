@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:my_dinner/core/services/date_service.dart';
 import 'package:my_dinner/core/services/injection.dart';
+import 'package:my_dinner/features/address/presentation/pages/address_details_page.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_event.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/meal_page.dart';
-import 'package:my_dinner/features/new_order/presentation/pages/edit_address_details_page.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/new_order_page.dart';
 import 'package:my_dinner/features/pick_diet/presentation/pages/companies.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
@@ -115,7 +116,9 @@ class _MyDietPageState extends State<MyDietPage> {
   }
 
   Widget _buildBottomBar() {
-    if (_bloc.state is LoadedMyDiet) {
+    MyDietState state2 = _bloc.state;
+    if (state2 is LoadedMyDiet) {
+      LoadedMyDiet state = state2;
       return BottomAppBar(
         shape: CircularNotchedRectangle(),
         child: new Row(
@@ -126,7 +129,8 @@ class _MyDietPageState extends State<MyDietPage> {
               child: MaterialButton(
                 child: Text('Zmień adress'),
                 onPressed: () {
-                  Navigator.of(context).push(EditAddressDetailsPage.route);
+                  Navigator.of(context).push(AddressDetailsPage.routeWithParams(
+                      address: state.diets[0].address));
                 },
               ),
             ),
