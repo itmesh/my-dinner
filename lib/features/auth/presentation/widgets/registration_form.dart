@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
 
 typedef OnRegister = void Function(String user, String password);
 
@@ -8,8 +7,9 @@ class RegistrationForm extends StatefulWidget {
 
   const RegistrationForm({
     Key key,
-    this.onRegister,
-  }) : super(key: key);
+    @required this.onRegister,
+  })  : assert(onRegister != null, 'onRegister can not be null'),
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,11 +19,13 @@ class RegistrationForm extends StatefulWidget {
 
 class _RegistrationFormState extends State<RegistrationForm> {
   final _formKey = GlobalKey<FormState>(debugLabel: '_registrationFormKey');
+  String email;
+  String password;
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      //  key: _formKey,
+      key: _formKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -35,6 +37,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             validator: (value) {
               return value.isEmpty ? 'Pole nie może być puste' : null;
             },
+            onSaved: (value) => email = value,
           ),
           TextFormField(
             decoration: InputDecoration(
@@ -43,13 +46,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
             validator: (value) {
               return value.isEmpty ? 'Pole nie może być puste' : null;
             },
+            onChanged: (value) => password = value,
+            onSaved: (value) => password = value,
           ),
           TextFormField(
             decoration: InputDecoration(
               labelText: 'Powtórz hasło',
             ),
             validator: (value) {
-              return value.isEmpty ? 'Pole nie może być puste' : null;
+              if (value.isEmpty) {
+                return 'Pole nie może być puste';
+              }
+              if (value != password) {
+                print(value);
+                print(password);
+                return 'Hasła nie są takie same';
+              }
+              return null;
             },
           ),
           SizedBox(
@@ -62,7 +75,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
               textColor: Colors.white,
               color: Theme.of(context).primaryColor,
               onPressed: () {
-                Navigator.of(context).pushReplacement(MyDietPage.route);
+                if (_formKey.currentState.validate()) {
+                  _formKey.currentState.save();
+                  widget.onRegister(email, password);
+                }
               },
               icon: Icon(Icons.send),
               label: Text('Zarejestruj'),

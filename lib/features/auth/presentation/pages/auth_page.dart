@@ -3,12 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:provider/provider.dart';
+
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/features/auth/presentation/provider/auth_provider.dart';
 import 'package:my_dinner/features/auth/presentation/widgets/login_form.dart';
 import 'package:my_dinner/features/auth/presentation/widgets/registration_form.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
-import 'package:provider/provider.dart';
 
 class AuthPage extends StatefulWidget {
   static ModalRoute<dynamic> get route {
@@ -23,23 +24,37 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   AuthProvider _authProvider;
-  bool inputData = false;
-  KeyboardVisibilityNotification keyboardVisibilityNotification;
+  bool _inputData = false;
+  KeyboardVisibilityNotification _keyboardVisibility;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  GlobalKey _key = GlobalKey();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
     super.initState();
-    _authProvider = locator.get();
+    _authProvider = locator.get<AuthProvider>();
     _authProvider.addListener(() {
       if (_authProvider.loginSuccess) {
         Navigator.of(context).pushReplacement(MyDietPage.route);
       }
     });
-    keyboardVisibilityNotification = KeyboardVisibilityNotification();
-    keyboardVisibilityNotification.addNewListener(
+    _authProvider.addListener(() {
+      if (_authProvider.registerSuccess) {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('Użytkownik został zarejestrowany'),
+        ));
+      }
+    });
+    _keyboardVisibility = KeyboardVisibilityNotification();
+    _keyboardVisibility.addNewListener(
       onChange: (bool visible) {
         setState(() {
-          inputData = visible;
+          _inputData = visible;
         });
       },
     );
@@ -47,17 +62,23 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   void dispose() {
-    keyboardVisibilityNotification.dispose();
+    _keyboardVisibility.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Provider(
-        create: (_) => _authProvider,
+      key: _scaffoldKey,
+      body: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: _authProvider,
+          )
+        ],
         child: SafeArea(
           child: DefaultTabController(
+            key: _key,
             length: 2,
             child: Container(
               decoration: BoxDecoration(
@@ -106,6 +127,12 @@ class _AuthPageState extends State<AuthPage> {
                             _buildRegisterForm(context),
                           ],
                         ),
+                        if (!_inputData) _buildOpenButton(),
+                        Consumer<AuthProvider>(
+                          builder: (_, auth, child) =>
+                              auth.loading ? child : SizedBox(),
+                          child: _buildModalProgress(),
+                        ),
                       ],
                     ),
                   ),
@@ -115,6 +142,53 @@ class _AuthPageState extends State<AuthPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildOpenButton() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(MyDietPage.route);
+              },
+              child: Row(
+                children: <Widget>[
+                  Text('Otwórz bez logowania'),
+                  SizedBox(
+                    width: 16.0,
+                  ),
+                  Icon(Icons.arrow_forward)
+                ],
+              ),
+              elevation: 8.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildModalProgress() {
+    return Stack(
+      children: [
+        Opacity(
+          opacity: 0.3,
+          child: const ModalBarrier(
+            dismissible: false,
+            color: Colors.grey,
+          ),
+        ),
+        Center(child: CircularProgressIndicator()),
+      ],
     );
   }
 
@@ -144,7 +218,11 @@ class _AuthPageState extends State<AuthPage> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: RegistrationForm(),
+                child: RegistrationForm(
+                  onRegister: (String email, String password) {
+                    _authProvider.registerUser(email, password);
+                  },
+                ),
               ),
             ),
           ),
@@ -197,36 +275,6 @@ class _AuthPageState extends State<AuthPage> {
             ),
           ),
         ),
-        if (!inputData)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RaisedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(MyDietPage.route);
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Text('Otwórz bez logowania'),
-                        SizedBox(
-                          width: 16.0,
-                        ),
-                        Icon(Icons.arrow_forward)
-                      ],
-                    ),
-                    elevation: 8.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
       ],
     );
   }

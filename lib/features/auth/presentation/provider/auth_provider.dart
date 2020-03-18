@@ -33,7 +33,6 @@ class AuthProvider with ChangeNotifier {
   }
 
   void _eitherLoginOrError(Either either) {
-    error = false;
     either.fold((_) => error = true, (token) {
       locator.get<Session>().initialize(SessionContext(token));
       loginSuccess = true;
@@ -56,8 +55,6 @@ class AuthProvider with ChangeNotifier {
   }
 
   void _eitherRegisterOrError(Either either) {
-    error = false;
-    registerSuccess = false;
     either.fold(
       (_) => error = true,
       (user) => registerSuccess = true,
@@ -67,6 +64,9 @@ class AuthProvider with ChangeNotifier {
   }
 
   void _setLoading(bool enable) {
+    error = false;
+    registerSuccess = false;
+    loginSuccess = false;
     loading = enable;
     notifyListeners();
   }

@@ -20,7 +20,6 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>(debugLabel: '_loginFormKey');
-
   String _email;
   String _password;
 
