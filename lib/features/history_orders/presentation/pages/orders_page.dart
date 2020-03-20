@@ -3,7 +3,7 @@ import 'package:my_dinner/features/address/domain/models/address.dart';
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
 import 'package:my_dinner/features/new_order/presentation/widgets/diet_card.dart';
-import 'package:my_dinner/features/pick_diet/presentation/pages/companies.dart';
+import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 
 import 'order_details_page.dart';
@@ -50,7 +50,7 @@ class OrdersPage extends StatelessWidget {
         ]),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () => Navigator.of(context).push(Companies.route),
+          onPressed: () => Navigator.of(context).push(DietSelectorPage.route),
         ),
       ),
     );

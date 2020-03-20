@@ -30,7 +30,7 @@ import 'package:my_dinner/features/pick_diet/data/datasource/companies_api.dart'
 import 'package:my_dinner/features/pick_diet/data/repository/companies_repository_imp.dart';
 import 'package:my_dinner/features/pick_diet/domain/repositories/companies_repository.dart';
 import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
-import 'package:my_dinner/features/pick_diet/presentation/provider/company_selector.dart';
+import 'package:my_dinner/features/pick_diet/presentation/provider/diet_picker.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -44,7 +44,7 @@ void $initGetIt(GetIt g, {String environment}) {
         g<PasswordForgotten>(),
       ));
   g.registerFactory<MyDietState>(() => InitialMyDiet());
-  g.registerFactory<CompanySelector>(() => CompanySelector(
+  g.registerFactory<DietPicker>(() => DietPicker(
         g<GetCompanies>(),
       ));
   g.registerFactory<MyDietBloc>(() => MyDietBloc(

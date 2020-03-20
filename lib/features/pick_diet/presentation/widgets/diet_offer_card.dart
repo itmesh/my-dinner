@@ -12,25 +12,23 @@ class DietOfferCard extends StatefulWidget {
   const DietOfferCard({
     Key key,
     this.dietOffer,
-    this.onSelect,
-  }) : super(key: key);
+    @required this.onSelect,
+  })  : assert(dietOffer != null, 'onSelect can not be null'),
+        super(key: key);
 
   @override
   _DietOfferCardState createState() => _DietOfferCardState();
 }
 
 class _DietOfferCardState extends State<DietOfferCard> {
-  String selectedVariant;
-  String selectedCalorific;
+  final _formKey = GlobalKey<FormState>();
+  String _selectedCalorific;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      selectedVariant = widget.dietOffer.variants.length == 1
-          ? widget.dietOffer.variants[0]
-          : '';
-      selectedCalorific = widget.dietOffer.calorific.length == 1
+      _selectedCalorific = widget.dietOffer.calorific.length == 1
           ? widget.dietOffer.calorific[0]
           : '';
     });
@@ -73,48 +71,38 @@ class _DietOfferCardState extends State<DietOfferCard> {
                           FractionallySizedBox(
                             widthFactor: 0.8,
                             child: Container(
-                              child: MaterialDropdown<String>(
-                                title: 'Warianty',
-                                dropDown: DropdownButtonFormField(
-                                  value: selectedVariant,
-                                  items: <DropdownMenuItem<String>>[
-                                    if (widget.dietOffer.variants.length > 1)
-                                      _emptyDropdown,
-                                    ..._mapToDropdown(
-                                        widget.dietOffer.variants),
-                                  ],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedVariant = value;
-                                    });
-                                  },
-                                ),
-                              ),
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 16.0),
-                            ),
-                          ),
-                          FractionallySizedBox(
-                            widthFactor: 0.8,
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: MaterialDropdown<String>(
-                                title: 'Kaloryczność',
-                                dropDown: DropdownButtonFormField(
-                                  value: selectedCalorific,
-                                  items: <DropdownMenuItem<String>>[
-                                    if (widget.dietOffer.calorific.length > 1)
-                                      _emptyDropdown,
-                                    ..._mapToDropdown(widget.dietOffer.calorific
-                                        .map((e) => e.toString())
-                                        .toList()),
-                                  ],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedCalorific = value;
-                                    });
-                                  },
+                              child: Form(
+                                key: _formKey,
+                                child: MaterialDropdown<String>(
+                                  title: 'Kaloryczność',
+                                  dropDown: DropdownButtonFormField(
+                                    value: _selectedCalorific,
+                                    items: <DropdownMenuItem<String>>[
+                                      if (widget.dietOffer.calorific.length > 1)
+                                        _emptyDropdown,
+                                      ..._mapToDropdown(widget
+                                          .dietOffer.calorific
+                                          .map((e) => e.toString())
+                                          .toList()),
+                                    ],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedCalorific = value;
+                                      });
+                                      _formKey.currentState.validate();
+                                    },
+                                    onSaved: (value) {
+                                      _selectedCalorific = value;
+                                    },
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return 'Wybierz kaloryczność';
+                                      }
+                                      return null;
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -139,8 +127,10 @@ class _DietOfferCardState extends State<DietOfferCard> {
                     FlatButton(
                       textColor: Theme.of(context).primaryColor,
                       onPressed: () {
-                        if (widget.onSelect != null)
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
                           widget.onSelect(widget.dietOffer);
+                        }
                       },
                       child: Text('Wybierz'),
                     )

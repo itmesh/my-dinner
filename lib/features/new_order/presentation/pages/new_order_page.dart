@@ -10,7 +10,7 @@ import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/edit_diet_page.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/edit_profile_page.dart';
 import 'package:my_dinner/features/new_order/presentation/widgets/diet_card.dart';
-import 'package:my_dinner/features/pick_diet/presentation/pages/companies.dart';
+import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
 import 'package:my_dinner/features/profile/domain/models/profile.dart';
 import 'package:my_dinner/features/profile/presentation/widgets/contact_data_card.dart';
 
@@ -228,7 +228,7 @@ class NewOrderPage extends StatelessWidget {
                 if (mealsData.isNotEmpty)
                   OutlineButton(
                     onPressed: () {
-                      Navigator.of(context).push(Companies.route);
+                      Navigator.of(context).push(DietSelectorPage.route);
                     },
                     borderSide: BorderSide(
                       color: Color(0xFF2196f3),
@@ -242,7 +242,7 @@ class NewOrderPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: _buildEmptyCard(context, () {
-                Navigator.of(context).push(Companies.route);
+                Navigator.of(context).push(DietSelectorPage.route);
               }),
             ),
           if (mealsData.length == 1)
