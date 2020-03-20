@@ -94,9 +94,9 @@ class _LoginFormState extends State<LoginForm> {
               color: Theme.of(context).primaryColor,
               onPressed: () {
                 if (_formKey.currentState.validate()) {
-                  if (widget.onLogin != null) {
-                    widget.onLogin(_email, _password);
-                  }
+                  _formKey.currentState.save();
+                  FocusScope.of(context).unfocus();
+                  widget.onLogin(_email, _password);
                 }
               },
               icon: Icon(Icons.send),

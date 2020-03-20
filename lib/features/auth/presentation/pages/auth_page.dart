@@ -45,6 +45,7 @@ class _AuthPageState extends State<AuthPage> {
     });
     _authProvider.addListener(() {
       if (_authProvider.registerSuccess) {
+        DefaultTabController.of(_key.currentContext).animateTo(0);
         _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text('Użytkownik został zarejestrowany'),
         ));
@@ -78,70 +79,153 @@ class _AuthPageState extends State<AuthPage> {
         ],
         child: SafeArea(
           child: DefaultTabController(
-            key: _key,
             length: 2,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  colorFilter: new ColorFilter.mode(
-                      Colors.black.withOpacity(0.6), BlendMode.dstATop),
-                  image: AssetImage('assets/images/food-background.jpg'),
+            child: Builder(
+              builder: (context) => Container(
+                key: _key,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    colorFilter: new ColorFilter.mode(
+                        Colors.black.withOpacity(0.6), BlendMode.dstATop),
+                    image: AssetImage('assets/images/food-background.jpg'),
+                  ),
                 ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    color: Theme.of(context).cardColor.withOpacity(0.8),
-                    child: TabBar(
-                      tabs: <Widget>[
-                        Tab(
-                          child: Text(
-                            'LOGOWANIE',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 16.0,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      color: Theme.of(context).cardColor.withOpacity(0.8),
+                      child: TabBar(
+                        tabs: <Widget>[
+                          Tab(
+                            child: Text(
+                              'LOGOWANIE',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 16.0,
+                              ),
                             ),
                           ),
-                        ),
-                        Tab(
-                          child: Text(
-                            'REJESTRACJA',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 16.0,
+                          Tab(
+                            child: Text(
+                              'REJESTRACJA',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 16.0,
+                              ),
                             ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Stack(
+                        children: <Widget>[
+                          TabBarView(
+                            children: <Widget>[
+                              _buildLogin(context),
+                              _buildRegistration(context),
+                            ],
                           ),
-                        )
-                      ],
+                          if (!_inputData) _buildOpenButton(),
+                          Consumer<AuthProvider>(
+                            builder: (_, auth, child) =>
+                                auth.loading ? child : SizedBox(),
+                            child: _buildModalProgress(),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Stack(
-                      children: <Widget>[
-                        TabBarView(
-                          children: <Widget>[
-                            _buildLoginForm(context),
-                            _buildRegisterForm(context),
-                          ],
-                        ),
-                        if (!_inputData) _buildOpenButton(),
-                        Consumer<AuthProvider>(
-                          builder: (_, auth, child) =>
-                              auth.loading ? child : SizedBox(),
-                          child: _buildModalProgress(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLogin(BuildContext context) {
+    return _buildForm(
+      context: context,
+      side: TrianglePainterSide.left,
+      form: LoginForm(
+        onLogin: (email, password) {
+          _authProvider.loginUser(email, password);
+        },
+      ),
+    );
+  }
+
+  Widget _buildRegistration(BuildContext context) {
+    return _buildForm(
+      context: context,
+      side: TrianglePainterSide.right,
+      form: RegistrationForm(
+        onRegister: (String email, String password) {
+          _authProvider.registerUser(email, password);
+        },
+      ),
+    );
+  }
+
+  Stack _buildForm({
+    BuildContext context,
+    TrianglePainterSide side,
+    Widget form,
+  }) {
+    Alignment alignment;
+    switch (side) {
+      case TrianglePainterSide.left:
+        alignment = Alignment.topLeft;
+        break;
+      case TrianglePainterSide.right:
+        alignment = Alignment.topRight;
+        break;
+    }
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: alignment,
+          child: CustomPaint(
+            painter: TrianglePainter(
+              color: Theme.of(context).primaryColor,
+              trianglePainterSide: side,
+            ),
+            size: Size(
+              MediaQuery.of(context).size.width / 4,
+              MediaQuery.of(context).size.width / 4,
+            ),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: 16.0,
+            ),
+            child: Material(
+              color: Colors.transparent,
+              elevation: 8.0,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                  color: Theme.of(context).cardColor.withOpacity(0.8),
+                ),
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: form,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -188,93 +272,6 @@ class _AuthPageState extends State<AuthPage> {
           ),
         ),
         Center(child: CircularProgressIndicator()),
-      ],
-    );
-  }
-
-  Stack _buildRegisterForm(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Align(
-          alignment: Alignment.topRight,
-          child: CustomPaint(
-            painter: TrianglePainter(
-              color: Theme.of(context).primaryColor,
-              trianglePainterSide: TrianglePainterSide.right,
-            ),
-            size: Size(
-              MediaQuery.of(context).size.width / 4,
-              MediaQuery.of(context).size.width / 4,
-            ),
-          ),
-        ),
-        Center(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4.0)),
-              color: Theme.of(context).cardColor.withOpacity(0.8),
-            ),
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: RegistrationForm(
-                  onRegister: (String email, String password) {
-                    _authProvider.registerUser(email, password);
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Stack _buildLoginForm(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Align(
-          alignment: Alignment.topLeft,
-          child: CustomPaint(
-            painter: TrianglePainter(
-              color: Theme.of(context).primaryColor,
-              trianglePainterSide: TrianglePainterSide.left,
-            ),
-            size: Size(
-              MediaQuery.of(context).size.width / 4,
-              MediaQuery.of(context).size.width / 4,
-            ),
-          ),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 16.0,
-            ),
-            child: Material(
-              color: Colors.transparent,
-              elevation: 8.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                  color: Theme.of(context).cardColor.withOpacity(0.8),
-                ),
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: LoginForm(
-                      onLogin: (email, password) {
-                        _authProvider.loginUser(email, password);
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }

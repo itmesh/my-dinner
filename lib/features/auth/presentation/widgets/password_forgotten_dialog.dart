@@ -46,8 +46,13 @@ class _PasswordForgottenDialogState extends State<PasswordForgottenDialog> {
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              Text(
+                'Odzyskiwanie hasła',
+                style: TextStyle(fontSize: 16.0),
+              ),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Adres email',
