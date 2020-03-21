@@ -87,6 +87,7 @@ class _DietSelectorPageState extends State<DietSelectorPage> {
                         selected: e == _dietPicker.selectedCompany,
                         company: e,
                         onSelect: _dietPicker.selectCompany,
+                        onSelectDiet: _dietPicker.selectCompanyWithDiet,
                       ))
                   .toList(),
             ),
@@ -108,12 +109,17 @@ class _DietSelectorPageState extends State<DietSelectorPage> {
         padding: const EdgeInsets.all(4.0),
         children: [
           if (_dietPicker.selectedCompany != null)
-            ..._dietPicker.selectedCompany.availDiets
-                .map((diet) => DietOfferCard(
-                      dietOffer: diet,
-                      onSelect: _dietPicker.selectDiet,
-                    ))
-                .toList(),
+            ..._dietPicker.selectedCompany.availDiets.map((diet) {
+              int calories = diet == _dietPicker.selectedDiet
+                  ? _dietPicker.calories
+                  : null;
+              return DietOfferCard(
+                calories: calories,
+                selected: diet == _dietPicker.selectedDiet,
+                dietOffer: diet,
+                onSelect: _dietPicker.selectDiet,
+              );
+            }).toList(),
         ],
       ),
     );

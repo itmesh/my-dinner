@@ -22,7 +22,10 @@ class DietPicker extends ChangeNotifier {
   bool loading = false;
   Company _selectedCompany;
   DietOffer _selectedDiet;
+  int _calories;
   int _currentIndex = 0;
+
+  int get calories => _calories;
 
   DietOffer get selectedDiet => _selectedDiet;
 
@@ -54,6 +57,8 @@ class DietPicker extends ChangeNotifier {
 
   void selectCompany(Company company) {
     _selectedCompany = company;
+    _selectedDiet = null;
+    _calories = null;
     _currentIndex += 1;
     _steps[0].active = false;
     _steps[0].state = StepState.complete;
@@ -61,11 +66,19 @@ class DietPicker extends ChangeNotifier {
     _steps[1].state = StepState.editing;
     _steps[2].active = false;
     _steps[2].state = StepState.disabled;
+
     notifyListeners();
   }
 
-  void selectDiet(DietOffer dietOffer) {
+  void selectCompanyWithDiet(Company company, DietOffer diet, int calories) {
+    selectCompany(company);
+    _selectedDiet = diet;
+    _calories = calories;
+  }
+
+  void selectDiet(DietOffer dietOffer, int calories) {
     _selectedDiet = dietOffer;
+    _calories = calories;
     _currentIndex += 1;
     _steps[1].active = false;
     _steps[1].state = StepState.complete;

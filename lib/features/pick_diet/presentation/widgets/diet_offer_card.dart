@@ -3,17 +3,21 @@ import 'package:my_dinner/features/pick_diet/domain/models/diet_offer.dart';
 import 'package:my_dinner/widgets/material_dropdown.dart';
 import 'package:my_dinner/widgets/selectable_card.dart';
 
-typedef OnSelect = void Function(DietOffer value);
+typedef OnSelect = void Function(DietOffer value, int calories);
 
 class DietOfferCard extends StatefulWidget {
   final DietOffer dietOffer;
+  final int calories;
+  final bool selected;
   final OnSelect onSelect;
 
   const DietOfferCard({
     Key key,
+    this.selected = false,
+    this.calories,
     this.dietOffer,
     @required this.onSelect,
-  })  : assert(dietOffer != null, 'onSelect can not be null'),
+  })  : assert(onSelect != null, 'onSelect can not be null'),
         super(key: key);
 
   @override
@@ -31,6 +35,9 @@ class _DietOfferCardState extends State<DietOfferCard> {
       _selectedCalorific = widget.dietOffer.calorific.length == 1
           ? widget.dietOffer.calorific[0]
           : '';
+      if (widget.calories != null) {
+        _selectedCalorific = widget.calories.toString();
+      }
     });
   }
 
@@ -39,6 +46,7 @@ class _DietOfferCardState extends State<DietOfferCard> {
     return Column(
       children: <Widget>[
         SelectableCard(
+          selected: widget.selected,
           card: Card(
             child: ExpansionTile(
               initiallyExpanded: true,
@@ -129,7 +137,10 @@ class _DietOfferCardState extends State<DietOfferCard> {
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
-                          widget.onSelect(widget.dietOffer);
+                          widget.onSelect(
+                            widget.dietOffer,
+                            int.parse(_selectedCalorific),
+                          );
                         }
                       },
                       child: Text('Wybierz'),

@@ -10,16 +10,23 @@ import 'package:my_dinner/features/pick_diet/domain/models/diet_offer.dart';
 import 'package:my_dinner/widgets/selectable_card.dart';
 
 typedef OnSelect = void Function(Company value);
+typedef OnSelectDiet = void Function(
+  Company company,
+  DietOffer diet,
+  int calories,
+);
 
 class CompanyCard extends StatefulWidget {
   final Company company;
   final OnSelect onSelect;
   final bool selected;
+  final OnSelectDiet onSelectDiet;
 
   const CompanyCard({
     this.company,
     this.onSelect,
     this.selected = false,
+    this.onSelectDiet,
   });
 
   @override
@@ -31,6 +38,7 @@ class CompanyCard extends StatefulWidget {
 class _CompanyCardState extends State<CompanyCard>
     with TickerProviderStateMixin {
   final _showAllChipsDuration = Duration(milliseconds: 400);
+  final _hideMoreChipsDuration = Duration(milliseconds: 100);
   final ValueNotifier<bool> _showAllChips = ValueNotifier<bool>(false);
   AnimationController _showingAllChipsController;
   bool selected = false;
@@ -92,7 +100,7 @@ class _CompanyCardState extends State<CompanyCard>
                   SizedBox(width: 8.0),
                   Text(widget.company.rating.rate.toString()),
                   SizedBox(width: 4.0),
-                  Text(widget.company.rating.votesCount.toString()),
+                  Text('(${widget.company.rating.votesCount})'),
                 ],
               )
             ],
@@ -142,13 +150,13 @@ class _CompanyCardState extends State<CompanyCard>
     if (_showAllChips.value) {
       return diets
           .sublist(0, limit)
-          .map((e) => _buildChip(
-              label: e.name, onTap: (diet) => _showDialogWithDiet(diet)))
+          .map((diet) => _buildChip(
+              diet: diet, onTap: (diet) => _showDialogWithDiet(diet)))
           .toList()
             ..addAll(diets
                 .sublist(limit)
-                .map((e) => _buildChip(
-                    label: e.name,
+                .map((diet) => _buildChip(
+                    diet: diet,
                     withAnimation: true,
                     onTap: (diet) => _showDialogWithDiet(diet)))
                 .toList());
@@ -156,20 +164,20 @@ class _CompanyCardState extends State<CompanyCard>
       if (diets.length > limit) {
         return diets
             .sublist(0, limit)
-            .map((e) => _buildChip(
-                label: e.name, onTap: (diet) => _showDialogWithDiet(diet)))
+            .map((diet) => _buildChip(
+                diet: diet, onTap: (diet) => _showDialogWithDiet(diet)))
             .toList()
-              ..add(_buildChip(label: '...', onTap: (_) => _showMoreChips));
+              ..add(_buildChip(onTap: (_) => _showMoreChips()));
       } else {
         return diets
-            .map((e) => _buildChip(
-                label: e.name, onTap: (diet) => _showDialogWithDiet(diet)))
+            .map((diet) => _buildChip(
+                diet: diet, onTap: (diet) => _showDialogWithDiet(diet)))
             .toList();
       }
     }
   }
 
-  void _showDialogWithDiet(String diet) {
+  void _showDialogWithDiet(DietOffer diet) {
     showDialog(
       context: context,
       builder: (_) => Dialog(
@@ -177,7 +185,90 @@ class _CompanyCardState extends State<CompanyCard>
           builder: (_, constraints) {
             print(constraints.maxHeight);
             print(constraints.maxWidth);
-            return Container();
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          diet.name,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        ...diet.calorific
+                            .map((e) => Container(
+                                  margin: const EdgeInsets.only(bottom: 4.0),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.circular(6.0),
+                                    border: Border.all(
+                                      color: _chipBackgroundColor(context),
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (widget.onSelectDiet != null) {
+                                          widget.onSelectDiet(
+                                            widget.company,
+                                            diet,
+                                            e,
+                                          );
+                                          Navigator.pop(context);
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
+                                              child:
+                                                  Text(e.toString() + ' kcal'),
+                                            ),
+                                            Row(
+                                              children: <Widget>[
+                                                Text('21.00 zł - 22.20 zł'),
+                                                SizedBox(width: 16.0),
+                                                Text(
+                                                  'Wybierz',
+                                                  style:
+                                                      TextStyle(fontSize: 12.0),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      FlatButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text('Zamknij'),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            );
           },
         ),
       ),
@@ -190,17 +281,36 @@ class _CompanyCardState extends State<CompanyCard>
   }
 
   Widget _buildChip({
-    String label,
+    DietOffer diet,
     Function onTap,
     bool withAnimation = false,
   }) {
-    Widget chip = GestureDetector(
-      onTap: () => onTap(label),
-      child: Chip(
-        backgroundColor: _chipBackgroundColor(context),
-        label: Text(
-          label,
-          style: TextStyle(fontSize: 14.0),
+    AnimationController _animController = AnimationController(
+      vsync: this,
+      duration: _hideMoreChipsDuration,
+    );
+    _animController.value = 0.0;
+    Widget chip = FadeTransition(
+      opacity: Tween(begin: 1.0, end: 0.0).animate(_animController),
+      child: GestureDetector(
+        onTap: () {
+          if (diet == null) {
+            _animController.addStatusListener((status) {
+              if (status == AnimationStatus.completed) {
+                onTap(diet);
+              }
+            });
+            _animController.forward();
+          } else {
+            onTap(diet);
+          }
+        },
+        child: Chip(
+          backgroundColor: _chipBackgroundColor(context),
+          label: Text(
+            diet?.name ?? '...',
+            style: TextStyle(fontSize: 14.0),
+          ),
         ),
       ),
     );
