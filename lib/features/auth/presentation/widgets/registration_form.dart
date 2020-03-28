@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 typedef OnRegister = void Function(String user, String password);
@@ -66,6 +67,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
             },
           ),
           SizedBox(
+            height: 12.0,
+          ),
+          LinkedLabelSwitch(
+            label: 'Akceptuje regulamin i polityke prywatności',
+            onChanged: (_) {},
+            padding: const EdgeInsets.all(0.0),
+            value: true,
+          ),
+          SizedBox(
             height: 24.0,
           ),
           ButtonTheme(
@@ -85,6 +95,52 @@ class _RegistrationFormState extends State<RegistrationForm> {
               label: Text('Zarejestruj'),
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class LinkedLabelSwitch extends StatelessWidget {
+  const LinkedLabelSwitch({
+    this.label,
+    this.padding,
+    this.value,
+    this.onChanged,
+  });
+
+  final String label;
+  final EdgeInsets padding;
+  final bool value;
+  final Function onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: padding,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                text: label,
+                style: TextStyle(
+                  color: Colors.blueAccent,
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    print('Label has been tapped.');
+                  },
+              ),
+            ),
+          ),
+          Switch(
+            value: value,
+            onChanged: (bool newValue) {
+              onChanged(newValue);
+            },
+          ),
         ],
       ),
     );
