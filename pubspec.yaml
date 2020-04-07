@@ -48,6 +48,8 @@ dependencies:
   sized_context: ^0.2.1
   keyboard_visibility: ^0.5.6
   validators: ^2.0.0+1
+  redux: ^4.0.0
+  redux_thunk: ^0.3.0
 
 
   # The following adds the Cupertino Icons font to your application.

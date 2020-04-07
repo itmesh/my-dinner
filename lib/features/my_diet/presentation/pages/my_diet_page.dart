@@ -9,6 +9,7 @@ import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_event.dart'
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/meal_page.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/new_order_page.dart';
+import 'package:my_dinner/features/new_order/presentation/redux/store.dart';
 import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -104,7 +105,8 @@ class _MyDietPageState extends State<MyDietPage> {
   Widget _buildFloatingButton() {
     if (_bloc.state is LoadedMyDiet) {
       return FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          await NewOrderRedux.init();
           Navigator.of(context).push(NewOrderPage.route);
         },
         child: Icon(Icons.add),

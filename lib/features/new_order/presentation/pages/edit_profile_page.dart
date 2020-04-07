@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_dinner/features/profile/domain/models/profile.dart';
 import 'package:my_dinner/features/profile/presentation/widgets/profile_form.dart';
 
 class EditProfilePage extends StatelessWidget {
-  static ModalRoute<dynamic> get route {
+  static ModalRoute<Profile> get route {
     return MaterialPageRoute(
       builder: (_) => EditProfilePage(),
     );

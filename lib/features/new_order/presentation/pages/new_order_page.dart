@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
 import 'package:my_dinner/features/address/domain/models/delivery_hours.dart';
 import 'package:my_dinner/features/address/presentation/pages/address_details_page.dart';
@@ -9,10 +10,13 @@ import 'package:my_dinner/features/address/presentation/widgets/address_card.dar
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/edit_diet_page.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/edit_profile_page.dart';
+import 'package:my_dinner/features/new_order/presentation/redux/new_order_redux.dart';
+import 'package:my_dinner/features/new_order/presentation/redux/store.dart';
 import 'package:my_dinner/features/new_order/presentation/widgets/diet_card.dart';
 import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
 import 'package:my_dinner/features/profile/domain/models/profile.dart';
 import 'package:my_dinner/features/profile/presentation/widgets/contact_data_card.dart';
+import 'package:redux/redux.dart';
 
 class NewOrderPage extends StatelessWidget {
   static Route<dynamic> get route {
@@ -23,56 +27,74 @@ class NewOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Store<NewOrderState> _store = Store(
+      newOrderReducer,
+      initialState: NewOrderState(),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Nowe zamówienie'),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView(
-              children: <Widget>[
-                _buildDietInfo(context),
-                Container(height: 8.0, color: Colors.black12),
-                _buildContactData(context),
-                Container(height: 8.0, color: Colors.black12),
-                _buildAddressData(context),
-                Container(
-                  height: 16.0,
-                  color: Colors.black12,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Text(
-                  '0,00 zł',
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                ),
-                Expanded(child: SizedBox()),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: RaisedButton.icon(
-                    label: Text('Podsumowanie'),
-                    icon: Icon(Icons.playlist_add_check),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Colors.white,
-                    onPressed: () {},
+      body: StoreProvider<NewOrderState>(
+        store: NewOrderRedux.store,
+        child: StoreConnector<NewOrderState, NewOrderState>(
+            onInit: (store) {
+              store.dispatch(getProfile);
+              store.dispatch(getAddresses);
+            },
+            converter: (store) => store.state,
+            builder: (context, state) {
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ListView(
+                      children: <Widget>[
+                        _buildDietInfo(context),
+                        Container(height: 8.0, color: Colors.black12),
+                        _buildContactData(context),
+                        Container(height: 8.0, color: Colors.black12),
+                        _buildAddressData(context),
+                        Container(
+                          height: 16.0,
+                          color: Colors.black12,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 24.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text(
+                          '0,00 zł',
+                          style: TextStyle(
+                              fontSize: 16.0, fontWeight: FontWeight.bold),
+                        ),
+                        Expanded(child: SizedBox()),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: RaisedButton.icon(
+                            label: Text('Podsumowanie'),
+                            icon: Icon(Icons.playlist_add_check),
+                            color: Theme.of(context).primaryColor,
+                            textColor: Colors.white,
+                            onPressed: () {},
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }),
       ),
     );
   }
 
   Widget _buildContactData(BuildContext context) {
+    Store<NewOrderState> store = StoreProvider.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -84,17 +106,25 @@ class NewOrderPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 12.0),
           child: Container(
-            child: ContactDataCard(
-              contactData: Profile(
-                name: 'Krzysztof',
-                surname: 'Wizner',
-                email: 'krzysztofwiz93@gmail.com',
-                phoneNumber: 518990713,
-              ),
-              onEdit: () {
-                Navigator.of(context).push(EditProfilePage.route);
-              },
-            ),
+            child: StoreConnector<NewOrderState, ProfileViewModel>(
+                converter: (store) => ProfileViewModel.fromStore(store),
+                builder: (_, profileViewModel) {
+                  if (profileViewModel != null) {
+                    return ContactDataCard(
+                      contactData: Profile(
+                        name: profileViewModel.name,
+                        surname: profileViewModel.surname,
+                        email: profileViewModel.email,
+                        phoneNumber: 123,
+                      ),
+                      onEdit: () {
+                        Navigator.of(context).push(EditProfilePage.route);
+                      },
+                    );
+                  } else {
+                    return SizedBox();
+                  }
+                }),
           ),
         )
       ],
@@ -102,67 +132,81 @@ class NewOrderPage extends StatelessWidget {
   }
 
   Widget _buildAddressData(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            title: Row(
-              children: <Widget>[
-                Text('Adres dostawy',
-                    style: TextStyle(
-                        color: Color(0xFF2196f3), fontWeight: FontWeight.w400)),
-                Expanded(
-                  child: SizedBox(),
-                ),
-                if (addressData.isNotEmpty)
-                  OutlineButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(AddressDetailsPage.routeWithParams());
-                    },
-                    borderSide: BorderSide(
-                      color: Color(0xFF2196f3),
+    return StoreConnector<NewOrderState, List<AddressViewModel>>(
+      converter: (store) {
+        if (store.state.addresses != null) {
+          return store.state.addresses
+              .map((e) => AddressViewModel.fromAddress(e))
+              .toList();
+        } else {
+          return [];
+        }
+      },
+      builder: (_, addresses) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12.0),
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Text('Adres dostawy',
+                        style: TextStyle(
+                            color: Color(0xFF2196f3),
+                            fontWeight: FontWeight.w400)),
+                    Expanded(
+                      child: SizedBox(),
                     ),
-                    child: Text('Dodaj'),
-                  ),
-              ],
-            ),
-          ),
-          if (addressData.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: _buildEmptyCard(context, () {
-                Navigator.of(context)
-                    .push(AddressDetailsPage.routeWithParams());
-              }),
-            ),
-          if (addressData.length == 1)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: _buildSingleAddress(
-                context: context,
-                address: addressData[0],
-                singleItem: true,
+                    if (addresses.isNotEmpty)
+                      OutlineButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(AddressDetailsPage.routeWithParams());
+                        },
+                        borderSide: BorderSide(
+                          color: Color(0xFF2196f3),
+                        ),
+                        child: Text('Dodaj'),
+                      ),
+                  ],
+                ),
               ),
-            ),
-          if (addressData.length > 1)
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(children: [
-                SizedBox(width: 12.0),
-                if (addressData.length > 1)
-                  ...addressData
-                      .map((address) => _buildSingleAddress(
-                            context: context,
-                            address: address,
-                          ))
-                      .toList(),
-                SizedBox(width: 4.0),
-              ]),
-            ),
-        ],
-      ),
+              if (addresses.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: _buildEmptyCard(context, () {
+                    Navigator.of(context)
+                        .push(AddressDetailsPage.routeWithParams());
+                  }),
+                ),
+              if (addresses.length == 1)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: _buildSingleAddress(
+                    context: context,
+                    address: addresses[0].address,
+                    singleItem: true,
+                  ),
+                ),
+              if (addresses.length > 1)
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(children: [
+                    SizedBox(width: 12.0),
+                    if (addresses.length > 1)
+                      ...addresses
+                          .map((address) => _buildSingleAddress(
+                                context: context,
+                                address: address.address,
+                              ))
+                          .toList(),
+                    SizedBox(width: 4.0),
+                  ]),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -193,6 +237,7 @@ class NewOrderPage extends StatelessWidget {
     bool singleItem = false,
   }) {
     AddressCard addressCard = AddressCard(
+      selected: true,
       onEdit: () {
         Navigator.of(context).push(
           AddressDetailsPage.routeWithParams(address: address),
@@ -352,6 +397,6 @@ class NewOrderPage extends StatelessWidget {
     );
   }).toList();
 
-  final List<Address> addressData = addressData2;
+  //final List<Address> addressData = addressData2;
   final List<Diet> mealsData = mealsData0;
 }

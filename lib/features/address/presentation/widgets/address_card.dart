@@ -22,14 +22,8 @@ class AddressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SelectableCard(
-      onTap: () {},
+      selected: selected,
       card: Card(
-        shape: selected
-            ? RoundedRectangleBorder(
-                side: BorderSide(color: Theme.of(context).primaryColor),
-                borderRadius: BorderRadius.circular(4.0),
-              )
-            : null,
         child: ListTile(
           onTap: onTap,
           title: Text('${address.street} ${address.homeFlatNumber}'),
