@@ -50,6 +50,7 @@ dependencies:
   validators: ^2.0.0+1
   redux: ^4.0.0
   redux_thunk: ^0.3.0
+  logging: 0.11.4
 
 
   # The following adds the Cupertino Icons font to your application.
