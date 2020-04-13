@@ -1,5 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:my_dinner/core/services/injection.dart';
+import 'package:my_dinner/core/services/url_helper.dart';
+import 'package:my_dinner/core/services/utils/constants.dart';
 
 typedef OnRegister = void Function(String user, String password);
 
@@ -20,6 +23,7 @@ class RegistrationForm extends StatefulWidget {
 
 class _RegistrationFormState extends State<RegistrationForm> {
   final _formKey = GlobalKey<FormState>(debugLabel: '_registrationFormKey');
+  bool rulesAccepted = false;
   String email;
   String password;
 
@@ -41,6 +45,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             onSaved: (value) => email = value,
           ),
           TextFormField(
+            obscureText: true,
             decoration: InputDecoration(
               labelText: 'Hasło',
             ),
@@ -51,6 +56,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             onSaved: (value) => password = value,
           ),
           TextFormField(
+            obscureText: true,
             decoration: InputDecoration(
               labelText: 'Powtórz hasło',
             ),
@@ -70,10 +76,17 @@ class _RegistrationFormState extends State<RegistrationForm> {
             height: 12.0,
           ),
           LinkedLabelSwitch(
+            onTap: () {
+              URLHelper.open(URLs.rules);
+            },
             label: 'Akceptuje regulamin i polityke prywatności',
-            onChanged: (_) {},
+            onChanged: (value) {
+              setState(() {
+                rulesAccepted = value;
+              });
+            },
             padding: const EdgeInsets.all(0.0),
-            value: true,
+            value: rulesAccepted,
           ),
           SizedBox(
             height: 24.0,
@@ -107,12 +120,14 @@ class LinkedLabelSwitch extends StatelessWidget {
     this.padding,
     this.value,
     this.onChanged,
+    this.onTap,
   });
 
   final String label;
   final EdgeInsets padding;
   final bool value;
   final Function onChanged;
+  final GestureTapCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +145,9 @@ class LinkedLabelSwitch extends StatelessWidget {
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    print('Label has been tapped.');
+                    if (onTap != null) {
+                      onTap();
+                    }
                   },
               ),
             ),

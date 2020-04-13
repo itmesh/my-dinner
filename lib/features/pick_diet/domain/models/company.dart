@@ -21,7 +21,7 @@ class Company {
     return Company(
       name: dto.name,
       logoURL: dto.logoURL,
-      availDiets: dto.availDiets.map((e) => DietOffer.fromDto(e)),
+      availDiets: dto.availDiets.map((e) => DietOffer.fromDto(e)).toList(),
       rating: Rating.fromDto(dto.rating),
       priceLevel: dto.priceLevel,
     );

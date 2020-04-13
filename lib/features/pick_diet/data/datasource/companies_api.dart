@@ -6,7 +6,6 @@ import 'package:injectable/injectable.dart';
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/utils/demo.dart';
 import 'package:my_dinner/features/pick_diet/data/dtos/company_dto.dart';
-import 'package:my_dinner/features/pick_diet/domain/models/company.dart';
 
 abstract class CompaniesApi {
   Future<List<CompanyDto>> getCompanies();
@@ -32,7 +31,7 @@ class CompaniesApiDemo extends CompaniesApi {
 
     return json
         .decode(response)
-        .map<Company>((e) => CompanyDto.fromJson(e))
+        .map<CompanyDto>((e) => CompanyDto.fromJson(e))
         .toList();
   }
 }

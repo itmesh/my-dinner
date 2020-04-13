@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
 import 'package:my_dinner/core/services/failures.dart';
+import 'package:my_dinner/core/services/log.dart';
 import 'package:my_dinner/features/address/data/datasources/address_api.dart';
 import 'package:my_dinner/features/address/data/dtos/address_dto.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
@@ -11,6 +12,7 @@ import 'package:my_dinner/features/address/domain/repositories/address_repositor
 @RegisterAs(AddressRepository)
 @singleton
 class AddressRepositoryImp extends AddressRepository {
+  final _log = Log('AddressRepositoryImp');
   final AddressApi addressApi;
 
   AddressRepositoryImp(this.addressApi);
@@ -19,9 +21,9 @@ class AddressRepositoryImp extends AddressRepository {
   Future<Either<Failure, List<Address>>> getAddresses() async {
     try {
       List<AddressDto> dto = await addressApi.getAddresses();
-      return Right(dto.map((e) => Address.fromDto(e)));
+      return Right(dto.map((e) => Address.fromDto(e)).toList());
     } catch (e) {
-      Logger().e(e);
+      _log.error(e);
       return Left(ApiFailure());
     }
   }
@@ -32,7 +34,7 @@ class AddressRepositoryImp extends AddressRepository {
       AddressDto dto = await addressApi.createAddress(address);
       return Right(Address.fromDto(dto));
     } catch (e) {
-      Logger().e(e);
+      _log.error(e.toString());
       return Left(ApiFailure());
     }
   }
@@ -43,7 +45,7 @@ class AddressRepositoryImp extends AddressRepository {
       AddressDto dto = await addressApi.updateAddress(address);
       return Right(Address.fromDto(dto));
     } catch (e) {
-      Logger().e(e);
+      _log.error(e);
       return Left(ApiFailure());
     }
   }
@@ -54,7 +56,7 @@ class AddressRepositoryImp extends AddressRepository {
       AddressDto dto = await addressApi.deleteAddress(address);
       return Right(Address.fromDto(dto));
     } catch (e) {
-      Logger().e(e);
+      _log.error(e);
       return Left(ApiFailure());
     }
   }
