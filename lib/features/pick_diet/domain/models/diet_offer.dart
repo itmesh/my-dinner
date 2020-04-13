@@ -1,18 +1,24 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_dinner/features/pick_diet/data/dtos/diet_offer_dto.dart';
 
-part 'diet_offer.freezed.dart';
+class DietOffer {
+  final String name;
+  final String description;
+  final List<String> variants;
+  final List<int> calorific;
 
-part 'diet_offer.g.dart';
+  DietOffer({
+    this.name,
+    this.description,
+    this.variants,
+    this.calorific,
+  });
 
-@freezed
-abstract class DietOffer with _$DietOffer{
-  const factory DietOffer(
-    String name,
-    String description,
-    List<String> variants,
-    List<int> calorific,
-  ) = _DietOffer;
-
-  factory DietOffer.fromJson(Map<String, dynamic> json) =>
-      _$DietOfferFromJson(json);
+  factory DietOffer.fromDto(DietOfferDto dto) {
+    return DietOffer(
+      name: dto.name,
+      description: dto.description,
+      variants: dto.variants,
+      calorific: dto.calorific,
+    );
+  }
 }

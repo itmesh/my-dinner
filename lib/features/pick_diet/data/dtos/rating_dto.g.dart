@@ -1,19 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'rating.dart';
+part of 'rating_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Rating _$_$_RatingFromJson(Map<String, dynamic> json) {
-  return _$_Rating(
-    (json['rate'] as num)?.toDouble(),
-    json['votesCount'] as int,
+RatingDto _$RatingDtoFromJson(Map<String, dynamic> json) {
+  return RatingDto(
+    rate: (json['rate'] as num)?.toDouble(),
+    votesCount: json['votesCount'] as int,
   );
 }
 
-Map<String, dynamic> _$_$_RatingToJson(_$_Rating instance) => <String, dynamic>{
+Map<String, dynamic> _$RatingDtoToJson(RatingDto instance) => <String, dynamic>{
       'rate': instance.rate,
       'votesCount': instance.votesCount,
     };

@@ -3,19 +3,24 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
+import 'package:my_dinner/core/services/config/host_config.dart';
+import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/log.dart';
 
+@Environment(Env.dev)
+@singleton
 class MyHttpClient {
   static const int _minClientId = 100000;
   static const int _maxClientId = 999999;
 
   final Log _log = Log('MyHttpClient');
   final Random _random = Random();
-  final String baseUrl;
+  final HostConfig hostConfig;
   final _Session session = _Session();
   final List<HttpErrorHandler> httpErrorHandlers = [];
 
-  MyHttpClient(this.baseUrl);
+  MyHttpClient(this.hostConfig);
 
   Future<T> post<T>({
     String path,
@@ -26,7 +31,7 @@ class MyHttpClient {
     _log.debug('POST $path');
     return _withHttpClient(
       (client) => client
-          .postUrl(Uri.parse(baseUrl + path))
+          .postUrl(Uri.parse(hostConfig.baseUrl + path))
           .then((HttpClientRequest request) =>
               _prepareRequestWithBody(request, body, headers))
           .then((HttpClientResponse response) =>
@@ -40,10 +45,10 @@ class MyHttpClient {
     Map<String, String> headers,
     T out(dynamic json),
   }) async {
-    _log.debug('GET $baseUrl$path');
+    _log.debug('GET $path');
     return _withHttpClient(
       (client) => client
-          .getUrl(Uri.parse(baseUrl + path))
+          .getUrl(Uri.parse(hostConfig.baseUrl + path))
           .then(
               (HttpClientRequest request) => _prepareRequest(request, headers))
           .then((HttpClientResponse response) =>
@@ -61,7 +66,7 @@ class MyHttpClient {
     _log.debug('PUT $path');
     return _withHttpClient(
       (client) => client
-          .putUrl(Uri.parse(baseUrl + path))
+          .putUrl(Uri.parse(hostConfig.baseUrl + path))
           .then((HttpClientRequest request) =>
               _prepareRequestWithBody(request, body, headers))
           .then((HttpClientResponse response) =>
@@ -79,7 +84,7 @@ class MyHttpClient {
     _log.debug('PATCH $path');
     return _withHttpClient(
       (client) => client
-          .patchUrl(Uri.parse(baseUrl + path))
+          .patchUrl(Uri.parse(hostConfig.baseUrl + path))
           .then((HttpClientRequest request) =>
               _prepareRequestWithBody(request, body, headers))
           .then((HttpClientResponse response) =>
@@ -96,7 +101,7 @@ class MyHttpClient {
   }) async {
     _log.debug('DELETE $path');
     return _withHttpClient((client) => client
-        .deleteUrl(Uri.parse(baseUrl + path))
+        .deleteUrl(Uri.parse(hostConfig.baseUrl + path))
         .then((HttpClientRequest request) =>
             _prepareRequestWithBody(request, body, headers))
         .then(
@@ -318,3 +323,4 @@ const List<int> _acceptableResponseStatus = [
   HttpStatus.ok,
   HttpStatus.created
 ];
+

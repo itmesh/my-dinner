@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:my_dinner/core/services/failures.dart';
 import 'package:my_dinner/features/auth/data/datasources/auth_api.dart';
+import 'package:my_dinner/features/auth/data/dtos/auth_response.dart';
 import 'package:my_dinner/features/auth/domain/models/user.dart';
 import 'package:my_dinner/features/auth/domain/repositories/auth_repository.dart';
 
@@ -16,7 +17,8 @@ class AuthRepositoryImp extends AuthRepository {
   @override
   Future<Either<Failure, String>> login(User user) async {
     try {
-      return Right(await authApi.login(user));
+      AuthResponse response = await authApi.login(user.toDto());
+      return Right(response.token);
     } catch (e) {
       Logger().e(e);
       return Left(ApiFailure());
@@ -24,9 +26,10 @@ class AuthRepositoryImp extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, User>> register(User user) async {
+  Future<Either<Failure, String>> register(User user) async {
     try {
-      return Right(await authApi.register(user));
+      AuthResponse response = await authApi.login(user.toDto());
+      return Right(response.token);
     } catch (e) {
       Logger().e(e);
       return Left(ApiFailure());

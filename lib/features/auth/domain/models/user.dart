@@ -1,15 +1,22 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_dinner/features/auth/data/dtos/user_dto.dart';
 
-part 'user.g.dart';
+class User {
+  final String email;
+  final String password;
 
-part 'user.freezed.dart';
+  User({
+    this.email,
+    this.password,
+  });
 
-@freezed
-abstract class User with _$User{
-  const factory User({
-    String email,
-    String password,
-}) = _User;
+  factory User.fromDto(UserDto dto) {
+    return User(email: dto.email);
+  }
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  UserDto toDto() {
+    return UserDto(
+      email: email,
+      password: password,
+    );
+  }
 }

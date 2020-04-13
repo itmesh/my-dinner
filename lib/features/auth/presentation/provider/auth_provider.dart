@@ -33,10 +33,15 @@ class AuthProvider with ChangeNotifier {
   }
 
   void _eitherLoginOrError(Either either) {
-    either.fold((_) => error = true, (token) {
-      locator.get<Session>().initialize(SessionContext(token));
-      loginSuccess = true;
-    });
+    either.fold(
+      (_) => error = true,
+      (token) {
+        locator.get<Session>().initialize(
+              SessionContext(token),
+            );
+        loginSuccess = true;
+      },
+    );
     loading = false;
     notifyListeners();
   }
@@ -57,7 +62,7 @@ class AuthProvider with ChangeNotifier {
   void _eitherRegisterOrError(Either either) {
     either.fold(
       (_) => error = true,
-      (user) => registerSuccess = true,
+      (token) => registerSuccess = true,
     );
     loading = false;
     notifyListeners();

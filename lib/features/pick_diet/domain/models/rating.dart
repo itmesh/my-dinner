@@ -1,15 +1,18 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_dinner/features/pick_diet/data/dtos/rating_dto.dart';
 
-part 'rating.freezed.dart';
+class Rating {
+  final double rate;
+  final int votesCount;
 
-part 'rating.g.dart';
+  Rating({
+    this.rate,
+    this.votesCount,
+  });
 
-@freezed
-abstract class Rating with _$Rating {
-  const factory Rating(
-    double rate,
-    int votesCount,
-  ) = _Rating;
-
-  factory Rating.fromJson(Map<String, dynamic> json) => _$RatingFromJson(json);
+  factory Rating.fromDto(RatingDto dto) {
+    return Rating(
+      rate: dto.rate,
+      votesCount: dto.votesCount,
+    );
+  }
 }

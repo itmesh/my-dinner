@@ -1,6 +1,7 @@
 import 'package:either_option/either_option.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:my_dinner/features/my_diet/data/dtos/diet_dto.dart';
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/my_diet/domain/usecases/my_diet_mock.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/bloc.dart';
@@ -22,9 +23,11 @@ main() {
     expect(bloc.initialState, initialState);
   });
 
-  test('mapEventToState.LoadMyDiet - initial state - should emit LoadedMyDiet state with diet', () {
+  test(
+      'mapEventToState.LoadMyDiet - initial state - should emit LoadedMyDiet state with diet',
+      () {
     // arrange
-    Diet diet = Diet.fromJson(jsonFixture('diets.json'));
+    Diet diet = Diet.fromDto(DietDto.fromJson(jsonFixture('diets.json')));
     when(getDietMock.call(any)).thenAnswer((_) async => Right([diet]));
     // assert later
     final expected = [
@@ -37,7 +40,8 @@ main() {
     bloc.add(LoadMyDiet(DateTime.now()));
   });
 
-  test('mapEventToState.LoadMyDiet - initial state - should emit Error state', () {
+  test('mapEventToState.LoadMyDiet - initial state - should emit Error state',
+      () {
     // arrange
     when(getDietMock.call(any)).thenThrow(Exception());
     // assert later

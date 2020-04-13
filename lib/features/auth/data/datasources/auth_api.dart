@@ -1,27 +1,44 @@
+import 'dart:convert';
+
 import 'package:injectable/injectable.dart';
 import 'package:my_dinner/core/services/injection.dart';
+import 'package:my_dinner/core/services/my_http_client.dart';
 import 'package:my_dinner/core/services/utils/demo.dart';
+import 'package:my_dinner/features/auth/data/dtos/auth_response.dart';
+import 'package:my_dinner/features/auth/data/dtos/user_dto.dart';
 import 'package:my_dinner/features/auth/domain/models/user.dart';
 
 abstract class AuthApi {
-  Future<String> login(User user);
+  Future<AuthResponse> login(UserDto user);
 
-  Future<User> register(User user);
+  Future<AuthResponse> register(UserDto user);
 
   Future<bool> passwordForgotten(String email);
 }
 
-@RegisterAs(AuthApi)
+@RegisterAs(AuthApi, env: Env.dev)
 @singleton
 class AuthApiHttp extends AuthApi {
+  final MyHttpClient client;
+
+  AuthApiHttp(this.client);
+
   @override
-  Future<String> login(User user) async {
-    throw UnimplementedError();
+  Future<AuthResponse> login(UserDto user) async {
+    return client.post(
+      path: '/login',
+      body: json.encode(user.toJson()),
+      out: (value) => AuthResponse(),
+    );
   }
 
   @override
-  Future<User> register(User user) async {
-    throw UnimplementedError();
+  Future<AuthResponse> register(UserDto user) async {
+    return client.post(
+      path: '/register',
+      body: json.encode(user.toJson()),
+      out: (value) => AuthResponse(),
+    );
   }
 
   @override
@@ -34,15 +51,20 @@ class AuthApiHttp extends AuthApi {
 @singleton
 class AuthApiDemo extends AuthApi {
   @override
-  Future<String> login(User user) async {
+  Future<AuthResponse> login(UserDto user) async {
     await DemoUtils.mediumDelay;
-    return 'token';
+    return AuthResponse(
+      token: 'token',
+
+    );
   }
 
   @override
-  Future<User> register(User user) async {
+  Future<AuthResponse> register(UserDto user) async {
     await DemoUtils.mediumDelay;
-    return user;
+    return AuthResponse(
+      token: 'token',
+    );
   }
 
   @override

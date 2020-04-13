@@ -1,18 +1,18 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_dinner/features/my_diet/data/dtos/meal_dto.dart';
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 
-part 'meal.freezed.dart';
+class Meal {
+  final String name;
+  final String description;
+  final DateTime servingDate;
+  final Diet diet;
 
-part 'meal.g.dart';
+  Meal({
+    this.name,
+    this.description,
+    this.servingDate,
+    this.diet,
+  });
 
-@freezed
-abstract class Meal with _$Meal {
-  const factory Meal({
-    String name,
-    String description,
-    DateTime servingDate,
-    Diet diet,
-  }) = _Meal;
-
-  factory Meal.fromJson(Map<String, dynamic> json) => _$MealFromJson(json);
+  factory Meal.fromDto(MealDto dto) {}
 }

@@ -1,6 +1,7 @@
+import 'dart:collection';
+
 import 'package:either_option/either_option.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_dinner/core/services/failures.dart';
 import 'package:my_dinner/core/services/use_case.dart';

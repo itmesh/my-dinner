@@ -38,7 +38,6 @@ dependencies:
   bloc_test: ^3.1.0
   json_serializable: ^3.2.5
   meta: ^1.1.8
-  freezed_annotation:
   cached_network_image: ^2.0.0
   logger: ^0.6.0
   mobx: ^1.0.0
@@ -63,7 +62,6 @@ dev_dependencies:
     sdk: flutter
   injectable_generator:
   build_runner:
-  freezed:
   mobx_codegen: ^1.0.0
 
 

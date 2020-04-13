@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'address.dart';
+part of 'address_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Address _$_$_AddressFromJson(Map<String, dynamic> json) {
-  return _$_Address(
+AddressDto _$AddressDtoFromJson(Map<String, dynamic> json) {
+  return AddressDto(
     id: json['id'] as String,
     street: json['street'] as String,
     homeFlatNumber: json['homeFlatNumber'] as String,
@@ -15,12 +15,13 @@ _$_Address _$_$_AddressFromJson(Map<String, dynamic> json) {
     city: json['city'] as String,
     deliveryHours: json['deliveryHours'] == null
         ? null
-        : DeliveryHours.fromJson(json['deliveryHours'] as Map<String, dynamic>),
+        : DeliveryHoursDto.fromJson(
+            json['deliveryHours'] as Map<String, dynamic>),
     remarks: json['remarks'] as String,
   );
 }
 
-Map<String, dynamic> _$_$_AddressToJson(_$_Address instance) =>
+Map<String, dynamic> _$AddressDtoToJson(AddressDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'street': instance.street,

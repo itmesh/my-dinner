@@ -7,13 +7,13 @@ import 'package:my_dinner/features/auth/domain/models/user.dart';
 import 'package:my_dinner/features/auth/domain/repositories/auth_repository.dart';
 
 @singleton
-class Register extends UseCase<User, RegisterParams> {
+class Register extends UseCase<String, RegisterParams> {
   final AuthRepository authRepository;
 
   Register({this.authRepository});
 
   @override
-  Future<Either<Failure, User>> call(RegisterParams params) async {
+  Future<Either<Failure, String>> call(RegisterParams params) async {
     return await authRepository.register(params.user);
   }
 }

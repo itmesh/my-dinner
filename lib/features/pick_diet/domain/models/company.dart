@@ -1,21 +1,29 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_dinner/features/pick_diet/data/dtos/company_dto.dart';
 import 'package:my_dinner/features/pick_diet/domain/models/diet_offer.dart';
 import 'package:my_dinner/features/pick_diet/domain/models/rating.dart';
 
-part 'company.freezed.dart';
+class Company {
+  final String name;
+  final String logoURL;
+  final List<DietOffer> availDiets;
+  final Rating rating;
+  final int priceLevel;
 
-part 'company.g.dart';
+  Company({
+    this.name,
+    this.logoURL,
+    this.availDiets,
+    this.rating,
+    this.priceLevel,
+  });
 
-@freezed
-abstract class Company with _$Company {
-  const factory Company({
-    String name,
-    String logoURL,
-    List<DietOffer> availDiets,
-    Rating rating,
-    int priceLevel,
-  }) = _Company;
-
-  factory Company.fromJson(Map<String, dynamic> json) =>
-      _$CompanyFromJson(json);
+  factory Company.fromDto(CompanyDto dto) {
+    return Company(
+      name: dto.name,
+      logoURL: dto.logoURL,
+      availDiets: dto.availDiets.map((e) => DietOffer.fromDto(e)),
+      rating: Rating.fromDto(dto.rating),
+      priceLevel: dto.priceLevel,
+    );
+  }
 }

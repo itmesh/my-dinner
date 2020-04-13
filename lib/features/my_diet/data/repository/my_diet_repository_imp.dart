@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:my_dinner/core/services/failures.dart';
 import 'package:my_dinner/features/my_diet/data/datasources/my_diet_api.dart';
+import 'package:my_dinner/features/my_diet/data/dtos/diet_dto.dart';
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository.dart';
 
@@ -15,7 +16,8 @@ class MyDietRepositoryImp implements MyDietRepository {
 
   Future<Either<Failure, List<Diet>>> getDiets(DateTime day) async {
     try {
-      return Right(await myDietApi.getDiets(day));
+      List<DietDto> diets = await myDietApi.getDiets(day);
+      return Right(diets.map((dto) => Diet.fromDto(dto)));
     } catch (e) {
       Logger().e(e);
       return Left(ApiFailure());

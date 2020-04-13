@@ -1,22 +1,28 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
+import 'package:my_dinner/features/address/data/dtos/delivery_hours_dto.dart';
 
-part 'delivery_hours.freezed.dart';
-
-part 'delivery_hours.g.dart';
-
-@freezed
-abstract class DeliveryHours with _$DeliveryHours {
+class DeliveryHours {
   static final DateFormat dateFormat = DateFormat('HH:mm');
 
-  const factory DeliveryHours({
-    DateTime fromHour,
-    DateTime toHour,
-  }) = _DeliveryHours;
+  final DateTime fromHour;
+  final DateTime toHour;
 
-  @override
-  String toString() => 'sdfaafsdfadsfsad';
+  DeliveryHours({
+    this.fromHour,
+    this.toHour,
+  });
 
-  factory DeliveryHours.fromJson(Map<String, dynamic> json) =>
-      _$DeliveryHoursFromJson(json);
+  factory DeliveryHours.fromDto(DeliveryHoursDto dto) {
+    return DeliveryHours(
+      fromHour: dto.fromHour,
+      toHour: dto.toHour,
+    );
+  }
+
+  DeliveryHoursDto toDto() {
+    return DeliveryHoursDto(
+      fromHour: fromHour,
+      toHour: toHour,
+    );
+  }
 }

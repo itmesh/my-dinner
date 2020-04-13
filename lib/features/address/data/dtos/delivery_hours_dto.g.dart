@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'delivery_hours.dart';
+part of 'delivery_hours_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_DeliveryHours _$_$_DeliveryHoursFromJson(Map<String, dynamic> json) {
-  return _$_DeliveryHours(
+DeliveryHoursDto _$DeliveryHoursDtoFromJson(Map<String, dynamic> json) {
+  return DeliveryHoursDto(
     fromHour: json['fromHour'] == null
         ? null
         : DateTime.parse(json['fromHour'] as String),
@@ -17,7 +17,7 @@ _$_DeliveryHours _$_$_DeliveryHoursFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$_$_DeliveryHoursToJson(_$_DeliveryHours instance) =>
+Map<String, dynamic> _$DeliveryHoursDtoToJson(DeliveryHoursDto instance) =>
     <String, dynamic>{
       'fromHour': instance.fromHour?.toIso8601String(),
       'toHour': instance.toHour?.toIso8601String(),

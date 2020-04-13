@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'meal.dart';
+part of 'meal_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Meal _$_$_MealFromJson(Map<String, dynamic> json) {
-  return _$_Meal(
+MealDto _$MealDtoFromJson(Map<String, dynamic> json) {
+  return MealDto(
     name: json['name'] as String,
     description: json['description'] as String,
     servingDate: json['servingDate'] == null
@@ -15,11 +15,11 @@ _$_Meal _$_$_MealFromJson(Map<String, dynamic> json) {
         : DateTime.parse(json['servingDate'] as String),
     diet: json['diet'] == null
         ? null
-        : Diet.fromJson(json['diet'] as Map<String, dynamic>),
+        : DietDto.fromJson(json['diet'] as Map<String, dynamic>),
   );
 }
 
-Map<String, dynamic> _$_$_MealToJson(_$_Meal instance) => <String, dynamic>{
+Map<String, dynamic> _$MealDtoToJson(MealDto instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'servingDate': instance.servingDate?.toIso8601String(),
