@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:my_dinner/core/services/log.dart';
+import 'package:my_dinner/features/new_order/presentation/redux/store.dart';
 import 'package:my_dinner/main-demo.dart';
 
 import 'core/services/injection.dart';
 
-void main() {
+void main() async {
   configureInjection(Env.dev);
-  initializeDateFormatting().then((_) => runApp(MyApp()));
+  await NewOrderRedux.init();
+  Log.config();
+  runApp(MyApp());
 }

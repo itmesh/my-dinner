@@ -26,6 +26,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   bool rulesAccepted = false;
   String email;
   String password;
+  String rulesError;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +77,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
             height: 12.0,
           ),
           LinkedLabelSwitch(
+            error: rulesError,
             onTap: () {
               URLHelper.open(URLs.rules);
             },
@@ -98,7 +100,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
               textColor: Colors.white,
               color: Theme.of(context).primaryColor,
               onPressed: () {
-                if (_formKey.currentState.validate()) {
+                _validateRules();
+                if (_formKey.currentState.validate() && rulesAccepted) {
                   _formKey.currentState.save();
                   FocusScope.of(context).unfocus();
                   widget.onRegister(email, password);
@@ -112,6 +115,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
       ),
     );
   }
+
+  void _validateRules() {
+    setState(() {
+      if (rulesAccepted) {
+        rulesError = null;
+        return true;
+      } else {
+        rulesError = 'Regulamin nie został zaakceptowany';
+        return false;
+      }
+    });
+  }
 }
 
 class LinkedLabelSwitch extends StatelessWidget {
@@ -121,6 +136,7 @@ class LinkedLabelSwitch extends StatelessWidget {
     this.value,
     this.onChanged,
     this.onTap,
+    this.error,
   });
 
   final String label;
@@ -128,36 +144,53 @@ class LinkedLabelSwitch extends StatelessWidget {
   final bool value;
   final Function onChanged;
   final GestureTapCallback onTap;
+  final String error;
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return Padding(
       padding: padding,
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child: RichText(
-              text: TextSpan(
-                text: label,
-                style: TextStyle(
-                  color: Colors.blueAccent,
-                  decoration: TextDecoration.underline,
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    text: label,
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        if (onTap != null) {
+                          onTap();
+                        }
+                      },
+                  ),
                 ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    if (onTap != null) {
-                      onTap();
-                    }
-                  },
               ),
-            ),
+              Switch(
+                value: value,
+                onChanged: (bool newValue) {
+                  onChanged(newValue);
+                },
+              ),
+            ],
           ),
-          Switch(
-            value: value,
-            onChanged: (bool newValue) {
-              onChanged(newValue);
-            },
-          ),
+          if (error != null)
+            Text(
+              error,
+              style: themeData.textTheme.caption
+                  .copyWith(color: themeData.errorColor)
+                  .merge(
+                    themeData.inputDecorationTheme.helperStyle,
+                  ),
+              overflow: TextOverflow.ellipsis,
+            )
         ],
       ),
     );
