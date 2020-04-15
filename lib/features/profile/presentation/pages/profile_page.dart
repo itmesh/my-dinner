@@ -14,7 +14,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pushReplacement(MyDietPage.route);
+        Navigator.of(context).pushReplacement(MyDietPage.routeWithParams());
         return false;
       },
       child: Scaffold(

@@ -1,6 +1,9 @@
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class PreferencesAPI {
+import 'package:my_dinner/core/services/injection.dart';
+
+abstract class PreferencesApi {
   Future<bool> setString(String key, String values);
 
   Future<String> getString(String key);
@@ -10,7 +13,9 @@ abstract class PreferencesAPI {
   Future<bool> getBool(String key);
 }
 
-class Preferences implements PreferencesAPI {
+@RegisterAs(PreferencesApi)
+@singleton
+class Preferences implements PreferencesApi {
   @override
   Future<bool> setBool(String key, bool value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -44,7 +49,9 @@ class Preferences implements PreferencesAPI {
   }
 }
 
-class PreferencesDemo implements PreferencesAPI {
+@RegisterAs(PreferencesApi, env: Env.demo)
+@singleton
+class PreferencesDemo implements PreferencesApi {
   @override
   Future<bool> setBool(String key, bool values) async => true;
 

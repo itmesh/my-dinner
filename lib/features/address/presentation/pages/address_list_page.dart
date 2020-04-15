@@ -11,7 +11,6 @@ import 'package:my_dinner/features/address/presentation/widgets/address_card.dar
 import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 
-
 class AddressListPage extends StatelessWidget {
   final AddressStore addressStore = AddressStore(locator.get<GetAddresses>());
 
@@ -26,7 +25,7 @@ class AddressListPage extends StatelessWidget {
     addressStore.download();
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pushReplacement(MyDietPage.route);
+        Navigator.of(context).pushReplacement(MyDietPage.routeWithParams());
         return false;
       },
       child: Scaffold(

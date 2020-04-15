@@ -11,6 +11,8 @@ import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart'
 import 'package:my_dinner/features/profile/presentation/pages/profile_page.dart';
 
 class NavigationDrawer extends StatelessWidget {
+  final Session session = locator.get();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,7 +31,8 @@ class NavigationDrawer extends StatelessWidget {
             ListTile(
               title: Text('Moja dieta'),
               onTap: () {
-                Navigator.of(context).pushReplacement(MyDietPage.route);
+                Navigator.of(context)
+                    .pushReplacement(MyDietPage.routeWithParams());
               },
             ),
             ListTile(
@@ -64,7 +67,8 @@ class NavigationDrawer extends StatelessWidget {
   }
 
   Widget _loginOrLogout(BuildContext context) {
-    if (locator.get<Session>().isLogged()) {
+    if (session.isLogged()) {
+      session.logout();
       return ListTile(
         title: Text('Wyloguj'),
         onTap: () {

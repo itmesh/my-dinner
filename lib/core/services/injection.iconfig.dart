@@ -4,11 +4,13 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
+import 'package:my_dinner/core/services/auth_service.dart';
 import 'package:my_dinner/core/services/config/dev_host_config.dart';
 import 'package:my_dinner/core/services/config/host_config.dart';
 import 'package:my_dinner/core/services/context.dart';
 import 'package:my_dinner/core/services/date_service.dart';
 import 'package:my_dinner/core/services/my_http_client.dart';
+import 'package:my_dinner/core/services/utils/preferences.dart';
 import 'package:my_dinner/features/address/data/datasources/address_api.dart';
 import 'package:my_dinner/features/address/data/repositories/address_repository_imp.dart';
 import 'package:my_dinner/features/address/domain/repositories/address_repository.dart';
@@ -42,6 +44,7 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerFactory<AuthProvider>(() => AuthProvider(
         g<Login>(),
         g<Register>(),
+        g<Session>(),
       ));
   g.registerFactory<PasswordForgottenProvider>(() => PasswordForgottenProvider(
         g<PasswordForgotten>(),
@@ -56,14 +59,21 @@ void $initGetIt(GetIt g, {String environment}) {
       ));
 
   //Eager singletons must be registered in the right order
+  g.registerSingleton<AuthService>(AuthService());
   if (environment == 'dev') {
     g.registerSingleton<HostConfig>(DevHostConfig());
   }
-  g.registerSingleton<Session>(Session());
+  g.registerSingleton<Session>(Session(
+    g<AuthService>(),
+  ));
   if (environment == 'dev') {
     g.registerSingleton<MyHttpClient>(MyHttpClient(
       g<HostConfig>(),
     ));
+  }
+  g.registerSingleton<PreferencesApi>(Preferences());
+  if (environment == 'demo') {
+    g.registerSingleton<PreferencesApi>(PreferencesDemo());
   }
   g.registerSingleton<AddressApi>(AddressHttpApi());
   if (environment == 'demo') {

@@ -40,15 +40,41 @@ class _AuthPageState extends State<AuthPage> {
     _authProvider = locator.get<AuthProvider>();
     _authProvider.addListener(() {
       if (_authProvider.loginSuccess) {
-        Navigator.of(context).pushReplacement(MyDietPage.route);
+        Navigator.of(context).pushReplacement(MyDietPage.routeWithParams(
+          request: MyDietPageRequest(
+            snackBarMessage: 'Użytkownik został zalogowany',
+          ),
+        ));
       }
     });
     _authProvider.addListener(() {
       if (_authProvider.registerSuccess) {
-        DefaultTabController.of(_key.currentContext).animateTo(0);
-        _scaffoldKey.currentState.showSnackBar(SnackBar(
-          content: Text('Użytkownik został zarejestrowany'),
+        Navigator.of(context).pushReplacement(MyDietPage.routeWithParams(
+          request: MyDietPageRequest(
+            snackBarMessage: 'Użytkownik został zarejestrowany',
+          ),
         ));
+      }
+    });
+    _authProvider.addListener(() {
+      if (_authProvider.registerError) {
+        showDialog(
+          context: _scaffoldKey.currentContext,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Błąd serwera'),
+              content: Text('Wystąpił nieoczekiwany błąd, spróbuj później'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          },
+        );
       }
     });
     _keyboardVisibility = KeyboardVisibilityNotification();
@@ -239,7 +265,8 @@ class _AuthPageState extends State<AuthPage> {
           children: <Widget>[
             RaisedButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(MyDietPage.route);
+                Navigator.of(context)
+                    .pushReplacement(MyDietPage.routeWithParams());
               },
               child: Row(
                 children: <Widget>[

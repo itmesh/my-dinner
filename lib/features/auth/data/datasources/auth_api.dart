@@ -4,14 +4,14 @@ import 'package:injectable/injectable.dart';
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/my_http_client.dart';
 import 'package:my_dinner/core/services/utils/demo.dart';
-import 'package:my_dinner/features/auth/data/dtos/auth_response.dart';
+import 'package:my_dinner/features/auth/data/dtos/login_response.dart';
+import 'package:my_dinner/features/auth/data/dtos/register_response.dart';
 import 'package:my_dinner/features/auth/data/dtos/user_dto.dart';
-import 'package:my_dinner/features/auth/domain/models/user.dart';
 
 abstract class AuthApi {
-  Future<AuthResponse> login(UserDto user);
+  Future<LoginResponse> login(UserDto user);
 
-  Future<AuthResponse> register(UserDto user);
+  Future<RegisterResponse> register(UserDto user);
 
   Future<bool> passwordForgotten(String email);
 }
@@ -24,20 +24,20 @@ class AuthApiHttp extends AuthApi {
   AuthApiHttp(this.client);
 
   @override
-  Future<AuthResponse> login(UserDto user) async {
+  Future<LoginResponse> login(UserDto user) async {
     return client.post(
       path: '/login',
-      body: json.encode(user.toJson()),
-      out: (value) => AuthResponse(),
+      body: user.toJson(),
+      out: (value) => LoginResponse.fromJson(value),
     );
   }
 
   @override
-  Future<AuthResponse> register(UserDto user) async {
+  Future<RegisterResponse> register(UserDto user) async {
     return client.post(
-      path: '/register',
-      body: json.encode(user.toJson()),
-      out: (value) => AuthResponse(),
+      path: '/register/client',
+      body: user.toJson(),
+      out: (value) => RegisterResponse.fromJson(value),
     );
   }
 
@@ -51,18 +51,17 @@ class AuthApiHttp extends AuthApi {
 @singleton
 class AuthApiDemo extends AuthApi {
   @override
-  Future<AuthResponse> login(UserDto user) async {
+  Future<LoginResponse> login(UserDto user) async {
     await DemoUtils.mediumDelay;
-    return AuthResponse(
+    return LoginResponse(
       token: 'token',
-
     );
   }
 
   @override
-  Future<AuthResponse> register(UserDto user) async {
+  Future<RegisterResponse> register(UserDto user) async {
     await DemoUtils.mediumDelay;
-    return AuthResponse(
+    return RegisterResponse(
       token: 'token',
     );
   }

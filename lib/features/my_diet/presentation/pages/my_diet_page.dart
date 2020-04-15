@@ -15,11 +15,15 @@ import 'package:my_dinner/widgets/navigation_drawer.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class MyDietPage extends StatefulWidget {
-  static ModalRoute<void> get route {
+  const MyDietPage({Key key, this.myDietPageRequest}) : super(key: key);
+
+  static ModalRoute<void> routeWithParams({MyDietPageRequest request}) {
     return MaterialPageRoute(
-      builder: (_) => MyDietPage(),
+      builder: (_) => MyDietPage(myDietPageRequest: request),
     );
   }
+
+  final MyDietPageRequest myDietPageRequest;
 
   @override
   _MyDietPageState createState() => _MyDietPageState();
@@ -28,11 +32,21 @@ class MyDietPage extends StatefulWidget {
 class _MyDietPageState extends State<MyDietPage> {
   final CalendarController _calendarController = CalendarController();
   final MyDietBloc _bloc = locator.get();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     _bloc.add(LoadMyDiet(locator.get<DateService>().getCurrentDate()));
+    if (widget.myDietPageRequest?.snackBarMessage != null) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => _scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text(widget.myDietPageRequest.snackBarMessage),
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -66,6 +80,7 @@ class _MyDietPageState extends State<MyDietPage> {
         return closeApp;
       },
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text('Moja dieta'),
         ),
@@ -381,4 +396,10 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       widget.onDaySelected();
     }
   }
+}
+
+class MyDietPageRequest {
+  final String snackBarMessage;
+
+  MyDietPageRequest({this.snackBarMessage});
 }

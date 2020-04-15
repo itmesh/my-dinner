@@ -1,7 +1,6 @@
 import 'package:either_option/either_option.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
-import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/context.dart';
 import 'package:my_dinner/features/auth/domain/models/user.dart';
 import 'package:my_dinner/features/auth/domain/usecases/login.dart';
@@ -11,13 +10,15 @@ import 'package:my_dinner/features/auth/domain/usecases/register.dart';
 class AuthProvider with ChangeNotifier {
   final Login login;
   final Register register;
+  final Session session;
 
-  bool error = false;
   bool loading = false;
   bool registerSuccess = false;
   bool loginSuccess = false;
+  bool registerError = false;
+  bool loginError = false;
 
-  AuthProvider(this.login, this.register);
+  AuthProvider(this.login, this.register, this.session);
 
   void loginUser(String email, String password) async {
     _setLoading(true);
@@ -34,11 +35,9 @@ class AuthProvider with ChangeNotifier {
 
   void _eitherLoginOrError(Either either) {
     either.fold(
-      (_) => error = true,
+      (_) => loginError = true,
       (token) {
-        locator.get<Session>().initialize(
-              SessionContext(token),
-            );
+        session.initialize(SessionContext(token: token));
         loginSuccess = true;
       },
     );
@@ -61,17 +60,21 @@ class AuthProvider with ChangeNotifier {
 
   void _eitherRegisterOrError(Either either) {
     either.fold(
-      (_) => error = true,
-      (token) => registerSuccess = true,
+      (_) => registerError = true,
+      (token) {
+        session.initialize(SessionContext(token: token));
+        registerSuccess = true;
+      },
     );
     loading = false;
     notifyListeners();
   }
 
   void _setLoading(bool enable) {
-    error = false;
     registerSuccess = false;
     loginSuccess = false;
+    loginError = false;
+    registerError = false;
     loading = enable;
     notifyListeners();
   }
