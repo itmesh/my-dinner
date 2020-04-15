@@ -11,6 +11,8 @@ abstract class PreferencesApi {
   Future<bool> setBool(String key, bool value);
 
   Future<bool> getBool(String key);
+
+  Future<bool> remove(String key);
 }
 
 @RegisterAs(PreferencesApi)
@@ -47,6 +49,12 @@ class Preferences implements PreferencesApi {
     final prefs = await SharedPreferences.getInstance();
     return prefs.setString(key, value);
   }
+
+  @override
+  Future<bool> remove(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.remove(key);
+  }
 }
 
 @RegisterAs(PreferencesApi, env: Env.demo)
@@ -63,6 +71,9 @@ class PreferencesDemo implements PreferencesApi {
 
   @override
   Future<bool> setString(String key, String values) async => true;
+
+  @override
+  Future<bool> remove(String key) async => true;
 }
 
 class PreferencesKeys {

@@ -2,12 +2,14 @@ import 'package:either_option/either_option.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_dinner/core/services/context.dart';
+import 'package:my_dinner/core/services/log.dart';
 import 'package:my_dinner/features/auth/domain/models/user.dart';
 import 'package:my_dinner/features/auth/domain/usecases/login.dart';
 import 'package:my_dinner/features/auth/domain/usecases/register.dart';
 
 @injectable
 class AuthProvider with ChangeNotifier {
+  final _log = Log('AuthProvider');
   final Login login;
   final Register register;
   final Session session;

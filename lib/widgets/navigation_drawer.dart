@@ -68,10 +68,10 @@ class NavigationDrawer extends StatelessWidget {
 
   Widget _loginOrLogout(BuildContext context) {
     if (session.isLogged()) {
-      session.logout();
       return ListTile(
         title: Text('Wyloguj'),
         onTap: () {
+          session.logout();
           Navigator.of(context).pushReplacement(AuthPage.route);
         },
       );

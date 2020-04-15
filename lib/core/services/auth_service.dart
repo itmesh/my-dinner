@@ -15,8 +15,8 @@ class AuthService {
     return await preferences.getString(PreferencesKeys.bearerToken);
   }
 
-  Future<String> removeToken() async {
+  Future<bool> removeToken() async {
     PreferencesApi preferences = locator.get();
-    return await preferences.getString(PreferencesKeys.bearerToken);
+    return await preferences.remove(PreferencesKeys.bearerToken);
   }
 }

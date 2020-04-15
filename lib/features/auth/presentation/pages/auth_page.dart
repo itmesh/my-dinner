@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:my_dinner/core/services/context.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_dinner/core/services/injection.dart';
@@ -23,6 +24,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  final Session session = locator.get();
   AuthProvider _authProvider;
   bool _inputData = false;
   KeyboardVisibilityNotification _keyboardVisibility;
