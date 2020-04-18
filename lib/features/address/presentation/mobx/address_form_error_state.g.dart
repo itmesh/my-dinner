@@ -84,10 +84,45 @@ mixin _$AddressFormErrorState on _AddressFormErrorState, Store {
     }, _$postalCodeAtom, name: '${_$postalCodeAtom.name}_set');
   }
 
+  final _$deliveryHoursAtom =
+      Atom(name: '_AddressFormErrorState.deliveryHours');
+
+  @override
+  String get deliveryHours {
+    _$deliveryHoursAtom.context.enforceReadPolicy(_$deliveryHoursAtom);
+    _$deliveryHoursAtom.reportObserved();
+    return super.deliveryHours;
+  }
+
+  @override
+  set deliveryHours(String value) {
+    _$deliveryHoursAtom.context.conditionallyRunInAction(() {
+      super.deliveryHours = value;
+      _$deliveryHoursAtom.reportChanged();
+    }, _$deliveryHoursAtom, name: '${_$deliveryHoursAtom.name}_set');
+  }
+
+  final _$remarksAtom = Atom(name: '_AddressFormErrorState.remarks');
+
+  @override
+  String get remarks {
+    _$remarksAtom.context.enforceReadPolicy(_$remarksAtom);
+    _$remarksAtom.reportObserved();
+    return super.remarks;
+  }
+
+  @override
+  set remarks(String value) {
+    _$remarksAtom.context.conditionallyRunInAction(() {
+      super.remarks = value;
+      _$remarksAtom.reportChanged();
+    }, _$remarksAtom, name: '${_$remarksAtom.name}_set');
+  }
+
   @override
   String toString() {
     final string =
-        'street: ${street.toString()},homeFlatNumber: ${homeFlatNumber.toString()},city: ${city.toString()},postalCode: ${postalCode.toString()},anyExists: ${anyExists.toString()}';
+        'street: ${street.toString()},homeFlatNumber: ${homeFlatNumber.toString()},city: ${city.toString()},postalCode: ${postalCode.toString()},deliveryHours: ${deliveryHours.toString()},remarks: ${remarks.toString()},anyExists: ${anyExists.toString()}';
     return '{$string}';
   }
 }

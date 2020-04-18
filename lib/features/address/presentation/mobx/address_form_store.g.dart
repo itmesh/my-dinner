@@ -83,6 +83,40 @@ mixin _$AddressFormStore on _AddressFormStore, Store {
     }, _$postalCodeAtom, name: '${_$postalCodeAtom.name}_set');
   }
 
+  final _$remarksAtom = Atom(name: '_AddressFormStore.remarks');
+
+  @override
+  String get remarks {
+    _$remarksAtom.context.enforceReadPolicy(_$remarksAtom);
+    _$remarksAtom.reportObserved();
+    return super.remarks;
+  }
+
+  @override
+  set remarks(String value) {
+    _$remarksAtom.context.conditionallyRunInAction(() {
+      super.remarks = value;
+      _$remarksAtom.reportChanged();
+    }, _$remarksAtom, name: '${_$remarksAtom.name}_set');
+  }
+
+  final _$deliveryHoursAtom = Atom(name: '_AddressFormStore.deliveryHours');
+
+  @override
+  String get deliveryHours {
+    _$deliveryHoursAtom.context.enforceReadPolicy(_$deliveryHoursAtom);
+    _$deliveryHoursAtom.reportObserved();
+    return super.deliveryHours;
+  }
+
+  @override
+  set deliveryHours(String value) {
+    _$deliveryHoursAtom.context.conditionallyRunInAction(() {
+      super.deliveryHours = value;
+      _$deliveryHoursAtom.reportChanged();
+    }, _$deliveryHoursAtom, name: '${_$deliveryHoursAtom.name}_set');
+  }
+
   final _$_AddressFormStoreActionController =
       ActionController(name: '_AddressFormStore');
 
@@ -121,6 +155,26 @@ mixin _$AddressFormStore on _AddressFormStore, Store {
     final _$actionInfo = _$_AddressFormStoreActionController.startAction();
     try {
       return super.setPostalCode(postalCode);
+    } finally {
+      _$_AddressFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setRemarks(String remarks) {
+    final _$actionInfo = _$_AddressFormStoreActionController.startAction();
+    try {
+      return super.setRemarks(remarks);
+    } finally {
+      _$_AddressFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setDeliveryHours(String deliveryHours) {
+    final _$actionInfo = _$_AddressFormStoreActionController.startAction();
+    try {
+      return super.setDeliveryHours(deliveryHours);
     } finally {
       _$_AddressFormStoreActionController.endAction(_$actionInfo);
     }
@@ -167,9 +221,29 @@ mixin _$AddressFormStore on _AddressFormStore, Store {
   }
 
   @override
+  void validateRemarks(String deliveryHours) {
+    final _$actionInfo = _$_AddressFormStoreActionController.startAction();
+    try {
+      return super.validateRemarks(deliveryHours);
+    } finally {
+      _$_AddressFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void validateDeliveryHours(String deliveryHours) {
+    final _$actionInfo = _$_AddressFormStoreActionController.startAction();
+    try {
+      return super.validateDeliveryHours(deliveryHours);
+    } finally {
+      _$_AddressFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     final string =
-        'street: ${street.toString()},homeFlatNumber: ${homeFlatNumber.toString()},city: ${city.toString()},postalCode: ${postalCode.toString()},canSave: ${canSave.toString()}';
+        'street: ${street.toString()},homeFlatNumber: ${homeFlatNumber.toString()},city: ${city.toString()},postalCode: ${postalCode.toString()},remarks: ${remarks.toString()},deliveryHours: ${deliveryHours.toString()},canSave: ${canSave.toString()}';
     return '{$string}';
   }
 }

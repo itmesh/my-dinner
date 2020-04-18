@@ -1,28 +1,33 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
-import 'package:my_dinner/features/address/data/dtos/delivery_hours_dto.dart';
 
 part 'address_dto.g.dart';
 
 @JsonSerializable()
 class AddressDto {
-  final String id;
+  final int id;
   final String street;
-  final String homeFlatNumber;
+  final String flatNumber;
   final String postalCode;
   final String city;
-  final DeliveryHoursDto deliveryHours;
   final String remarks;
+  final DateTime deliveryTimeFrom;
+  final DateTime deliveryTimeTo;
 
   AddressDto({
     this.id,
     this.street,
-    this.homeFlatNumber,
+    this.flatNumber,
     this.postalCode,
     this.city,
-    this.deliveryHours,
     this.remarks,
+    this.deliveryTimeFrom,
+    this.deliveryTimeTo,
   });
 
   factory AddressDto.fromJson(Map<String, dynamic> json) =>
       _$AddressDtoFromJson(json);
+
+  String toJson() => json.encode(_$AddressDtoToJson(this));
 }

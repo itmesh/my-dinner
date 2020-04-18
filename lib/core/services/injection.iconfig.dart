@@ -69,13 +69,16 @@ void $initGetIt(GetIt g, {String environment}) {
   if (environment == 'dev') {
     g.registerSingleton<MyHttpClient>(MyHttpClient(
       g<HostConfig>(),
+      g<Session>(),
     ));
   }
   g.registerSingleton<PreferencesApi>(Preferences());
   if (environment == 'demo') {
     g.registerSingleton<PreferencesApi>(PreferencesDemo());
   }
-  g.registerSingleton<AddressApi>(AddressHttpApi());
+  g.registerSingleton<AddressApi>(AddressHttpApi(
+    g<MyHttpClient>(),
+  ));
   if (environment == 'demo') {
     g.registerSingleton<AddressApi>(AddressDemoApi());
   }

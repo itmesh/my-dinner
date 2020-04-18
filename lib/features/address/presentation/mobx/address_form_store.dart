@@ -23,6 +23,12 @@ abstract class _AddressFormStore with Store {
   @observable
   String postalCode = '';
 
+  @observable
+  String remarks = '';
+
+  @observable
+  String deliveryHours = '';
+
   @action
   void setStreet(String street) {
     this.street = street;
@@ -43,6 +49,16 @@ abstract class _AddressFormStore with Store {
     this.postalCode = postalCode;
   }
 
+  @action
+  void setRemarks(String remarks) {
+    this.remarks = remarks;
+  }
+
+  @action
+  void setDeliveryHours(String deliveryHours) {
+    this.deliveryHours = deliveryHours;
+  }
+
   @computed
   bool get canSave => !errors.anyExists;
 
@@ -54,6 +70,7 @@ abstract class _AddressFormStore with Store {
       homeFlatNumber = address.homeFlatNumber ?? '';
       city = address.city ?? '';
       postalCode = address.postalCode ?? '';
+      remarks = address.remarks ?? '';
       oldAddress = getAddress();
     }
     _setupValidations();
@@ -65,6 +82,7 @@ abstract class _AddressFormStore with Store {
       homeFlatNumber: homeFlatNumber,
       city: city,
       postalCode: postalCode,
+      remarks: 'test',
     );
   }
 
@@ -76,6 +94,7 @@ abstract class _AddressFormStore with Store {
       reaction((_) => homeFlatNumber, validateHomeFlatNumber),
       reaction((_) => city, validateCity),
       reaction((_) => postalCode, validatePostalCode),
+      reaction((_) => deliveryHours, validateDeliveryHours),
     ];
   }
 
@@ -84,6 +103,7 @@ abstract class _AddressFormStore with Store {
     validateHomeFlatNumber(homeFlatNumber);
     validateCity(city);
     validatePostalCode(postalCode);
+    validateDeliveryHours(deliveryHours);
   }
 
   @action
@@ -107,7 +127,21 @@ abstract class _AddressFormStore with Store {
   @action
   void validatePostalCode(String postalCode) {
     errors.postalCode =
-        isNull(postalCode) || postalCode.isEmpty ? 'Pole jest wymagane' : null;
+        isNull(postalCode) || postalCode.isEmpty ? 'Wymagany format 00-000' : null;
+  }
+
+  @action
+  void validateRemarks(String deliveryHours) {
+    errors.remarks = isNull(deliveryHours) || deliveryHours.isEmpty
+        ? 'Pole jest wymagane'
+        : null;
+  }
+
+  @action
+  void validateDeliveryHours(String deliveryHours) {
+    errors.deliveryHours = isNull(deliveryHours) || deliveryHours.isEmpty
+        ? 'Pole jest wymagane'
+        : null;
   }
 
   void dispose() {

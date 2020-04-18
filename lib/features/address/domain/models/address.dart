@@ -2,13 +2,15 @@ import 'package:my_dinner/features/address/data/dtos/address_dto.dart';
 import 'package:my_dinner/features/address/domain/models/delivery_hours.dart';
 
 class Address {
-  final String id;
+  final int id;
   final String street;
   final String homeFlatNumber;
   final String postalCode;
   final String city;
   final DeliveryHours deliveryHours;
   final String remarks;
+  final DateTime fromHour;
+  final DateTime toHour;
 
   Address({
     this.id,
@@ -18,17 +20,20 @@ class Address {
     this.city,
     this.deliveryHours,
     this.remarks,
+    this.fromHour,
+    this.toHour,
   });
 
   factory Address.fromDto(AddressDto dto) {
     return Address(
       id: dto.id,
       street: dto.street,
-      homeFlatNumber: dto.homeFlatNumber,
+      homeFlatNumber: dto.flatNumber,
       postalCode: dto.postalCode,
       city: dto.city,
-      deliveryHours: DeliveryHours.fromDto(dto.deliveryHours),
       remarks: dto.remarks,
+      fromHour: dto.deliveryTimeFrom,
+      toHour: dto.deliveryTimeTo,
     );
   }
 
@@ -36,11 +41,12 @@ class Address {
     return AddressDto(
       id: id,
       street: street,
-      homeFlatNumber: homeFlatNumber,
+      flatNumber: homeFlatNumber,
       postalCode: postalCode,
       city: city,
-      deliveryHours: deliveryHours.toDto(),
       remarks: remarks,
+      deliveryTimeFrom: fromHour,
+      deliveryTimeTo: toHour,
     );
   }
 }

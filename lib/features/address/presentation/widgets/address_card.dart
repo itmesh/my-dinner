@@ -35,8 +35,7 @@ class AddressCard extends StatelessWidget {
               children: <Widget>[
                 Text('${address.postalCode} ${address.city}'),
                 SizedBox(height: 4.0),
-                Text(
-                    'Godziny dostawy: ${_hoursToString(address.deliveryHours)}'),
+                Text('Godziny dostawy: ${_hoursToString()}'),
                 SizedBox(height: 2.0),
                 Text('Dodatkowe uwagi: ${address.remarks}'),
               ],
@@ -47,9 +46,15 @@ class AddressCard extends StatelessWidget {
     );
   }
 
-  String _hoursToString(DeliveryHours deliveryHours) =>
-      '${DeliveryHours.dateFormat.format(deliveryHours.fromHour)} - ' +
-      '${DeliveryHours.dateFormat.format(deliveryHours.toHour)}';
+  String _hoursToString() {
+    String fromHour = address.fromHour != null
+        ? DeliveryHours.dateFormat.format(address.fromHour)
+        : '--:--';
+    String toHour = address.toHour != null
+        ? DeliveryHours.dateFormat.format(address.toHour)
+        : '--:--';
+    return '$fromHour - $toHour';
+  }
 
   Widget get _trailing {
     if (trailingIconType == TrailingIconType.edit) {

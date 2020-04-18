@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_dinner/core/services/config/host_config.dart';
+import 'package:my_dinner/core/services/context.dart';
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/log.dart';
 
@@ -14,13 +15,14 @@ class MyHttpClient {
   static const int _minClientId = 100000;
   static const int _maxClientId = 999999;
 
+  final Session userSession;
   final Log _log = Log('MyHttpClient');
   final Random _random = Random();
   final HostConfig hostConfig;
   final _Session session = _Session();
   final List<HttpErrorHandler> httpErrorHandlers = [];
 
-  MyHttpClient(this.hostConfig);
+  MyHttpClient(this.hostConfig, this.userSession);
 
   Future<T> post<T>({
     String path,
@@ -29,6 +31,7 @@ class MyHttpClient {
     T out(dynamic json),
   }) async {
     _log.debug('POST $path');
+    _log.debug('BODY $body');
     return _withHttpClient(
       (client) => client
           .postUrl(Uri.parse(hostConfig.baseUrl + path))
@@ -64,6 +67,7 @@ class MyHttpClient {
     T out(dynamic json),
   }) async {
     _log.debug('PUT $path');
+    _log.debug('BODY $body');
     return _withHttpClient(
       (client) => client
           .putUrl(Uri.parse(hostConfig.baseUrl + path))
@@ -82,6 +86,7 @@ class MyHttpClient {
     T out(dynamic json),
   }) async {
     _log.debug('PATCH $path');
+    _log.debug('BODY $body');
     return _withHttpClient(
       (client) => client
           .patchUrl(Uri.parse(hostConfig.baseUrl + path))
@@ -100,6 +105,7 @@ class MyHttpClient {
     T out(dynamic json),
   }) async {
     _log.debug('DELETE $path');
+    _log.debug('BODY $body');
     return _withHttpClient((client) => client
         .deleteUrl(Uri.parse(hostConfig.baseUrl + path))
         .then((HttpClientRequest request) =>
@@ -149,8 +155,8 @@ class MyHttpClient {
       _log.debug('cookies: ${session.cookies}');
     }
 
-    if (session.bearerToken != null) {
-      allHeaders[_Session.authorization] = session.bearerToken;
+    if (userSession.get()?.token != null) {
+      allHeaders[_Session.authorization] = userSession.get().token;
     }
 
     allHeaders.forEach((key, value) => httpHeaders.add(key, value));
@@ -184,9 +190,10 @@ class MyHttpClient {
   }
 
   _prepareResponse(HttpClientResponse response) async {
-    if (_isTextOrJsonResponse(response)) {
+    bool contentEmpty = response.contentLength == 0;
+    if (contentEmpty || _isTextOrJsonResponse(response)) {
       String data = await _parseBody(response);
-      _log.debug('response=$data');
+      _log.debug('RESPONSE $data');
 
       if (data == null || data.isEmpty) {
         return null;
@@ -226,7 +233,7 @@ class MyHttpClient {
   Future<void> _checkContentType(HttpClientResponse response) async {
     bool contentNotEmpty = response.contentLength > 0;
 
-    if (!(_isTextOrJsonResponse(response)) && contentNotEmpty) {
+    if (contentNotEmpty && !(_isTextOrJsonResponse(response))) {
       throw HttpInvalidContentTypeException(
         response.headers.value(HttpHeaders.contentTypeHeader),
         message: await _parseBody(response),
@@ -243,8 +250,10 @@ class MyHttpClient {
 
   Future<void> _checkStatusCode(HttpClientResponse response) async {
     if (!_acceptableResponseStatus.contains(response.statusCode)) {
-      throw HttpStatusException(response.statusCode,
-          message: await _parseBody(response));
+      throw HttpStatusException(
+        response.statusCode,
+        message: await _parseBody(response),
+      );
     }
   }
 }
@@ -323,4 +332,3 @@ const List<int> _acceptableResponseStatus = [
   HttpStatus.ok,
   HttpStatus.created
 ];
-

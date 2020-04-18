@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'package:my_dinner/features/address/domain/models/address.dart';
+import 'package:my_dinner/features/address/domain/models/delivery_hours.dart';
 import 'package:my_dinner/features/address/presentation/mobx/address_form_store.dart';
 import 'package:my_dinner/widgets/material_dropdown.dart';
 
@@ -165,27 +166,52 @@ class _AddressFormState extends State<AddressForm> {
           ),
         ),
       ),
-      MaterialDropdown(
-        title: 'Godziny dostawy',
-        dropDown: DropdownButtonFormField(
-          onChanged: (_) {},
-          items: [
-            DropdownMenuItem(
-              child: Text('Do godziny 6:00'),
-            ),
-            DropdownMenuItem(
-              child: Text('Do godziny 8:00'),
-            ),
-            DropdownMenuItem(
-              child: Text('Do godziny 10:00'),
-            ),
-            DropdownMenuItem(
-              child: Text('Do godziny 12:00'),
-            ),
-          ],
+      Observer(
+        builder: (_) => TextFormField(
+          initialValue: _formStore.remarks,
+          onChanged: (v) => _formStore.setRemarks(v),
+          decoration: InputDecoration(
+            labelText: 'Uwagi',
+            errorText: _formStore.errors.remarks,
+          ),
+        ),
+      ),
+      Observer(
+        builder: (_) => MaterialDropdown(
+          title: 'Godziny dostawy',
+          dropDown: DropdownButtonFormField<String>(
+            value: _formStore.deliveryHours,
+            onChanged: (v) => _formStore.setDeliveryHours(v),
+            items: _dropdownHourItems(),
+          ),
         ),
       ),
     ];
+  }
+
+  List<DropdownMenuItem> _dropdownHourItems() {
+    List<DropdownMenuItem<String>> items = [];
+    items.add(DropdownMenuItem(
+      child: Text(''),
+      value: '',
+    ));
+    items.addAll(
+      DeliveryHours.availableHours
+          .map(
+            (e) => DropdownMenuItem<String>(
+              child: Text(_dateRange(e)),
+              value: _dateRange(e),
+            ),
+          )
+          .toList(),
+    );
+    return items;
+  }
+
+  String _dateRange(DeliveryHours deliveryHours) {
+    return DeliveryHours.dateFormat.format(deliveryHours.fromHour) +
+        ' - ' +
+        DeliveryHours.dateFormat.format(deliveryHours.toHour);
   }
 
   Future<bool> _confirmDelete() async {

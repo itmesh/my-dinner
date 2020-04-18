@@ -8,16 +8,18 @@ part of 'address_dto.dart';
 
 AddressDto _$AddressDtoFromJson(Map<String, dynamic> json) {
   return AddressDto(
-    id: json['id'] as String,
+    id: json['id'] as int,
     street: json['street'] as String,
-    homeFlatNumber: json['homeFlatNumber'] as String,
+    flatNumber: json['flatNumber'] as String,
     postalCode: json['postalCode'] as String,
     city: json['city'] as String,
-    deliveryHours: json['deliveryHours'] == null
-        ? null
-        : DeliveryHoursDto.fromJson(
-            json['deliveryHours'] as Map<String, dynamic>),
     remarks: json['remarks'] as String,
+    deliveryTimeFrom: json['deliveryTimeFrom'] == null
+        ? null
+        : DateTime.parse(json['deliveryTimeFrom'] as String),
+    deliveryTimeTo: json['deliveryTimeTo'] == null
+        ? null
+        : DateTime.parse(json['deliveryTimeTo'] as String),
   );
 }
 
@@ -25,9 +27,10 @@ Map<String, dynamic> _$AddressDtoToJson(AddressDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'street': instance.street,
-      'homeFlatNumber': instance.homeFlatNumber,
+      'flatNumber': instance.flatNumber,
       'postalCode': instance.postalCode,
       'city': instance.city,
-      'deliveryHours': instance.deliveryHours,
       'remarks': instance.remarks,
+      'deliveryTimeFrom': instance.deliveryTimeFrom?.toIso8601String(),
+      'deliveryTimeTo': instance.deliveryTimeTo?.toIso8601String(),
     };

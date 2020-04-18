@@ -18,10 +18,18 @@ abstract class _AddressFormErrorState with Store {
   @observable
   String postalCode;
 
+  @observable
+  String deliveryHours;
+
+  @observable
+  String remarks;
+
   @computed
   bool get anyExists =>
       street != null ||
       homeFlatNumber != null ||
       city != null ||
-      postalCode != null;
+      postalCode != null ||
+      deliveryHours != null ||
+      remarks != null;
 }

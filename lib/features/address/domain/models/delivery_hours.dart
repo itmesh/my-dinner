@@ -1,7 +1,13 @@
 import 'package:intl/intl.dart';
-import 'package:my_dinner/features/address/data/dtos/delivery_hours_dto.dart';
 
 class DeliveryHours {
+  static final List<DeliveryHours> availableHours = [
+    DeliveryHours(fromHour: DateTime(0, 0, 0, 4), toHour: DateTime(0, 0, 0, 5)),
+    DeliveryHours(fromHour: DateTime(0, 0, 0, 5), toHour: DateTime(0, 0, 0, 6)),
+    DeliveryHours(fromHour: DateTime(0, 0, 0, 6), toHour: DateTime(0, 0, 0, 7)),
+    DeliveryHours(fromHour: DateTime(0, 0, 0, 7), toHour: DateTime(0, 0, 0, 8)),
+    DeliveryHours(fromHour: DateTime(0, 0, 0, 8), toHour: DateTime(0, 0, 0, 9)),
+  ];
   static final DateFormat dateFormat = DateFormat('HH:mm');
 
   final DateTime fromHour;
@@ -11,18 +17,4 @@ class DeliveryHours {
     this.fromHour,
     this.toHour,
   });
-
-  factory DeliveryHours.fromDto(DeliveryHoursDto dto) {
-    return DeliveryHours(
-      fromHour: dto.fromHour,
-      toHour: dto.toHour,
-    );
-  }
-
-  DeliveryHoursDto toDto() {
-    return DeliveryHoursDto(
-      fromHour: fromHour,
-      toHour: toHour,
-    );
-  }
 }
