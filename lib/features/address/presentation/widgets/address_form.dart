@@ -179,7 +179,7 @@ class _AddressFormState extends State<AddressForm> {
       Observer(
         builder: (_) => MaterialDropdown(
           title: 'Godziny dostawy',
-          dropDown: DropdownButtonFormField<String>(
+          dropDown: DropdownButtonFormField<DeliveryHours>(
             value: _formStore.deliveryHours,
             onChanged: (v) => _formStore.setDeliveryHours(v),
             items: _dropdownHourItems(),
@@ -190,17 +190,17 @@ class _AddressFormState extends State<AddressForm> {
   }
 
   List<DropdownMenuItem> _dropdownHourItems() {
-    List<DropdownMenuItem<String>> items = [];
+    List<DropdownMenuItem<DeliveryHours>> items = [];
     items.add(DropdownMenuItem(
       child: Text(''),
-      value: '',
+      value: DeliveryHours(),
     ));
     items.addAll(
       DeliveryHours.availableHours
           .map(
-            (e) => DropdownMenuItem<String>(
+            (e) => DropdownMenuItem<DeliveryHours>(
               child: Text(_dateRange(e)),
-              value: _dateRange(e),
+              value: e,
             ),
           )
           .toList(),

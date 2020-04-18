@@ -29,13 +29,13 @@ abstract class _AddressDetailsStore with Store {
       _addressFuture != null && _addressFuture.status == FutureStatus.pending;
 
   @observable
-  bool createSuccess = false;
+  Address addressCreated;
 
   @observable
-  bool updateSuccess = false;
+  Address addressUpdated;
 
   @observable
-  bool deleteSuccess = false;
+  Address addressDeleted;
 
   @action
   Future<void> update(Address address) async {
@@ -45,7 +45,7 @@ abstract class _AddressDetailsStore with Store {
     Either either = await _addressFuture;
     either.fold(
       (error) {},
-      (address) => updateSuccess = true,
+      (address) => addressUpdated = address,
     );
   }
 
@@ -57,7 +57,7 @@ abstract class _AddressDetailsStore with Store {
     Either either = await _addressFuture;
     either.fold(
       (error) {},
-      (address) => createSuccess = true,
+      (address) => addressCreated = address,
     );
   }
 
@@ -69,7 +69,7 @@ abstract class _AddressDetailsStore with Store {
     Either either = await _addressFuture;
     either.fold(
       (error) {},
-      (address) => deleteSuccess = true,
+      (address) => addressDeleted = address,
     );
   }
 }

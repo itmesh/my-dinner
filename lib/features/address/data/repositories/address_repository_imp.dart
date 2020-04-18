@@ -41,8 +41,8 @@ class AddressRepositoryImp extends AddressRepository {
   @override
   Future<Either<Failure, Address>> updateAddress(Address address) async {
     try {
-      AddressDto dto = await addressApi.updateAddress(address.toDto());
-      return Right(Address.fromDto(dto));
+      await addressApi.updateAddress(address.toDto());
+      return Right(address);
     } catch (e) {
       _log.error('$e');
       return Left(ApiFailure());
@@ -52,8 +52,8 @@ class AddressRepositoryImp extends AddressRepository {
   @override
   Future<Either<Failure, Address>> deleteAddress(Address address) async {
     try {
-      AddressDto dto = await addressApi.deleteAddress(address.toDto());
-      return Right(Address.fromDto(dto));
+      await addressApi.deleteAddress(address.toDto());
+      return Right(address);
     } catch (e) {
       _log.error('$e');
       return Left(ApiFailure());

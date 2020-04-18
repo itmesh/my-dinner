@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
+import 'package:my_dinner/features/address/domain/models/delivery_hours.dart';
 import 'package:validators/validators.dart';
 import 'package:my_dinner/features/address/presentation/mobx/address_form_error_state.dart';
 
@@ -27,7 +28,7 @@ abstract class _AddressFormStore with Store {
   String remarks = '';
 
   @observable
-  String deliveryHours = '';
+  DeliveryHours deliveryHours = DeliveryHours();
 
   @action
   void setStreet(String street) {
@@ -55,7 +56,7 @@ abstract class _AddressFormStore with Store {
   }
 
   @action
-  void setDeliveryHours(String deliveryHours) {
+  void setDeliveryHours(DeliveryHours deliveryHours) {
     this.deliveryHours = deliveryHours;
   }
 
@@ -72,8 +73,18 @@ abstract class _AddressFormStore with Store {
       postalCode = address.postalCode ?? '';
       remarks = address.remarks ?? '';
       oldAddress = getAddress();
+      deliveryHours = _convertToDeliveryHours(address);
     }
     _setupValidations();
+  }
+
+  DeliveryHours _convertToDeliveryHours(Address address) {
+    DeliveryHours deliveryHours = DeliveryHours(
+      fromHour: address.fromHour,
+      toHour: address.toHour,
+    );
+    return DeliveryHours.availableHours
+        .firstWhere((e) => e == deliveryHours, orElse: () => DeliveryHours());
   }
 
   Address getAddress() {
@@ -82,7 +93,9 @@ abstract class _AddressFormStore with Store {
       homeFlatNumber: homeFlatNumber,
       city: city,
       postalCode: postalCode,
-      remarks: 'test',
+      remarks: remarks,
+      fromHour: deliveryHours?.fromHour,
+      toHour: deliveryHours?.toHour,
     );
   }
 
@@ -94,7 +107,6 @@ abstract class _AddressFormStore with Store {
       reaction((_) => homeFlatNumber, validateHomeFlatNumber),
       reaction((_) => city, validateCity),
       reaction((_) => postalCode, validatePostalCode),
-      reaction((_) => deliveryHours, validateDeliveryHours),
     ];
   }
 
@@ -103,7 +115,6 @@ abstract class _AddressFormStore with Store {
     validateHomeFlatNumber(homeFlatNumber);
     validateCity(city);
     validatePostalCode(postalCode);
-    validateDeliveryHours(deliveryHours);
   }
 
   @action
@@ -126,20 +137,14 @@ abstract class _AddressFormStore with Store {
 
   @action
   void validatePostalCode(String postalCode) {
-    errors.postalCode =
-        isNull(postalCode) || postalCode.isEmpty ? 'Wymagany format 00-000' : null;
+    errors.postalCode = isNull(postalCode) || postalCode.isEmpty
+        ? 'Wymagany format 00-000'
+        : null;
   }
 
   @action
   void validateRemarks(String deliveryHours) {
     errors.remarks = isNull(deliveryHours) || deliveryHours.isEmpty
-        ? 'Pole jest wymagane'
-        : null;
-  }
-
-  @action
-  void validateDeliveryHours(String deliveryHours) {
-    errors.deliveryHours = isNull(deliveryHours) || deliveryHours.isEmpty
         ? 'Pole jest wymagane'
         : null;
   }

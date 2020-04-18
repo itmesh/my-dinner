@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:my_dinner/core/services/json_converters.dart';
+
 part 'address_dto.g.dart';
 
+@HourDateTimeConverter()
 @JsonSerializable()
 class AddressDto {
   final int id;

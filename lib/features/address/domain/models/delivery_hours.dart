@@ -17,4 +17,25 @@ class DeliveryHours {
     this.fromHour,
     this.toHour,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      other is DeliveryHours &&
+      _hoursEquals(fromHour, other.fromHour) &&
+      _hoursEquals(toHour, other.toHour);
+
+  @override
+  int get hashCode => fromHour.hashCode ^ toHour.hashCode;
+
+  bool _hoursEquals(DateTime hour1, DateTime hour2) {
+    if (hour1 == null && hour2 == null) return true;
+    if ((hour1 == null && hour2 != null) || hour1 != null && hour2 == null) {
+      return false;
+    }
+    if (dateFormat.format(hour1) == dateFormat.format(hour2)) {
+      return true;
+    }
+
+    return false;
+  }
 }

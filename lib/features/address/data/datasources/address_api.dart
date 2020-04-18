@@ -52,7 +52,7 @@ class AddressHttpApi extends AddressApi {
 
   @override
   Future<AddressDto> deleteAddress(AddressDto address) {
-    return client.patch(
+    return client.delete(
       path: '/client/address/${address.id}',
       out: (value) => null,
     );

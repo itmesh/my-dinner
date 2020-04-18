@@ -14,12 +14,10 @@ AddressDto _$AddressDtoFromJson(Map<String, dynamic> json) {
     postalCode: json['postalCode'] as String,
     city: json['city'] as String,
     remarks: json['remarks'] as String,
-    deliveryTimeFrom: json['deliveryTimeFrom'] == null
-        ? null
-        : DateTime.parse(json['deliveryTimeFrom'] as String),
-    deliveryTimeTo: json['deliveryTimeTo'] == null
-        ? null
-        : DateTime.parse(json['deliveryTimeTo'] as String),
+    deliveryTimeFrom: const HourDateTimeConverter()
+        .fromJson(json['deliveryTimeFrom'] as String),
+    deliveryTimeTo: const HourDateTimeConverter()
+        .fromJson(json['deliveryTimeTo'] as String),
   );
 }
 
@@ -31,6 +29,8 @@ Map<String, dynamic> _$AddressDtoToJson(AddressDto instance) =>
       'postalCode': instance.postalCode,
       'city': instance.city,
       'remarks': instance.remarks,
-      'deliveryTimeFrom': instance.deliveryTimeFrom?.toIso8601String(),
-      'deliveryTimeTo': instance.deliveryTimeTo?.toIso8601String(),
+      'deliveryTimeFrom':
+          const HourDateTimeConverter().toJson(instance.deliveryTimeFrom),
+      'deliveryTimeTo':
+          const HourDateTimeConverter().toJson(instance.deliveryTimeTo),
     };

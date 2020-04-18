@@ -33,55 +33,58 @@ mixin _$AddressDetailsStore on _AddressDetailsStore, Store {
     }, _$_addressFutureAtom, name: '${_$_addressFutureAtom.name}_set');
   }
 
-  final _$createSuccessAtom = Atom(name: '_AddressDetailsStore.createSuccess');
+  final _$addressCreatedAtom =
+      Atom(name: '_AddressDetailsStore.addressCreated');
 
   @override
-  bool get createSuccess {
-    _$createSuccessAtom.context.enforceReadPolicy(_$createSuccessAtom);
-    _$createSuccessAtom.reportObserved();
-    return super.createSuccess;
+  Address get addressCreated {
+    _$addressCreatedAtom.context.enforceReadPolicy(_$addressCreatedAtom);
+    _$addressCreatedAtom.reportObserved();
+    return super.addressCreated;
   }
 
   @override
-  set createSuccess(bool value) {
-    _$createSuccessAtom.context.conditionallyRunInAction(() {
-      super.createSuccess = value;
-      _$createSuccessAtom.reportChanged();
-    }, _$createSuccessAtom, name: '${_$createSuccessAtom.name}_set');
+  set addressCreated(Address value) {
+    _$addressCreatedAtom.context.conditionallyRunInAction(() {
+      super.addressCreated = value;
+      _$addressCreatedAtom.reportChanged();
+    }, _$addressCreatedAtom, name: '${_$addressCreatedAtom.name}_set');
   }
 
-  final _$updateSuccessAtom = Atom(name: '_AddressDetailsStore.updateSuccess');
+  final _$addressUpdatedAtom =
+      Atom(name: '_AddressDetailsStore.addressUpdated');
 
   @override
-  bool get updateSuccess {
-    _$updateSuccessAtom.context.enforceReadPolicy(_$updateSuccessAtom);
-    _$updateSuccessAtom.reportObserved();
-    return super.updateSuccess;
-  }
-
-  @override
-  set updateSuccess(bool value) {
-    _$updateSuccessAtom.context.conditionallyRunInAction(() {
-      super.updateSuccess = value;
-      _$updateSuccessAtom.reportChanged();
-    }, _$updateSuccessAtom, name: '${_$updateSuccessAtom.name}_set');
-  }
-
-  final _$deleteSuccessAtom = Atom(name: '_AddressDetailsStore.deleteSuccess');
-
-  @override
-  bool get deleteSuccess {
-    _$deleteSuccessAtom.context.enforceReadPolicy(_$deleteSuccessAtom);
-    _$deleteSuccessAtom.reportObserved();
-    return super.deleteSuccess;
+  Address get addressUpdated {
+    _$addressUpdatedAtom.context.enforceReadPolicy(_$addressUpdatedAtom);
+    _$addressUpdatedAtom.reportObserved();
+    return super.addressUpdated;
   }
 
   @override
-  set deleteSuccess(bool value) {
-    _$deleteSuccessAtom.context.conditionallyRunInAction(() {
-      super.deleteSuccess = value;
-      _$deleteSuccessAtom.reportChanged();
-    }, _$deleteSuccessAtom, name: '${_$deleteSuccessAtom.name}_set');
+  set addressUpdated(Address value) {
+    _$addressUpdatedAtom.context.conditionallyRunInAction(() {
+      super.addressUpdated = value;
+      _$addressUpdatedAtom.reportChanged();
+    }, _$addressUpdatedAtom, name: '${_$addressUpdatedAtom.name}_set');
+  }
+
+  final _$addressDeletedAtom =
+      Atom(name: '_AddressDetailsStore.addressDeleted');
+
+  @override
+  Address get addressDeleted {
+    _$addressDeletedAtom.context.enforceReadPolicy(_$addressDeletedAtom);
+    _$addressDeletedAtom.reportObserved();
+    return super.addressDeleted;
+  }
+
+  @override
+  set addressDeleted(Address value) {
+    _$addressDeletedAtom.context.conditionallyRunInAction(() {
+      super.addressDeleted = value;
+      _$addressDeletedAtom.reportChanged();
+    }, _$addressDeletedAtom, name: '${_$addressDeletedAtom.name}_set');
   }
 
   final _$updateAsyncAction = AsyncAction('update');
@@ -108,7 +111,7 @@ mixin _$AddressDetailsStore on _AddressDetailsStore, Store {
   @override
   String toString() {
     final string =
-        'createSuccess: ${createSuccess.toString()},updateSuccess: ${updateSuccess.toString()},deleteSuccess: ${deleteSuccess.toString()},loading: ${loading.toString()}';
+        'addressCreated: ${addressCreated.toString()},addressUpdated: ${addressUpdated.toString()},addressDeleted: ${addressDeleted.toString()},loading: ${loading.toString()}';
     return '{$string}';
   }
 }

@@ -17,7 +17,7 @@ class AddressDetailsPage extends StatefulWidget {
     this.address,
   }) : super(key: key);
 
-  static ModalRoute<Address> routeWithParams({Address address}) {
+  static ModalRoute<AddressDetailsResponse> routeWithParams({Address address}) {
     return MaterialPageRoute(
       builder: (_) => AddressDetailsPage(
         address: address,
@@ -42,12 +42,33 @@ class _AddressDetailsPageState extends State<AddressDetailsPage> {
       locator.get<DeleteAddress>(),
     );
     _disposers = [
-      when((_) => _addressDetailsStore.updateSuccess,
-          () => Navigator.of(context).pop()),
-      when((_) => _addressDetailsStore.deleteSuccess,
-          () => Navigator.of(context).pop()),
-      when((_) => _addressDetailsStore.createSuccess,
-          () => Navigator.of(context).pop()),
+      when(
+        (_) => _addressDetailsStore.addressUpdated != null,
+        () => Navigator.of(context).pop(
+          AddressDetailsResponse(
+            address: _addressDetailsStore.addressUpdated,
+            operation: Operation.update,
+          ),
+        ),
+      ),
+      when(
+        (_) => _addressDetailsStore.addressDeleted != null,
+        () => Navigator.of(context).pop(
+          AddressDetailsResponse(
+            address: _addressDetailsStore.addressDeleted,
+            operation: Operation.delete,
+          ),
+        ),
+      ),
+      when(
+        (_) => _addressDetailsStore.addressCreated != null,
+        () => Navigator.of(context).pop(
+          AddressDetailsResponse(
+            address: _addressDetailsStore.addressCreated,
+            operation: Operation.create,
+          ),
+        ),
+      ),
     ];
   }
 
@@ -86,4 +107,17 @@ class _AddressDetailsPageState extends State<AddressDetailsPage> {
       ),
     );
   }
+}
+
+class AddressDetailsResponse {
+  final Address address;
+  final Operation operation;
+
+  AddressDetailsResponse({this.address, this.operation});
+}
+
+enum Operation {
+  create,
+  update,
+  delete,
 }

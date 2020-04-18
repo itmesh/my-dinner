@@ -7,7 +7,6 @@ class Address {
   final String homeFlatNumber;
   final String postalCode;
   final String city;
-  final DeliveryHours deliveryHours;
   final String remarks;
   final DateTime fromHour;
   final DateTime toHour;
@@ -18,7 +17,6 @@ class Address {
     this.homeFlatNumber,
     this.postalCode,
     this.city,
-    this.deliveryHours,
     this.remarks,
     this.fromHour,
     this.toHour,

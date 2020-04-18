@@ -103,14 +103,14 @@ mixin _$AddressFormStore on _AddressFormStore, Store {
   final _$deliveryHoursAtom = Atom(name: '_AddressFormStore.deliveryHours');
 
   @override
-  String get deliveryHours {
+  DeliveryHours get deliveryHours {
     _$deliveryHoursAtom.context.enforceReadPolicy(_$deliveryHoursAtom);
     _$deliveryHoursAtom.reportObserved();
     return super.deliveryHours;
   }
 
   @override
-  set deliveryHours(String value) {
+  set deliveryHours(DeliveryHours value) {
     _$deliveryHoursAtom.context.conditionallyRunInAction(() {
       super.deliveryHours = value;
       _$deliveryHoursAtom.reportChanged();
@@ -171,7 +171,7 @@ mixin _$AddressFormStore on _AddressFormStore, Store {
   }
 
   @override
-  void setDeliveryHours(String deliveryHours) {
+  void setDeliveryHours(DeliveryHours deliveryHours) {
     final _$actionInfo = _$_AddressFormStoreActionController.startAction();
     try {
       return super.setDeliveryHours(deliveryHours);
@@ -225,16 +225,6 @@ mixin _$AddressFormStore on _AddressFormStore, Store {
     final _$actionInfo = _$_AddressFormStoreActionController.startAction();
     try {
       return super.validateRemarks(deliveryHours);
-    } finally {
-      _$_AddressFormStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void validateDeliveryHours(String deliveryHours) {
-    final _$actionInfo = _$_AddressFormStoreActionController.startAction();
-    try {
-      return super.validateDeliveryHours(deliveryHours);
     } finally {
       _$_AddressFormStoreActionController.endAction(_$actionInfo);
     }

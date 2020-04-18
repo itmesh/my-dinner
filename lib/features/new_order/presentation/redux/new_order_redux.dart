@@ -117,7 +117,6 @@ class AddressViewModel {
         homeFlatNumber: address.homeFlatNumber ?? '',
         postalCode: address.postalCode ?? '',
         city: address.city ?? '',
-        deliveryHours: address.deliveryHours?.toString() ?? '',
         remarks: address.remarks ?? '',
         address: address,
       );

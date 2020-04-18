@@ -11,9 +11,7 @@ import 'package:my_dinner/features/address/presentation/widgets/address_card.dar
 import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 
-class AddressListPage extends StatelessWidget {
-  final AddressStore addressStore = AddressStore(locator.get<GetAddresses>());
-
+class AddressListPage extends StatefulWidget {
   static Route<dynamic> get route {
     return MaterialPageRoute(
       builder: (_) => AddressListPage(),
@@ -21,8 +19,20 @@ class AddressListPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  _AddressListPageState createState() => _AddressListPageState();
+}
+
+class _AddressListPageState extends State<AddressListPage> {
+  final AddressStore addressStore = AddressStore(locator.get<GetAddresses>());
+
+  @override
+  void initState() {
     addressStore.download();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pushReplacement(MyDietPage.routeWithParams());
@@ -59,8 +69,15 @@ class AddressListPage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.of(context).push(AddressDetailsPage.routeWithParams());
+          onPressed: () async {
+            AddressDetailsResponse response = await Navigator.of(context)
+                .push(AddressDetailsPage.routeWithParams());
+            if (response != null) {
+              addressStore.performOperation(
+                response.address,
+                response.operation,
+              );
+            }
           },
         ),
       ),
@@ -69,9 +86,15 @@ class AddressListPage extends StatelessWidget {
 
   Widget _mapToAddressCard(BuildContext context, Address address) {
     return AddressCard(
-      onTap: () {
-        Navigator.of(context)
+      onTap: () async {
+        AddressDetailsResponse response = await Navigator.of(context)
             .push(AddressDetailsPage.routeWithParams(address: address));
+        if (response != null) {
+          addressStore.performOperation(
+            response.address,
+            response.operation,
+          );
+        }
       },
       trailingIconType: TrailingIconType.arrow,
       address: address,

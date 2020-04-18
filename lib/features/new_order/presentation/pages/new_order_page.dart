@@ -345,10 +345,6 @@ class NewOrderPage extends StatelessWidget {
     Address(
       street: 'Spokojna',
       homeFlatNumber: '8/5',
-      deliveryHours: DeliveryHours(
-        fromHour: DateTime(0, 0, 0, 8, 0),
-        toHour: DateTime(0, 0, 0, 10, 0),
-      ),
       city: 'Kraków',
       postalCode: '30-054',
       remarks: 'Pin do bramki to 12344',
@@ -358,10 +354,6 @@ class NewOrderPage extends StatelessWidget {
     return Address(
       street: 'Spokojna',
       homeFlatNumber: '8/5',
-      deliveryHours: DeliveryHours(
-        fromHour: DateTime(0, 0, 0, 8, 0),
-        toHour: DateTime(0, 0, 0, 10, 0),
-      ),
       city: 'Kraków',
       postalCode: '30-054',
       remarks: 'Pin do bramki to 12344',
@@ -370,12 +362,7 @@ class NewOrderPage extends StatelessWidget {
   static List<Diet> mealsData0 = [];
   static List<Diet> mealsData1 = [
     Diet(
-      address: Address(
-        deliveryHours: DeliveryHours(
-          fromHour: DateTime(0, 0, 0, 8, 0),
-          toHour: DateTime(0, 0, 0, 10, 0),
-        ),
-      ),
+      address: Address(),
       calories: 3000,
       name: 'Dieta 3000 kalorii',
       dietCounts: 4,
@@ -384,12 +371,7 @@ class NewOrderPage extends StatelessWidget {
   ];
   static List<Diet> mealsData2 = List.generate(5, (index) {
     return Diet(
-      address: Address(
-        deliveryHours: DeliveryHours(
-          fromHour: DateTime(0, 0, 0, 8, 0),
-          toHour: DateTime(0, 0, 0, 10, 0),
-        ),
-      ),
+      address: Address(),
       calories: 3000,
       name: 'Dieta 3000 kalorii',
       dietCounts: 4,
