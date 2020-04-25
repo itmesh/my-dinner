@@ -243,7 +243,7 @@ class MyHttpClient {
 
   bool _isTextOrJsonResponse(HttpClientResponse response) {
     String contentTypeHeader =
-        response.headers.value(HttpHeaders.contentTypeHeader);
+        response.headers.value(HttpHeaders.contentTypeHeader) ?? '';
     return contentTypeHeader.contains('application/json') ||
         contentTypeHeader.contains('text/plain');
   }
@@ -330,5 +330,6 @@ class HttpStatusException extends HttpInvalidResponseException {
 const List<int> _acceptableResponseStatus = [
   HttpStatus.accepted,
   HttpStatus.ok,
-  HttpStatus.created
+  HttpStatus.created,
+  HttpStatus.noContent,
 ];

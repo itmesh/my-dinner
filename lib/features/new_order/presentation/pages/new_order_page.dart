@@ -115,7 +115,7 @@ class NewOrderPage extends StatelessWidget {
                         name: profileViewModel.name,
                         surname: profileViewModel.surname,
                         email: profileViewModel.email,
-                        phoneNumber: 123,
+                        phoneNumber: '123',
                       ),
                       onEdit: () {
                         Navigator.of(context).push(EditProfilePage.route);

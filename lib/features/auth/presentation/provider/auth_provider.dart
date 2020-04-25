@@ -38,8 +38,8 @@ class AuthProvider with ChangeNotifier {
   void _eitherLoginOrError(Either either) {
     either.fold(
       (_) => loginError = true,
-      (token) {
-        session.initialize(SessionContext(token: token));
+      (sessionContext) {
+        session.initialize(sessionContext);
         loginSuccess = true;
       },
     );

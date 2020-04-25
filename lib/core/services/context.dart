@@ -1,5 +1,8 @@
 import 'package:injectable/injectable.dart';
+
 import 'package:my_dinner/core/services/auth_service.dart';
+import 'package:my_dinner/features/auth/domain/models/user.dart';
+import 'package:my_dinner/features/profile/domain/models/profile.dart';
 
 @singleton
 class Session {
@@ -38,14 +41,17 @@ class Session {
 
 class SessionContext {
   final String token;
+  final Profile profile;
 
-  SessionContext({this.token});
+  SessionContext({this.token, this.profile});
 
   SessionContext copyWith({
     String token,
+    User user,
   }) {
     return SessionContext(
       token: token ?? this.token,
+      profile: user ?? this.profile,
     );
   }
 }

@@ -72,7 +72,7 @@ ThunkAction<NewOrderState> getProfile = (Store<NewOrderState> store) async {
     name: 'Krzysztof',
     surname: 'Wizner',
     email: 'krzysztofwiz93@gmail.com',
-    phoneNumber: 518990713,
+    phoneNumber: '518990713',
   );
   store.dispatch(EditProfile(profile));
 };
