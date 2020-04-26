@@ -35,30 +35,32 @@ class NavigationDrawer extends StatelessWidget {
                     .pushReplacement(MyDietPage.routeWithParams());
               },
             ),
-            ListTile(
-              title: Text('Zamówienia'),
-              onTap: () {
-                Navigator.of(context).pushReplacement(OrdersPage.route);
-              },
-            ),
-            ListTile(
-              title: Text('Historia posiłków'),
-              onTap: () {
-                Navigator.of(context).pushReplacement(HistoryMealsPage.route);
-              },
-            ),
-            ListTile(
-              title: Text('Adresy dostawy'),
-              onTap: () {
-                Navigator.of(context).pushReplacement(AddressListPage.route);
-              },
-            ),
-            ListTile(
-              title: Text('Dane kontaktowe'),
-              onTap: () {
-                Navigator.of(context).pushReplacement(ProfilePage.route);
-              },
-            ),
+            if (session.isLogged()) ...[
+              ListTile(
+                title: Text('Zamówienia'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(OrdersPage.route);
+                },
+              ),
+              ListTile(
+                title: Text('Historia posiłków'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(HistoryMealsPage.route);
+                },
+              ),
+              ListTile(
+                title: Text('Adresy dostawy'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(AddressListPage.route);
+                },
+              ),
+              ListTile(
+                title: Text('Dane kontaktowe'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(ProfilePage.route);
+                },
+              ),
+            ],
             _loginOrLogout(context),
           ],
         ),

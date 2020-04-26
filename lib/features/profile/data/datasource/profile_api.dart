@@ -29,7 +29,7 @@ class ProfileHttpApi extends ProfileApi {
     return client.put(
       path: '/client',
       body: clientDto.toJson(),
-      out: (value) => ClientDto.fromJson(value),
+      out: (value) => null,
     );
   }
 }

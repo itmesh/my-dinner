@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:my_dinner/core/services/context.dart';
-import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/features/profile/domain/models/profile.dart';
-import 'package:my_dinner/features/profile/domain/usecases/update_profile.dart';
+
+typedef OnUpdate = void Function(Profile profile);
 
 class ProfileForm extends StatefulWidget {
-  static ModalRoute<dynamic> get route {
-    return MaterialPageRoute(
-      builder: (_) => ProfileForm(),
-    );
-  }
+  final Profile profile;
+  final OnUpdate onUpdate;
+
+  const ProfileForm({Key key, this.profile, this.onUpdate}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _ProfileFormState();
+    return _ProfileFormState(profile);
   }
 }
 
 class _ProfileFormState extends State<ProfileForm> {
-  final Session _session = locator.get();
-  final UpdateProfile _updateProfile = locator.get();
   final _formKey = GlobalKey<FormState>();
-  Profile _profile;
+  final Profile profile;
+  String name;
+  String surname;
+  String email;
+  String phoneNumber;
+
+  _ProfileFormState(this.profile);
 
   @override
   void initState() {
     super.initState();
-    _profile = _session.get().profile ?? Profile();
+    name = profile?.name ?? '';
+    surname = profile?.surname ?? '';
+    email = profile?.email ?? '';
+    phoneNumber = profile?.phoneNumber ?? '';
   }
 
   @override
@@ -41,7 +46,7 @@ class _ProfileFormState extends State<ProfileForm> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    initialValue: _profile.name ?? '',
+                    initialValue: name,
                     decoration: InputDecoration(
                       labelText: 'Imie',
                     ),
@@ -51,9 +56,10 @@ class _ProfileFormState extends State<ProfileForm> {
                       }
                       return null;
                     },
+                    onChanged: (value) => name = value,
                   ),
                   TextFormField(
-                    initialValue: _profile.surname ?? '',
+                    initialValue: surname,
                     decoration: InputDecoration(
                       labelText: 'Nazwisko',
                     ),
@@ -63,20 +69,20 @@ class _ProfileFormState extends State<ProfileForm> {
                       }
                       return null;
                     },
+                    onChanged: (value) => surname = value,
                   ),
                   TextFormField(
                     readOnly: true,
-                    initialValue: _profile.email ?? '',
+                    initialValue: email,
                     decoration: InputDecoration(
                       labelText: 'Email',
                     ),
-                    keyboardType: TextInputType.emailAddress,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
                       labelText: 'Numer telefonu',
                     ),
-                    initialValue: _profile.phoneNumber ?? '',
+                    initialValue: phoneNumber,
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value.isEmpty) {
@@ -84,6 +90,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       }
                       return null;
                     },
+                    onChanged: (value) => phoneNumber = value,
                   ),
                 ],
               ),
@@ -98,7 +105,26 @@ class _ProfileFormState extends State<ProfileForm> {
                   textColor: Colors.white,
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
-                    if (_formKey.currentState.validate()) {}
+                    if (_formKey.currentState.validate()) {
+                      Profile newProfile = Profile(
+                        name: name,
+                        surname: surname,
+                        phoneNumber: phoneNumber,
+                        email: email,
+                      );
+                      if (newProfile != profile) {
+                        if (widget.onUpdate != null) {
+                          widget.onUpdate(
+                            Profile(
+                              name: name,
+                              surname: surname,
+                              phoneNumber: phoneNumber,
+                              email: email,
+                            ),
+                          );
+                        }
+                      }
+                    }
                   },
                   icon: Icon(Icons.save),
                   label: Text('Zapisz'),
