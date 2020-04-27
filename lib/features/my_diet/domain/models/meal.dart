@@ -14,5 +14,10 @@ class Meal {
     this.diet,
   });
 
-  factory Meal.fromDto(MealDto dto) {}
+  factory Meal.fromDto(MealDto dto) {
+    return Meal(
+      name: dto.name,
+      description: dto.description,
+    );
+  }
 }

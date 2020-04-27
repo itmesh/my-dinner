@@ -17,7 +17,7 @@ abstract class AddressApi {
   Future<AddressDto> deleteAddress(AddressDto address);
 }
 
-@RegisterAs(AddressApi)
+@RegisterAs(AddressApi, env: Env.dev)
 @singleton
 class AddressHttpApi extends AddressApi {
   final MyHttpClient client;

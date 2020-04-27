@@ -24,9 +24,9 @@ class Diet {
       name: dto.name,
       calories: dto.calories,
       dietCounts: dto.dietCounts,
-      address: Address.fromDto(dto.address),
+      address: dto.address == null ? null : Address.fromDto(dto.address),
       remarks: dto.remarks,
-      meals: dto.meals.map((e) => Meal.fromDto(e)),
+      meals: dto.meals.map((e) => Meal.fromDto(e)).toList(),
     );
   }
 }

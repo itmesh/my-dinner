@@ -5,7 +5,6 @@
 // **************************************************************************
 
 import 'package:my_dinner/core/services/auth_service.dart';
-import 'package:my_dinner/core/services/config/dev_host_config.dart';
 import 'package:my_dinner/core/services/config/host_config.dart';
 import 'package:my_dinner/core/services/context.dart';
 import 'package:my_dinner/core/services/date_service.dart';
@@ -68,6 +67,9 @@ void $initGetIt(GetIt g, {String environment}) {
   if (environment == 'dev') {
     g.registerSingleton<HostConfig>(DevHostConfig());
   }
+  if (environment == 'demo') {
+    g.registerSingleton<HostConfig>(DemoHostConfig());
+  }
   g.registerSingleton<Session>(Session(
     g<AuthService>(),
   ));
@@ -81,9 +83,11 @@ void $initGetIt(GetIt g, {String environment}) {
   if (environment == 'demo') {
     g.registerSingleton<PreferencesApi>(PreferencesDemo());
   }
-  g.registerSingleton<AddressApi>(AddressHttpApi(
-    g<MyHttpClient>(),
-  ));
+  if (environment == 'dev') {
+    g.registerSingleton<AddressApi>(AddressHttpApi(
+      g<MyHttpClient>(),
+    ));
+  }
   if (environment == 'demo') {
     g.registerSingleton<AddressApi>(AddressDemoApi());
   }
