@@ -31,7 +31,7 @@ class AddressRepositoryImp extends AddressRepository {
   Future<Either<Failure, Address>> createAddress(Address address) async {
     try {
       AddressDto dto = await addressApi.createAddress(address.toDto());
-      return Right(address);
+      return Right(Address.fromDto(dto));
     } catch (e) {
       _log.error('$e');
       return Left(ApiFailure());

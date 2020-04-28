@@ -72,8 +72,8 @@ abstract class _AddressFormStore with Store {
       city = address.city ?? '';
       postalCode = address.postalCode ?? '';
       remarks = address.remarks ?? '';
-      oldAddress = getAddress();
       deliveryHours = _convertToDeliveryHours(address);
+      oldAddress = address;
     }
     _setupValidations();
   }
@@ -89,6 +89,7 @@ abstract class _AddressFormStore with Store {
 
   Address getAddress() {
     return Address(
+      id: oldAddress.id,
       street: street,
       homeFlatNumber: homeFlatNumber,
       city: city,

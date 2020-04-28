@@ -37,14 +37,14 @@ class AddressHttpApi extends AddressApi {
     return client.post(
       path: '/client/address/',
       body: address.toJson(),
-      out: (value) => null,
+      out: (value) => AddressDto.fromJson(value),
     );
   }
 
   @override
   Future<AddressDto> updateAddress(AddressDto address) {
-    return client.patch(
-      path: '/client/address/',
+    return client.put(
+      path: '/client/address/${address.id}',
       body: address.toJson(),
       out: (value) => null,
     );
