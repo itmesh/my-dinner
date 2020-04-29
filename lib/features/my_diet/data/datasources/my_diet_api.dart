@@ -6,9 +6,12 @@ import 'package:injectable/injectable.dart';
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/utils/demo.dart';
 import 'package:my_dinner/features/my_diet/data/dtos/diet_dto.dart';
+import 'package:my_dinner/features/my_diet/data/dtos/diet_order_dto.dart';
 
 abstract class MyDietApi {
   Future<List<DietDto>> getDiets(DateTime day);
+
+  Future<DietOrderDto> orderDiet(DateTime day);
 }
 
 @RegisterAs(MyDietApi)
@@ -18,6 +21,11 @@ class MyDietApiHttp implements MyDietApi {
 
   @override
   Future<List<DietDto>> getDiets(DateTime day) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<DietOrderDto> orderDiet(DateTime day) {
     throw UnimplementedError();
   }
 }
@@ -36,6 +44,16 @@ class MyDietApiDemo implements MyDietApi {
     }
 
     // throw Exception();
-    return json.decode(response).map<DietDto>((e) => DietDto.fromJson(e)).toList();
+    return json
+        .decode(response)
+        .map<DietDto>((e) => DietDto.fromJson(e))
+        .toList();
+  }
+
+  @override
+  Future<DietOrderDto> orderDiet(DateTime day) async {
+    await DemoUtils.smallDelay;
+    String response = await rootBundle.loadString('assets/demo/order.json');
+    return DietOrderDto.fromJson(json.decode(response));
   }
 }
