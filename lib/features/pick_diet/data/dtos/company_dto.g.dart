@@ -12,7 +12,7 @@ CompanyDto _$CompanyDtoFromJson(Map<String, dynamic> json) {
     logoURL: json['logoURL'] as String,
     availDiets: (json['availDiets'] as List)
         ?.map((e) =>
-            e == null ? null : DietOfferDto.fromJson(e as Map<String, dynamic>))
+            e == null ? null : OfferDto.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     rating: json['rating'] == null
         ? null

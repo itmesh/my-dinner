@@ -13,7 +13,7 @@ typedef OnSelect = void Function(Company value);
 typedef OnSelectDiet = void Function(
   Company company,
   DietOffer diet,
-  int calories,
+  Calorie calorie,
 );
 
 class CompanyCard extends StatefulWidget {
@@ -83,49 +83,51 @@ class _CompanyCardState extends State<CompanyCard>
               SizedBox(
                 height: 4.0,
               ),
-              Row(
-                children: <Widget>[
-                  AbsorbPointer(
-                    child: RatingBar(
-                      allowHalfRating: true,
-                      initialRating: widget.company.rating.rate,
-                      itemSize: 20.0,
-                      itemBuilder: (context, _) => Icon(
-                        Icons.star,
-                        color: Colors.amber,
+              if (widget.company.rating != null)
+                Row(
+                  children: <Widget>[
+                    AbsorbPointer(
+                      child: RatingBar(
+                        allowHalfRating: true,
+                        initialRating: widget.company.rating.rate,
+                        itemSize: 20.0,
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (_) {},
                       ),
-                      onRatingUpdate: (_) {},
                     ),
-                  ),
-                  SizedBox(width: 8.0),
-                  Text(widget.company.rating.rate.toString()),
-                  SizedBox(width: 4.0),
-                  Text('(${widget.company.rating.votesCount})'),
-                ],
-              )
+                    SizedBox(width: 8.0),
+                    Text(widget.company.rating.rate.toString()),
+                    SizedBox(width: 4.0),
+                    Text('(${widget.company.rating.votesCount})'),
+                  ],
+                )
             ],
           ),
         ),
         content: Column(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: ValueListenableBuilder(
-                valueListenable: _showAllChips,
-                builder: (_, __, ___) {
-                  return AnimatedSize(
-                    vsync: this,
-                    duration: _showAllChipsDuration,
-                    alignment: Alignment.topCenter,
-                    child: Wrap(
-                      spacing: 6.0,
-                      alignment: WrapAlignment.start,
-                      children: _buildLimitedChips(widget.company.availDiets),
-                    ),
-                  );
-                },
+            if (widget.company.availDiets != null)
+              Container(
+                width: double.infinity,
+                child: ValueListenableBuilder(
+                  valueListenable: _showAllChips,
+                  builder: (_, __, ___) {
+                    return AnimatedSize(
+                      vsync: this,
+                      duration: _showAllChipsDuration,
+                      alignment: Alignment.topCenter,
+                      child: Wrap(
+                        spacing: 6.0,
+                        alignment: WrapAlignment.start,
+                        children: _buildLimitedChips(widget.company.availDiets),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
             Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -200,7 +202,7 @@ class _CompanyCardState extends State<CompanyCard>
                           ),
                         ),
                         SizedBox(height: 16.0),
-                        ...diet.calorific
+                        ...diet.calories
                             .map((e) => Container(
                                   margin: const EdgeInsets.only(bottom: 4.0),
                                   decoration: BoxDecoration(

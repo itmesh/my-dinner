@@ -40,7 +40,16 @@ NewOrderState newOrderReducer(NewOrderState state, dynamic action) {
   return NewOrderState(
     profile: profileReducer(state.profile, action),
     addresses: addressesReducer(state.addresses, action),
+    pickedDiet: pickedDietReducer(state.pickedDiet, action),
   );
+}
+
+final pickedDietReducer = combineReducers<PickedDiet>([
+  TypedReducer<PickedDiet, AddPickedDiet>(_addPickedDiet),
+]);
+
+PickedDiet _addPickedDiet(PickedDiet pickedDiet, AddPickedDiet action) {
+  return action.pickedDiet;
 }
 
 final addressesReducer = combineReducers<List<Address>>([
@@ -154,5 +163,23 @@ class ProfileViewModel {
     }
 
     return null;
+  }
+}
+
+class PickedDietViewModel {
+  final String name;
+  final String calorie;
+
+  PickedDietViewModel({
+    this.name,
+    this.calorie,
+  });
+
+  static PickedDietViewModel fromStore(Store<NewOrderState> store) {
+    PickedDiet pickedDiet = store.state.pickedDiet;
+    return PickedDietViewModel(
+      name: pickedDiet?.dietOffer?.name ?? '',
+      calorie: pickedDiet?.calorie?.value?.toString() ?? '',
+    );
   }
 }

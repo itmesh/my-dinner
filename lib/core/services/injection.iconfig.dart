@@ -29,17 +29,18 @@ import 'package:my_dinner/features/my_diet/data/datasources/my_diet_api.dart';
 import 'package:my_dinner/features/my_diet/data/repository/my_diet_repository_imp.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository.dart';
 import 'package:my_dinner/features/my_diet/domain/usecases/get_diet.dart';
-import 'package:my_dinner/features/my_diet/domain/usecases/order_diet.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
-import 'package:my_dinner/features/pick_diet/data/datasource/companies_api.dart';
-import 'package:my_dinner/features/pick_diet/data/repository/companies_repository_imp.dart';
-import 'package:my_dinner/features/pick_diet/domain/repositories/companies_repository.dart';
 import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
-import 'package:my_dinner/features/pick_diet/presentation/provider/diet_picker.dart';
 import 'package:my_dinner/features/profile/data/datasource/profile_api.dart';
 import 'package:my_dinner/features/profile/data/repository/profile_repository_imp.dart';
 import 'package:my_dinner/features/profile/domain/repositories/profile_repository.dart';
+import 'package:my_dinner/features/my_diet/domain/usecases/order_diet.dart';
+import 'package:my_dinner/features/pick_diet/data/datasource/pick_diet_api.dart';
+import 'package:my_dinner/features/pick_diet/data/repository/pick_diet_repository_imp.dart';
+import 'package:my_dinner/features/pick_diet/domain/repositories/pick_diet_repository.dart';
+import 'package:my_dinner/features/pick_diet/domain/usecases/get_offers.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
+import 'package:my_dinner/features/pick_diet/presentation/provider/diet_picker.dart';
 import 'package:my_dinner/features/profile/domain/usecases/get_profile.dart';
 import 'package:my_dinner/features/profile/domain/usecases/update_profile.dart';
 import 'package:get_it/get_it.dart';
@@ -55,13 +56,14 @@ void $initGetIt(GetIt g, {String environment}) {
         g<PasswordForgotten>(),
       ));
   g.registerFactory<MyDietState>(() => InitialMyDiet());
-  g.registerFactory<DietPicker>(() => DietPicker(
-        g<GetCompanies>(),
-      ));
   g.registerFactory<MyDietBloc>(() => MyDietBloc(
         g<MyDietState>(),
         g<GetDiet>(),
         g<OrderDiet>(),
+      ));
+  g.registerFactory<DietPicker>(() => DietPicker(
+        g<GetCompanies>(),
+        g<GetOffers>(),
       ));
 
   //Eager singletons must be registered in the right order
@@ -138,16 +140,7 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerSingleton<GetDiet>(GetDiet(
     g<MyDietRepository>(),
   ));
-  g.registerSingleton<CompaniesApi>(CompaniesApiHttp());
-  if (environment == 'demo') {
-    g.registerSingleton<CompaniesApi>(CompaniesApiDemo());
-  }
-  g.registerSingleton<CompaniesRepository>(CompaniesRepositoryImp(
-    g<CompaniesApi>(),
-  ));
-  g.registerSingleton<GetCompanies>(GetCompanies(
-    g<CompaniesRepository>(),
-  ));
+  g.registerSingleton<GetCompanies>(GetCompanies());
   if (environment == 'dev') {
     g.registerSingleton<ProfileApi>(ProfileHttpApi(
       g<MyHttpClient>(),
@@ -158,6 +151,23 @@ void $initGetIt(GetIt g, {String environment}) {
   }
   g.registerSingleton<ProfileRepository>(ProfileRepositoryImp(
     g<ProfileApi>(),
+  ));
+  g.registerSingleton<OrderDiet>(OrderDiet(
+    g<MyDietRepository>(),
+  ));
+  if (environment == 'dev') {
+    g.registerSingleton<PickDietApi>(PickDietHttpApi(
+      g<MyHttpClient>(),
+    ));
+  }
+  if (environment == 'demo') {
+    g.registerSingleton<PickDietApi>(PickDietDemoApi());
+  }
+  g.registerSingleton<PickDietRepository>(PickDietRepositoryImp(
+    g<PickDietApi>(),
+  ));
+  g.registerSingleton<GetOffers>(GetOffers(
+    g<PickDietRepository>(),
   ));
   g.registerSingleton<GetProfile>(GetProfile(
     g<ProfileRepository>(),

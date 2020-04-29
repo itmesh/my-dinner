@@ -135,16 +135,13 @@ class MyHttpClient {
   void _addHeaders({
     HttpHeaders httpHeaders,
     Map<String, String> headersMap,
-    bool addContentType = true,
+    bool addContentType = false,
   }) {
     Map<String, String> allHeaders = {
       HttpHeaders.acceptHeader: 'application/json',
     };
     if (addContentType) {
-      allHeaders.putIfAbsent(
-        HttpHeaders.contentTypeHeader,
-        () => 'application/json',
-      );
+      httpHeaders.contentType = ContentType("application", "json", charset: "utf-8");
     }
     if (headersMap != null) {
       allHeaders.addAll(headersMap);

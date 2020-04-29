@@ -32,8 +32,8 @@ class _DietOfferCardState extends State<DietOfferCard> {
   void initState() {
     super.initState();
     setState(() {
-      _selectedCalorific = widget.dietOffer.calorific.length == 1
-          ? widget.dietOffer.calorific[0]
+      _selectedCalorific = widget.dietOffer.calories.length == 1
+          ? widget.dietOffer.calories[0].value.toString()
           : '';
       if (widget.calories != null) {
         _selectedCalorific = widget.calories.toString();
@@ -88,11 +88,11 @@ class _DietOfferCardState extends State<DietOfferCard> {
                                   dropDown: DropdownButtonFormField(
                                     value: _selectedCalorific,
                                     items: <DropdownMenuItem<String>>[
-                                      if (widget.dietOffer.calorific.length > 1)
+                                      if (widget.dietOffer.calories.length > 1)
                                         _emptyDropdown,
                                       ..._mapToDropdown(widget
-                                          .dietOffer.calorific
-                                          .map((e) => e.toString())
+                                          .dietOffer.calories
+                                          .map((e) => e.value.toString())
                                           .toList()),
                                     ],
                                     onChanged: (value) {
@@ -127,7 +127,7 @@ class _DietOfferCardState extends State<DietOfferCard> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
-                        '21,00 - 39,00 zł / dzień',
+                        _getPrice(),
                         style: TextStyle(
                             fontSize: 16.0, fontWeight: FontWeight.bold),
                       ),
@@ -153,6 +153,19 @@ class _DietOfferCardState extends State<DietOfferCard> {
         ),
       ],
     );
+  }
+
+  String _getPrice() {
+    if (_selectedCalorific.isEmpty) return '';
+    List<Price> pricing = widget.dietOffer.calories
+        .firstWhere((calorie) => calorie.value.toString() == _selectedCalorific)
+        .pricing;
+    if (pricing.length == 1) {
+      return '${pricing[0].value} zł / dzień';
+    } else {
+      pricing.sort((val1, val2) => val1.value > val2.value ? 1 : -1);
+      return '${pricing.first.value} - ${pricing.last.value} zł / dzień';
+    }
   }
 
   void _showDialogWithDiet() {

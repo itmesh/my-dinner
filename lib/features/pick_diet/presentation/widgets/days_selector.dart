@@ -13,7 +13,7 @@ class _DateSelectorState extends State<DateSelector>
   AnimationController _controller;
   final Animatable<double> _easeInTween = CurveTween(curve: Curves.easeIn);
   Animation<double> _calendarHeightFactor;
-  bool _chooseDaysLater = false;
+  bool _chooseDaysLater = true;
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _DateSelectorState extends State<DateSelector>
       duration: Duration(milliseconds: 500),
     );
     _calendarHeightFactor = _controller.drive(_easeInTween);
-    _controller.value = 1.0;
+    _controller.value = _chooseDaysLater ? 0.0 : 1.0;
   }
 
   void _handleChooseDaysLater(bool value) {

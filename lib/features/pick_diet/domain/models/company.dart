@@ -3,6 +3,7 @@ import 'package:my_dinner/features/pick_diet/domain/models/diet_offer.dart';
 import 'package:my_dinner/features/pick_diet/domain/models/rating.dart';
 
 class Company {
+  final int id;
   final String name;
   final String logoURL;
   final List<DietOffer> availDiets;
@@ -10,6 +11,7 @@ class Company {
   final int priceLevel;
 
   Company({
+    this.id,
     this.name,
     this.logoURL,
     this.availDiets,

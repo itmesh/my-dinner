@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:my_dinner/features/pick_diet/data/dtos/diet_offer_dto.dart';
 import 'package:my_dinner/features/pick_diet/data/dtos/rating_dto.dart';
+import 'package:my_dinner/features/pick_diet/data/dtos/vendor_offer_dto.dart';
 
 part 'company_dto.g.dart';
 
@@ -8,7 +9,7 @@ part 'company_dto.g.dart';
 class CompanyDto {
   final String name;
   final String logoURL;
-  final List<DietOfferDto> availDiets;
+  final List<OfferDto> availDiets;
   final RatingDto rating;
   final int priceLevel;
 

@@ -12,7 +12,7 @@ import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 
 class DietSelectorPage extends StatefulWidget {
-  static ModalRoute<dynamic> get route {
+  static ModalRoute<PickedDiet> get route {
     return MaterialPageRoute(
       builder: (_) => DietSelectorPage(),
     );
@@ -105,21 +105,37 @@ class _DietSelectorPageState extends State<DietSelectorPage> {
         'Wybierz\ndiete',
         textAlign: TextAlign.center,
       ),
-      content: ListView(
-        padding: const EdgeInsets.all(4.0),
-        children: [
-          if (_dietPicker.selectedCompany != null)
-            ..._dietPicker.selectedCompany.availDiets.map((diet) {
-              int calories = diet == _dietPicker.selectedDiet
-                  ? _dietPicker.calories
-                  : null;
-              return DietOfferCard(
-                calories: calories,
-                selected: diet == _dietPicker.selectedDiet,
-                dietOffer: diet,
-                onSelect: _dietPicker.selectDiet,
-              );
-            }).toList(),
+      content: Column(
+        children: <Widget>[
+          if (_dietPicker.loading) LinearProgressIndicator(),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(4.0),
+              children: [
+                ..._dietPicker.dietOffers.map((diet) {
+                  return DietOfferCard(
+                    selected: diet == _dietPicker.selectedDiet,
+                    dietOffer: diet,
+                    onSelect: _dietPicker.selectDiet,
+                  );
+                }),
+                /*
+                if (_dietPicker.selectedCompany != null)
+                  ..._dietPicker.dietOffers.map((diet) {
+                    int calories = diet == _dietPicker.selectedDiet
+                        ? _dietPicker.calorie.value
+                        : null;
+                    return DietOfferCard(
+                      calories: calories,
+                      selected: diet == _dietPicker.selectedDiet,
+                      dietOffer: diet,
+                      onSelect: _dietPicker.selectDiet,
+                    );
+                  }).toList(),
+                 */
+              ],
+            ),
+          ),
         ],
       ),
     );

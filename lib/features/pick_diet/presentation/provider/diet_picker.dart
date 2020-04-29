@@ -9,24 +9,30 @@ import 'package:my_dinner/features/pick_diet/domain/models/company.dart';
 import 'package:my_dinner/features/pick_diet/domain/models/diet_offer.dart';
 import 'package:my_dinner/features/pick_diet/domain/models/picked_diet.dart';
 import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
+import 'package:my_dinner/features/pick_diet/domain/usecases/get_offers.dart';
 import 'package:my_dinner/widgets/stepper.dart';
 
 @injectable
 class DietPicker extends ChangeNotifier {
   final GetCompanies _getCompanies;
+  final GetOffers _getOffers;
   final List<Company> _companies = [];
+  final List<DietOffer> _dietOffers = [];
   final List<StepStatus> _steps = [
     StepStatus(step: 0, active: true, state: StepState.editing),
     StepStatus(step: 1, active: false, state: StepState.disabled),
     StepStatus(step: 2, active: false, state: StepState.disabled),
   ];
+
+  DietPicker(this._getCompanies, this._getOffers);
+
   bool loading = false;
   Company _selectedCompany;
   DietOffer _selectedDiet;
-  int _calories;
+  Calorie _calorie;
   int _currentIndex = 0;
 
-  int get calories => _calories;
+  Calorie get calorie => _calorie;
 
   DietOffer get selectedDiet => _selectedDiet;
 
@@ -34,15 +40,13 @@ class DietPicker extends ChangeNotifier {
 
   StepStatus get currentStep => _steps[_currentIndex];
 
-  DietPicker(this._getCompanies);
-
   UnmodifiableListView<Company> get companies =>
       UnmodifiableListView(_companies);
 
   UnmodifiableListView<StepStatus> get steps => UnmodifiableListView(_steps);
 
-  UnmodifiableListView<DietOffer> get diets =>
-      UnmodifiableListView(_selectedCompany?.availDiets ?? []);
+  UnmodifiableListView<DietOffer> get dietOffers =>
+      UnmodifiableListView(_dietOffers ?? []);
 
   void nextStep() {}
 
@@ -56,10 +60,11 @@ class DietPicker extends ChangeNotifier {
 
   void prevStep() {}
 
-  void selectCompany(Company company) {
+  void selectCompany(Company company) async {
     _selectedCompany = company;
     _selectedDiet = null;
-    _calories = null;
+    _dietOffers.clear();
+    _calorie = null;
     _currentIndex += 1;
     _steps[0].active = false;
     _steps[0].state = StepState.complete;
@@ -67,19 +72,37 @@ class DietPicker extends ChangeNotifier {
     _steps[1].state = StepState.editing;
     _steps[2].active = false;
     _steps[2].state = StepState.disabled;
-
     notifyListeners();
+    setLoading(true);
+    _dietOffers.addAll(
+      _eitherOffersOrError(
+        await _getOffers(GetOfferParams(companyId: company.id)),
+      ),
+    );
+    setLoading(false);
   }
 
-  void selectCompanyWithDiet(Company company, DietOffer diet, int calories) {
+  List<DietOffer> _eitherOffersOrError(
+    Either<Failure, List<DietOffer>> either,
+  ) =>
+      either.fold(
+        (_) => [],
+        (offers) => offers,
+      );
+
+  void selectCompanyWithDiet(
+    Company company,
+    DietOffer diet,
+    Calorie calorie,
+  ) {
     selectCompany(company);
     _selectedDiet = diet;
-    _calories = calories;
+    _calorie = calorie;
   }
 
-  void selectDiet(DietOffer dietOffer, int calories) {
+  void selectDiet(DietOffer dietOffer, int calorie) {
     _selectedDiet = dietOffer;
-    _calories = calories;
+    _calorie = dietOffer.calories.firstWhere((e) => e.value == calorie);
     _currentIndex += 1;
     _steps[1].active = false;
     _steps[1].state = StepState.complete;
@@ -89,7 +112,10 @@ class DietPicker extends ChangeNotifier {
   }
 
   PickedDiet finish() {
-    return PickedDiet();
+    return PickedDiet(
+      dietOffer: selectedDiet,
+      calorie: _calorie,
+    );
   }
 
   void initialize() async {
@@ -98,12 +124,11 @@ class DietPicker extends ChangeNotifier {
     setLoading(false);
   }
 
-  List<Company> _eitherLoadedOrError(Either<Failure, List<Company>> either) {
-    return either.fold(
-      (_) => [],
-      (companies) => companies,
-    );
-  }
+  List<Company> _eitherLoadedOrError(Either<Failure, List<Company>> either) =>
+      either.fold(
+        (_) => [],
+        (companies) => companies,
+      );
 
   bool get lastStep => _steps.last == currentStep;
 

@@ -89,7 +89,7 @@ abstract class _AddressFormStore with Store {
 
   Address getAddress() {
     return Address(
-      id: oldAddress.id,
+      id: oldAddress?.id,
       street: street,
       homeFlatNumber: homeFlatNumber,
       city: city,

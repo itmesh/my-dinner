@@ -15,7 +15,7 @@ class _DietFormState extends State<DietForm>
   AnimationController _controller;
 
   Animation<double> _calendarHeightFactor;
-  bool _chooseDaysLater = false;
+  bool _chooseDaysLater = true;
 
   @override
   void initState() {
@@ -98,24 +98,23 @@ class _DietFormState extends State<DietForm>
                         alignment: Alignment.center,
                         child: Text('Ilość wybranych dni: 10')),
                     AnimatedBuilder(
-                      animation: _controller.view,
-                      builder: (_, Widget child) {
-                        return ClipRect(
-                          child: Align(
-                            heightFactor: _calendarHeightFactor.value,
-                            child: child,
+                        animation: _controller.view,
+                        builder: (_, Widget child) {
+                          return ClipRect(
+                            child: Align(
+                              heightFactor: _calendarHeightFactor.value,
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: AspectRatio(
+                          aspectRatio: 1 / 1,
+                          child: Center(
+                            child: Container(
+                              child: Text('KALENDARZ'),
+                            ),
                           ),
-                        );
-                      },
-                      child: AspectRatio(
-                        aspectRatio: 1/1,
-                        child: Center(
-                          child: Container(
-                            child: Text('KALENDARZ'),
-                          ),
-                        ),
-                      )
-                    ),
+                        )),
                     TextFormField(
                       maxLines: null,
                       keyboardType: TextInputType.multiline,

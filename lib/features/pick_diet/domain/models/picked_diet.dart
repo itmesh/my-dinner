@@ -1,15 +1,18 @@
+import 'package:my_dinner/features/pick_diet/domain/models/company.dart';
+import 'package:my_dinner/features/pick_diet/domain/models/diet_offer.dart';
+
 class PickedDiet {
-  final String companyId;
-  final String dietId;
-  final int calories;
+  final Company company;
+  final DietOffer dietOffer;
+  final Calorie calorie;
   final String remark;
   final int setsCount;
   final List<DateTime> selectedDays;
 
   PickedDiet({
-    this.companyId,
-    this.dietId,
-    this.calories,
+    this.company,
+    this.dietOffer,
+    this.calorie,
     this.remark,
     this.setsCount,
     this.selectedDays,

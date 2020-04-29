@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
-import 'package:my_dinner/features/address/domain/models/delivery_hours.dart';
 import 'package:my_dinner/features/address/presentation/pages/address_details_page.dart';
 import 'package:my_dinner/features/address/presentation/widgets/address_card.dart';
 
@@ -13,6 +12,7 @@ import 'package:my_dinner/features/new_order/presentation/pages/edit_profile_pag
 import 'package:my_dinner/features/new_order/presentation/redux/new_order_redux.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/store.dart';
 import 'package:my_dinner/features/new_order/presentation/widgets/diet_card.dart';
+import 'package:my_dinner/features/pick_diet/domain/models/picked_diet.dart';
 import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
 import 'package:my_dinner/features/profile/domain/models/profile.dart';
 import 'package:my_dinner/features/profile/presentation/widgets/contact_data_card.dart';
@@ -27,11 +27,6 @@ class NewOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Store<NewOrderState> _store = Store(
-      newOrderReducer,
-      initialState: NewOrderState(),
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Nowe zamówienie'),
@@ -257,64 +252,78 @@ class NewOrderPage extends StatelessWidget {
   }
 
   Widget _buildDietInfo(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            title: Row(
-              children: <Widget>[
-                Text('Pakiet pudełek',
-                    style: TextStyle(
-                        color: Color(0xFF2196f3), fontWeight: FontWeight.w400)),
-                Expanded(
-                  child: SizedBox(),
-                ),
-                if (mealsData.isNotEmpty)
-                  OutlineButton(
-                    onPressed: () {
-                      Navigator.of(context).push(DietSelectorPage.route);
-                    },
-                    borderSide: BorderSide(
-                      color: Color(0xFF2196f3),
+    Store<NewOrderState> store = StoreProvider.of(context);
+    return StoreConnector<NewOrderState, PickedDietViewModel>(
+      converter: (store) => PickedDietViewModel.fromStore(store),
+      builder: (_, pickedDietView) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12.0),
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Row(
+                  children: <Widget>[
+                    Text('Pakiet pudełek',
+                        style: TextStyle(
+                            color: Color(0xFF2196f3),
+                            fontWeight: FontWeight.w400)),
+                    Expanded(
+                      child: SizedBox(),
                     ),
-                    child: Text('Wybierz inny'),
-                  ),
-              ],
-            ),
-          ),
-          if (mealsData.length == 0)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: _buildEmptyCard(context, () {
-                Navigator.of(context).push(DietSelectorPage.route);
-              }),
-            ),
-          if (mealsData.length == 1)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: _buildSingleDiet(
-                context: context,
-                diet: mealsData[0],
-                singleItem: true,
+                    if (mealsData.isNotEmpty)
+                      OutlineButton(
+                        onPressed: () {
+                          Navigator.of(context).push(DietSelectorPage.route);
+                        },
+                        borderSide: BorderSide(
+                          color: Color(0xFF2196f3),
+                        ),
+                        child: Text('Wybierz inny'),
+                      ),
+                  ],
+                ),
               ),
-            ),
-          if (mealsData.length > 1)
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(children: [
-                SizedBox(width: 12.0),
-                ...mealsData
-                    .map((diet) => _buildSingleDiet(
-                          context: context,
-                          diet: diet,
-                        ))
-                    .toList(),
-                SizedBox(width: 4.0),
-              ]),
-            ),
-        ],
-      ),
+              if (pickedDietView.name.isNotEmpty) Text(pickedDietView.name),
+              if (pickedDietView.calorie.isNotEmpty)
+                Text(pickedDietView.calorie),
+              if (mealsData.length == 0)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: _buildEmptyCard(context, () async {
+                    PickedDiet pickedDiet = await Navigator.of(context)
+                        .push<PickedDiet>(DietSelectorPage.route);
+                    if (pickedDiet != null) {
+                      store.dispatch(AddPickedDiet(pickedDiet));
+                    }
+                  }),
+                ),
+              if (mealsData.length == 1)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: _buildSingleDiet(
+                    context: context,
+                    diet: mealsData[0],
+                    singleItem: true,
+                  ),
+                ),
+              if (mealsData.length > 1)
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(children: [
+                    SizedBox(width: 12.0),
+                    ...mealsData
+                        .map((diet) => _buildSingleDiet(
+                              context: context,
+                              diet: diet,
+                            ))
+                        .toList(),
+                    SizedBox(width: 4.0),
+                  ]),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 
