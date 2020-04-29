@@ -4,7 +4,9 @@ import 'package:my_dinner/core/services/failures.dart';
 import 'package:my_dinner/core/services/log.dart';
 import 'package:my_dinner/features/my_diet/data/datasources/my_diet_api.dart';
 import 'package:my_dinner/features/my_diet/data/dtos/diet_dto.dart';
+import 'package:my_dinner/features/my_diet/data/dtos/diet_order_dto.dart';
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
+import 'package:my_dinner/features/my_diet/domain/models/diet_order.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository.dart';
 
 @RegisterAs(MyDietRepository)
@@ -19,6 +21,16 @@ class MyDietRepositoryImp implements MyDietRepository {
     try {
       List<DietDto> diets = await myDietApi.getDiets(day);
       return Right(diets.map((dto) => Diet.fromDto(dto)).toList());
+    } catch (e) {
+      _log.error(e.toString());
+      return Left(ApiFailure());
+    }
+  }
+
+  Future<Either<Failure, DietOrder>> orderDiet(DateTime day) async {
+    try {
+      DietOrderDto dto = await myDietApi.orderDiet(day);
+      return Right(DietOrder.fromDto(dto));
     } catch (e) {
       _log.error(e.toString());
       return Left(ApiFailure());

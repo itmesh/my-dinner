@@ -29,6 +29,7 @@ import 'package:my_dinner/features/my_diet/data/datasources/my_diet_api.dart';
 import 'package:my_dinner/features/my_diet/data/repository/my_diet_repository_imp.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository.dart';
 import 'package:my_dinner/features/my_diet/domain/usecases/get_diet.dart';
+import 'package:my_dinner/features/my_diet/domain/usecases/order_diet.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
 import 'package:my_dinner/features/pick_diet/data/datasource/companies_api.dart';
 import 'package:my_dinner/features/pick_diet/data/repository/companies_repository_imp.dart';
@@ -60,6 +61,7 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerFactory<MyDietBloc>(() => MyDietBloc(
         g<MyDietState>(),
         g<GetDiet>(),
+        g<OrderDiet>(),
       ));
 
   //Eager singletons must be registered in the right order

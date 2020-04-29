@@ -7,3 +7,9 @@ class LoadMyDiet extends MyDietEvent {
 
   LoadMyDiet(this.selectedDay);
 }
+
+class OrderMyDiet extends MyDietEvent {
+  final DateTime selectedDay;
+
+  OrderMyDiet(this.selectedDay);
+}
