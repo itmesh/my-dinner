@@ -273,7 +273,7 @@ class NewOrderPage extends StatelessWidget {
                     if (mealsData.isNotEmpty)
                       OutlineButton(
                         onPressed: () {
-                          Navigator.of(context).push(DietSelectorPage.route);
+                          Navigator.of(context).push(PickDietPage.route);
                         },
                         borderSide: BorderSide(
                           color: Color(0xFF2196f3),
@@ -291,7 +291,7 @@ class NewOrderPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: _buildEmptyCard(context, () async {
                     PickedDiet pickedDiet = await Navigator.of(context)
-                        .push<PickedDiet>(DietSelectorPage.route);
+                        .push<PickedDiet>(PickDietPage.route);
                     if (pickedDiet != null) {
                       store.dispatch(AddPickedDiet(pickedDiet));
                     }

@@ -8,6 +8,7 @@ import 'package:my_dinner/features/auth/presentation/pages/auth_page.dart';
 import 'package:my_dinner/features/history_meals/history_meals_page.dart';
 import 'package:my_dinner/features/history_orders/presentation/pages/orders_page.dart';
 import 'package:my_dinner/features/my_diet/presentation/pages/my_diet_page.dart';
+import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
 import 'package:my_dinner/features/profile/presentation/pages/profile_page.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -28,13 +29,21 @@ class NavigationDrawer extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
               ),
             ),
-            ListTile(
-              title: Text('Moja dieta'),
-              onTap: () {
-                Navigator.of(context)
-                    .pushReplacement(MyDietPage.routeWithParams());
-              },
-            ),
+            if (!session.isLogged())
+              ListTile(
+                title: Text('Oferta'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(PickDietPage.route);
+                },
+              ),
+            if (session.isLogged())
+              ListTile(
+                title: Text('Moja dieta'),
+                onTap: () {
+                  Navigator.of(context)
+                      .pushReplacement(MyDietPage.routeWithParams());
+                },
+              ),
             if (session.isLogged()) ...[
               ListTile(
                 title: Text('Zamówienia'),

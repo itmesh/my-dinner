@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_dinner/features/new_order/presentation/pages/new_order_page.dart';
+import 'package:my_dinner/features/pick_diet/presentation/widgets/dialogs.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_dinner/widgets/stepper.dart' as stepper;
@@ -11,18 +13,18 @@ import 'package:my_dinner/features/pick_diet/presentation/widgets/diet_offer_car
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 
-class DietSelectorPage extends StatefulWidget {
+class PickDietPage extends StatefulWidget {
   static ModalRoute<PickedDiet> get route {
     return MaterialPageRoute(
-      builder: (_) => DietSelectorPage(),
+      builder: (_) => PickDietPage(),
     );
   }
 
   @override
-  _DietSelectorPageState createState() => _DietSelectorPageState();
+  _PickDietPageState createState() => _PickDietPageState();
 }
 
-class _DietSelectorPageState extends State<DietSelectorPage> {
+class _PickDietPageState extends State<PickDietPage> {
   DietPicker _dietPicker;
 
   @override
@@ -36,35 +38,48 @@ class _DietSelectorPageState extends State<DietSelectorPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Wybierz catering'),
-        leading: CloseButton(),
-      ),
-      body: ChangeNotifierProvider.value(
-        value: _dietPicker,
-        child: Consumer<DietPicker>(
-          builder: (_, dietPicker, child) {
-            return Column(
-              children: <Widget>[
-                Expanded(
-                  child: stepper.HorizontalStepper(
-                    currentStep: _dietPicker.currentStep.step,
-                    onStepTapped: _dietPicker.goToStep,
-                    steps: [
-                      _buildCompanyStep(),
-                      _buildDietStep(),
-                      _buildFinishStep(),
-                    ],
+    return WillPopScope(
+      onWillPop: () async {
+        if (Navigator.of(context).canPop()) {
+          return true;
+        } else {
+          return await showCloseAppDialog(context);
+        }
+      },
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: ChangeNotifierProvider.value(
+          value: _dietPicker,
+          child: Consumer<DietPicker>(
+            builder: (_, dietPicker, child) {
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: stepper.HorizontalStepper(
+                      currentStep: _dietPicker.currentStep.step,
+                      onStepTapped: _dietPicker.goToStep,
+                      steps: [
+                        _buildCompanyStep(),
+                        _buildDietStep(),
+                        _buildFinishStep(),
+                      ],
+                    ),
                   ),
-                ),
-                if (_dietPicker.lastStep) _buildFinishAction()
-              ],
-            );
-          },
+                  if (_dietPicker.lastStep) _buildFinishAction()
+                ],
+              );
+            },
+          ),
         ),
+        drawer: NavigationDrawer(),
       ),
-      drawer: NavigationDrawer(),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      title: Text('Wybierz catering'),
+      leading: Navigator.of(context).canPop() ? CloseButton() : null,
     );
   }
 
@@ -176,8 +191,12 @@ class _DietSelectorPageState extends State<DietSelectorPage> {
               textColor: Colors.white,
               color: Theme.of(context).primaryColor,
               onPressed: () {
-                PickedDiet pickedDiet = _dietPicker.finish();
-                Navigator.of(context).pop(pickedDiet);
+                if(Navigator.of(context).canPop()){
+                  PickedDiet pickedDiet = _dietPicker.finish();
+                  Navigator.of(context).pop(pickedDiet);
+                } else {
+                  Navigator.of(context).push(NewOrderPage.route);
+                }
               },
               icon: Icon(Icons.save),
               label: Text('Zapisz'),

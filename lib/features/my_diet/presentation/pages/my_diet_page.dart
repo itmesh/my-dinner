@@ -11,6 +11,7 @@ import 'package:my_dinner/features/my_diet/presentation/pages/meal_page.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/new_order_page.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/store.dart';
 import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
+import 'package:my_dinner/features/pick_diet/presentation/widgets/dialogs.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -52,33 +53,7 @@ class _MyDietPageState extends State<MyDietPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        bool closeApp = await showDialog<bool>(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Zamknięcie aplikacji'),
-              content: Text('Czy na penwno chcesz zamknąć aplikacje?'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Nie'),
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-                FlatButton(
-                  child: Text('Tak'),
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                )
-              ],
-            );
-          },
-        );
-        return closeApp;
-      },
+      onWillPop: () async => await showCloseAppDialog(context),
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -208,7 +183,7 @@ class _MyDietPageState extends State<MyDietPage> {
             child: Card(
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).push(DietSelectorPage.route);
+                  Navigator.of(context).push(PickDietPage.route);
                 },
                 child: SizedBox(
                   height: 150,
@@ -277,7 +252,7 @@ class _MyDietPageState extends State<MyDietPage> {
                               Icons.add,
                               size: 48.0,
                               color:
-                              IconTheme.of(context).color.withOpacity(0.3),
+                                  IconTheme.of(context).color.withOpacity(0.3),
                             ),
                           ),
                         ],
@@ -320,7 +295,7 @@ class _MyDietPageState extends State<MyDietPage> {
     );
   }
 
-  Widget _orderedState(OrderedMyDiet state){
+  Widget _orderedState(OrderedMyDiet state) {
     return Expanded(
       child: PageView.builder(
         itemCount: 3,
@@ -351,9 +326,7 @@ class _MyDietPageState extends State<MyDietPage> {
                             'Zamówiony zestaw',
                             style: TextStyle(fontSize: 16.0),
                           ),
-                          Text(
-                            state.order.name
-                          ),
+                          Text(state.order.name),
                         ],
                       ),
                     ),

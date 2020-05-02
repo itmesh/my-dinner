@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _checkSession() async {
     bool initialized = await session.initFromPreferences();
     if (initialized) {
-      Navigator.of(context).push(
+      Navigator.of(context).pushReplacement(
         MyDietPage.routeWithParams(
           request: MyDietPageRequest(
             snackBarMessage: 'Użytkownik został zalogowany',
@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
     } else {
-      Navigator.of(context).push(AuthPage.route);
+      Navigator.of(context).pushReplacement(AuthPage.route);
     }
   }
 

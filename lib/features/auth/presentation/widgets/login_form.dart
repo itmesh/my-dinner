@@ -49,6 +49,7 @@ class _LoginFormState extends State<LoginForm> {
             onSaved: (value) => _email = value,
           ),
           TextFormField(
+            obscureText: true,
             decoration: InputDecoration(
               labelText: 'Hasło',
             ),

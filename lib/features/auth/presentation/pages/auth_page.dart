@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:my_dinner/core/services/context.dart';
+import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
+import 'package:my_dinner/features/pick_diet/presentation/provider/diet_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:my_dinner/core/services/injection.dart';
@@ -267,8 +269,7 @@ class _AuthPageState extends State<AuthPage> {
           children: <Widget>[
             RaisedButton(
               onPressed: () {
-                Navigator.of(context)
-                    .pushReplacement(MyDietPage.routeWithParams());
+                Navigator.of(context).pushReplacement(PickDietPage.route);
               },
               child: Row(
                 children: <Widget>[
