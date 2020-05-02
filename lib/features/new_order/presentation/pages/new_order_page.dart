@@ -5,12 +5,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
 import 'package:my_dinner/features/address/presentation/pages/address_details_page.dart';
 import 'package:my_dinner/features/address/presentation/widgets/address_card.dart';
-
-import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/address_actions.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/new_order_redux.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/store.dart';
-import 'package:my_dinner/features/new_order/presentation/widgets/diet_card.dart';
 import 'package:my_dinner/features/new_order/presentation/widgets/picked_diet_card.dart';
 import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
 import 'package:my_dinner/features/profile/presentation/pages/profile_page.dart';
@@ -339,25 +336,5 @@ class _NewOrderPageState extends State<NewOrderPage> {
         );
       },
     );
-  }
-
-  Widget _buildSingleDiet({
-    BuildContext context,
-    Diet diet,
-    singleItem = false,
-  }) {
-    Widget dietCard = DietCard(
-      diet: diet,
-      onEdit: () {},
-    );
-    if (singleItem) {
-      return dietCard;
-    } else {
-      return Container(
-        padding: const EdgeInsets.only(right: 8.0),
-        width: MediaQuery.of(context).size.width * 0.8,
-        child: dietCard,
-      );
-    }
   }
 }
