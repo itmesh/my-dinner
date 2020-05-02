@@ -33,7 +33,7 @@ class NavigationDrawer extends StatelessWidget {
               ListTile(
                 title: Text('Oferta'),
                 onTap: () {
-                  Navigator.of(context).pushReplacement(PickDietPage.route);
+                  Navigator.of(context).pushReplacement(PickDietPage.route());
                 },
               ),
             if (session.isLogged())
@@ -66,7 +66,9 @@ class NavigationDrawer extends StatelessWidget {
               ListTile(
                 title: Text('Dane kontaktowe'),
                 onTap: () {
-                  Navigator.of(context).pushReplacement(ProfilePage.route);
+                  Navigator.of(context).pushReplacement(
+                    ProfilePage.routeWithRequest(ProfilePageRequest()),
+                  );
                 },
               ),
             ],

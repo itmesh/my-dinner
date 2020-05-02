@@ -7,24 +7,28 @@ import 'package:my_dinner/features/address/presentation/pages/address_details_pa
 import 'package:my_dinner/features/address/presentation/widgets/address_card.dart';
 
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
-import 'package:my_dinner/features/new_order/presentation/pages/edit_diet_page.dart';
-import 'package:my_dinner/features/new_order/presentation/pages/edit_profile_page.dart';
+import 'package:my_dinner/features/new_order/presentation/redux/address_actions.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/new_order_redux.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/store.dart';
 import 'package:my_dinner/features/new_order/presentation/widgets/diet_card.dart';
-import 'package:my_dinner/features/pick_diet/domain/models/picked_diet.dart';
+import 'package:my_dinner/features/new_order/presentation/widgets/picked_diet_card.dart';
 import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
-import 'package:my_dinner/features/profile/domain/models/profile.dart';
+import 'package:my_dinner/features/profile/presentation/pages/profile_page.dart';
 import 'package:my_dinner/features/profile/presentation/widgets/contact_data_card.dart';
 import 'package:redux/redux.dart';
 
-class NewOrderPage extends StatelessWidget {
+class NewOrderPage extends StatefulWidget {
   static Route<dynamic> get route {
     return MaterialPageRoute(
       builder: (_) => NewOrderPage(),
     );
   }
 
+  @override
+  _NewOrderPageState createState() => _NewOrderPageState();
+}
+
+class _NewOrderPageState extends State<NewOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,14 +110,17 @@ class NewOrderPage extends StatelessWidget {
                 builder: (_, profileViewModel) {
                   if (profileViewModel != null) {
                     return ContactDataCard(
-                      contactData: Profile(
-                        name: profileViewModel.name,
-                        surname: profileViewModel.surname,
-                        email: profileViewModel.email,
-                        phoneNumber: '123',
-                      ),
-                      onEdit: () {
-                        Navigator.of(context).push(EditProfilePage.route);
+                      profile: profileViewModel,
+                      onEdit: () async {
+                        ProfilePageResponse response =
+                            await Navigator.of(context).push(
+                          ProfilePage.routeWithRequest(
+                              ProfilePageRequest.editProfile(
+                                  store.state.profile)),
+                        );
+                        if (response != null) {
+                          profileViewModel.onEdit(response.profile);
+                        }
                       },
                     );
                   } else {
@@ -127,6 +134,7 @@ class NewOrderPage extends StatelessWidget {
   }
 
   Widget _buildAddressData(BuildContext context) {
+    Store<NewOrderState> store = StoreProvider.of(context);
     return StoreConnector<NewOrderState, List<AddressViewModel>>(
       converter: (store) {
         if (store.state.addresses != null) {
@@ -154,9 +162,13 @@ class NewOrderPage extends StatelessWidget {
                     ),
                     if (addresses.isNotEmpty)
                       OutlineButton(
-                        onPressed: () {
-                          Navigator.of(context)
-                              .push(AddressDetailsPage.routeWithParams());
+                        onPressed: () async {
+                          AddressDetailsResponse response =
+                              await Navigator.of(context)
+                                  .push(AddressDetailsPage.routeWithParams());
+                          if (response != null) {
+                            store.dispatch(AddAddress(response.address));
+                          }
                         },
                         borderSide: BorderSide(
                           color: Color(0xFF2196f3),
@@ -270,10 +282,19 @@ class NewOrderPage extends StatelessWidget {
                     Expanded(
                       child: SizedBox(),
                     ),
-                    if (mealsData.isNotEmpty)
+                    if (pickedDietView.isPicked)
                       OutlineButton(
-                        onPressed: () {
-                          Navigator.of(context).push(PickDietPage.route);
+                        onPressed: () async {
+                          PickDietResponse response =
+                              await Navigator.of(context).push(
+                            PickDietPage.route(
+                                request: PickDietRequest(
+                              pickedDiet: store.state.pickedDiet,
+                            )),
+                          );
+                          if (response != null) {
+                            store.dispatch(AddPickedDiet(response.pickedDiet));
+                          }
                         },
                         borderSide: BorderSide(
                           color: Color(0xFF2196f3),
@@ -283,42 +304,35 @@ class NewOrderPage extends StatelessWidget {
                   ],
                 ),
               ),
-              if (pickedDietView.name.isNotEmpty) Text(pickedDietView.name),
-              if (pickedDietView.calorie.isNotEmpty)
-                Text(pickedDietView.calorie),
-              if (mealsData.length == 0)
+              if (!pickedDietView.isPicked)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: _buildEmptyCard(context, () async {
-                    PickedDiet pickedDiet = await Navigator.of(context)
-                        .push<PickedDiet>(PickDietPage.route);
-                    if (pickedDiet != null) {
-                      store.dispatch(AddPickedDiet(pickedDiet));
+                    PickDietResponse response =
+                        await Navigator.of(context).push(PickDietPage.route());
+                    if (response != null) {
+                      store.dispatch(AddPickedDiet(response.pickedDiet));
                     }
                   }),
                 ),
-              if (mealsData.length == 1)
+              if (pickedDietView.isPicked)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: _buildSingleDiet(
-                    context: context,
-                    diet: mealsData[0],
-                    singleItem: true,
+                  child: PickedDietCard(
+                    pickedDiet: pickedDietView,
+                    onEdit: () async {
+                      PickDietResponse response =
+                          await Navigator.of(context).push(
+                        PickDietPage.route(
+                            request: PickDietRequest(
+                          pickedDiet: store.state.pickedDiet,
+                        )),
+                      );
+                      if (response != null) {
+                        store.dispatch(AddPickedDiet(response.pickedDiet));
+                      }
+                    },
                   ),
-                ),
-              if (mealsData.length > 1)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(children: [
-                    SizedBox(width: 12.0),
-                    ...mealsData
-                        .map((diet) => _buildSingleDiet(
-                              context: context,
-                              diet: diet,
-                            ))
-                        .toList(),
-                    SizedBox(width: 4.0),
-                  ]),
                 ),
             ],
           ),
@@ -334,9 +348,7 @@ class NewOrderPage extends StatelessWidget {
   }) {
     Widget dietCard = DietCard(
       diet: diet,
-      onEdit: () {
-        Navigator.of(context).push(EditDietPage.route);
-      },
+      onEdit: () {},
     );
     if (singleItem) {
       return dietCard;
@@ -348,46 +360,4 @@ class NewOrderPage extends StatelessWidget {
       );
     }
   }
-
-  static List<Address> addressData0 = [];
-  static List<Address> addressData1 = [
-    Address(
-      street: 'Spokojna',
-      homeFlatNumber: '8/5',
-      city: 'Kraków',
-      postalCode: '30-054',
-      remarks: 'Pin do bramki to 12344',
-    ),
-  ];
-  static List<Address> addressData2 = List.generate(5, (index) {
-    return Address(
-      street: 'Spokojna',
-      homeFlatNumber: '8/5',
-      city: 'Kraków',
-      postalCode: '30-054',
-      remarks: 'Pin do bramki to 12344',
-    );
-  }).toList();
-  static List<Diet> mealsData0 = [];
-  static List<Diet> mealsData1 = [
-    Diet(
-      address: Address(),
-      calories: 3000,
-      name: 'Dieta 3000 kalorii',
-      dietCounts: 4,
-      remarks: 'Nie lubie szczypiorku oraz proszę o rezygnacje z mięsa',
-    ),
-  ];
-  static List<Diet> mealsData2 = List.generate(5, (index) {
-    return Diet(
-      address: Address(),
-      calories: 3000,
-      name: 'Dieta 3000 kalorii',
-      dietCounts: 4,
-      remarks: 'Nie lubie szczypiorku oraz proszę o rezygnacje z mięsa',
-    );
-  }).toList();
-
-  //final List<Address> addressData = addressData2;
-  final List<Diet> mealsData = mealsData0;
 }

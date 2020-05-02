@@ -1,19 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_dinner/features/new_order/presentation/redux/new_order_redux.dart';
-import 'package:my_dinner/features/profile/domain/models/profile.dart';
 
-class ContactDataCard extends StatelessWidget {
-  final ProfileViewModel profile;
+import 'package:my_dinner/features/new_order/presentation/redux/new_order_redux.dart';
+
+class PickedDietCard extends StatelessWidget {
+  final PickedDietViewModel pickedDiet;
   final GestureTapCallback onEdit;
 
-  const ContactDataCard({Key key, this.profile, this.onEdit})
-      : super(key: key);
+  PickedDietCard({this.pickedDiet, this.onEdit});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text('${profile.name} ${profile.surname}'),
+        title: Text('${pickedDiet.companyName} \n'
+            '${pickedDiet.dietName}'),
         trailing: Container(
           height: 26.0,
           width: 26.0,
@@ -33,13 +34,17 @@ class ContactDataCard extends StatelessWidget {
           ),
         ),
         subtitle: Padding(
-          padding: const EdgeInsets.only(top: 2.0),
+          padding: EdgeInsets.symmetric(vertical: 4.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('${profile.email}'),
+              Text('${pickedDiet.calorie} kcal'),
               SizedBox(height: 2.0),
-              Text('${profile.phoneNumber}'),
+              Text('Ilość zestawów: ${pickedDiet.setsCount}'),
+              if (pickedDiet.remarks.isNotEmpty) ...[
+                SizedBox(height: 2.0),
+                Text('Uwagi: ${pickedDiet.remarks}'),
+              ]
             ],
           ),
         ),

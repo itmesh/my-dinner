@@ -50,9 +50,12 @@ abstract class _ProfileStore with Store {
     _profileFuture =
         ObservableFuture(_updateProfile(UpdateProfileParams(profile: profile)));
     Either either = await _profileFuture;
-    either.fold((error) => this.error = true, (profile) {
-      this.profile = profile;
-      updateSuccess = true;
-    });
+    either.fold(
+      (error) => this.error = true,
+      (profile) {
+        this.profile = profile;
+        updateSuccess = true;
+      },
+    );
   }
 }

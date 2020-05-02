@@ -121,3 +121,7 @@ enum Operation {
   update,
   delete,
 }
+
+class AddressDetailsRequest {
+
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/new_order_page.dart';
 import 'package:my_dinner/features/pick_diet/presentation/widgets/dialogs.dart';
 import 'package:provider/provider.dart';
@@ -14,11 +15,19 @@ import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/widgets/navigation_drawer.dart';
 
 class PickDietPage extends StatefulWidget {
-  static ModalRoute<PickedDiet> get route {
-    return MaterialPageRoute(
-      builder: (_) => PickDietPage(),
+  static ModalRoute<PickDietResponse> route({
+    PickDietRequest request,
+  }) {
+    return MaterialPageRoute<PickDietResponse>(
+      builder: (_) => PickDietPage(
+        request: request,
+      ),
     );
   }
+
+  final PickDietRequest request;
+
+  const PickDietPage({Key key, this.request}) : super(key: key);
 
   @override
   _PickDietPageState createState() => _PickDietPageState();
@@ -26,6 +35,7 @@ class PickDietPage extends StatefulWidget {
 
 class _PickDietPageState extends State<PickDietPage> {
   DietPicker _dietPicker;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void didChangeDependencies() {
@@ -164,9 +174,40 @@ class _PickDietPageState extends State<PickDietPage> {
         'Wybierz\ndni',
         textAlign: TextAlign.center,
       ),
-      content: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: <Widget>[DateSelector()],
+      content: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16.0),
+          children: <Widget>[
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Pole nie może być puste';
+                }
+                return null;
+              },
+              onChanged: _dietPicker.setSetsCount,
+              decoration: InputDecoration(labelText: 'Podaj ilość dni'),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                WhitelistingTextInputFormatter.digitsOnly
+              ], // Only numbers can be entered
+            ),
+            TextFormField(
+              onChanged: _dietPicker.setRemarks,
+              minLines: 2,
+              maxLines: 8,
+              decoration: InputDecoration(labelText: 'Dodaj uwagi do diety'),
+              // Only numbers can be entered
+            ),
+            SwitchListTile(
+              value: _dietPicker.chooseDaysLater,
+              onChanged: _dietPicker.setChooseDaysLater,
+              title: Text('Wybiore dni później'),
+            ),
+            DateSelector(),
+          ],
+        ),
       ),
     );
   }
@@ -191,11 +232,15 @@ class _PickDietPageState extends State<PickDietPage> {
               textColor: Colors.white,
               color: Theme.of(context).primaryColor,
               onPressed: () {
-                if(Navigator.of(context).canPop()){
-                  PickedDiet pickedDiet = _dietPicker.finish();
-                  Navigator.of(context).pop(pickedDiet);
-                } else {
-                  Navigator.of(context).push(NewOrderPage.route);
+                if (_formKey.currentState.validate()) {
+                  if (Navigator.of(context).canPop()) {
+                    PickedDiet pickedDiet = _dietPicker.complete();
+                    Navigator.of(context).pop(PickDietResponse(
+                      pickedDiet: pickedDiet,
+                    ));
+                  } else {
+                    Navigator.of(context).push(NewOrderPage.route);
+                  }
                 }
               },
               icon: Icon(Icons.save),
@@ -206,4 +251,16 @@ class _PickDietPageState extends State<PickDietPage> {
       ),
     );
   }
+}
+
+class PickDietRequest {
+  final PickedDiet pickedDiet;
+
+  PickDietRequest({this.pickedDiet});
+}
+
+class PickDietResponse {
+  final PickedDiet pickedDiet;
+
+  PickDietResponse({this.pickedDiet});
 }

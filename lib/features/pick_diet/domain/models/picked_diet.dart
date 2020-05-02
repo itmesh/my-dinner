@@ -5,7 +5,7 @@ class PickedDiet {
   final Company company;
   final DietOffer dietOffer;
   final Calorie calorie;
-  final String remark;
+  final String remarks;
   final int setsCount;
   final List<DateTime> selectedDays;
 
@@ -13,7 +13,7 @@ class PickedDiet {
     this.company,
     this.dietOffer,
     this.calorie,
-    this.remark,
+    this.remarks,
     this.setsCount,
     this.selectedDays,
   });

@@ -31,6 +31,9 @@ class DietPicker extends ChangeNotifier {
   DietOffer _selectedDiet;
   Calorie _calorie;
   int _currentIndex = 0;
+  bool _chooseDaysLater = true;
+  String _remarks;
+  int _setsCount;
 
   Calorie get calorie => _calorie;
 
@@ -39,6 +42,12 @@ class DietPicker extends ChangeNotifier {
   Company get selectedCompany => _selectedCompany;
 
   StepStatus get currentStep => _steps[_currentIndex];
+
+  String get remarks => _remarks;
+
+  bool get chooseDaysLater => _chooseDaysLater;
+
+  int get setsCount => _setsCount;
 
   UnmodifiableListView<Company> get companies =>
       UnmodifiableListView(_companies);
@@ -111,12 +120,28 @@ class DietPicker extends ChangeNotifier {
     notifyListeners();
   }
 
-  PickedDiet finish() {
-    return PickedDiet(
-      dietOffer: selectedDiet,
-      calorie: _calorie,
-    );
+  void setChooseDaysLater(bool value) {
+    _chooseDaysLater = value;
+    notifyListeners();
   }
+
+  void setRemarks(String remarks) {
+    _remarks = remarks;
+    notifyListeners();
+  }
+
+  void setSetsCount(String setsCount) {
+    _setsCount = int.parse(setsCount);
+    notifyListeners();
+  }
+
+  PickedDiet complete() => PickedDiet(
+        company: selectedCompany,
+        dietOffer: selectedDiet,
+        calorie: calorie,
+        remarks: remarks,
+        setsCount: setsCount,
+      );
 
   void initialize() async {
     setLoading(true);

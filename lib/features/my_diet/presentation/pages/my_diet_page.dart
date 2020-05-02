@@ -183,7 +183,7 @@ class _MyDietPageState extends State<MyDietPage> {
             child: Card(
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).push(PickDietPage.route);
+                  Navigator.of(context).push(PickDietPage.route());
                 },
                 child: SizedBox(
                   height: 150,

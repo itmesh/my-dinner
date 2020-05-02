@@ -1,4 +1,5 @@
 import 'package:either_option/either_option.dart';
+import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/use_case.dart';
 import 'package:my_dinner/features/address/data/datasources/address_api.dart';
 import 'package:my_dinner/features/address/data/repositories/address_repository_imp.dart';
@@ -7,6 +8,7 @@ import 'package:my_dinner/features/address/domain/usecases/get_addresses.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/address_actions.dart';
 import 'package:my_dinner/features/pick_diet/domain/models/picked_diet.dart';
 import 'package:my_dinner/features/profile/domain/models/profile.dart';
+import 'package:my_dinner/features/profile/domain/usecases/get_profile.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -76,12 +78,11 @@ class EditProfile {
 }
 
 ThunkAction<NewOrderState> getProfile = (Store<NewOrderState> store) async {
-  await Future.delayed(Duration(seconds: 2));
-  Profile profile = Profile(
-    name: 'Krzysztof',
-    surname: 'Wizner',
-    email: 'krzysztofwiz93@gmail.com',
-    phoneNumber: '518990713',
+  GetProfile getProfile = locator.get();
+  Either either = await getProfile(NoParams());
+  Profile profile = either.fold(
+    (error) => Profile(),
+    (profile) => profile,
   );
   store.dispatch(EditProfile(profile));
 };
@@ -91,8 +92,8 @@ Profile _editProfile(Profile profile, EditProfile editProfile) {
 }
 
 ThunkAction<NewOrderState> getAddresses = (Store<NewOrderState> state) async {
-  Either either = await GetAddresses(AddressRepositoryImp(AddressDemoApi()))
-      .call(NoParams());
+  GetAddresses getAddresses = locator.get();
+  Either either = await getAddresses(NoParams());
   List<Address> addresses = either.fold(
     (error) => [],
     (addresses) => addresses,
@@ -167,19 +168,34 @@ class ProfileViewModel {
 }
 
 class PickedDietViewModel {
-  final String name;
+  final bool isPicked;
+  final String companyName;
+  final String dietName;
   final String calorie;
+  final String setsCount;
+  final String remarks;
+  final Function(PickedDiet pickedDiet) onEdit;
 
   PickedDietViewModel({
-    this.name,
+    this.isPicked,
+    this.companyName,
+    this.dietName,
     this.calorie,
+    this.setsCount,
+    this.remarks,
+    this.onEdit,
   });
 
   static PickedDietViewModel fromStore(Store<NewOrderState> store) {
     PickedDiet pickedDiet = store.state.pickedDiet;
     return PickedDietViewModel(
-      name: pickedDiet?.dietOffer?.name ?? '',
-      calorie: pickedDiet?.calorie?.value?.toString() ?? '',
+      isPicked: pickedDiet != null,
+      companyName: pickedDiet?.company?.name ?? '',
+      dietName: pickedDiet?.dietOffer?.name ?? '',
+      calorie: pickedDiet?.calorie?.value?.toString() ?? '0',
+      setsCount: pickedDiet?.setsCount?.toString() ?? '0',
+      remarks: pickedDiet?.remarks ?? '',
+      onEdit: (pickedDiet) => store.dispatch(AddPickedDiet(pickedDiet)),
     );
   }
 }

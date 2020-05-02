@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -46,24 +45,6 @@ class _DateSelectorState extends State<DateSelector>
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        TextField(
-          minLines: 2,
-          maxLines: 8,
-          decoration: new InputDecoration(labelText: "Dodaj uwagi do diety"),
-          // Only numbers can be entered
-        ),
-        TextField(
-          decoration: new InputDecoration(labelText: "Podaj ilość dni"),
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            WhitelistingTextInputFormatter.digitsOnly
-          ], // Only numbers can be entered
-        ),
-        SwitchListTile(
-          value: _chooseDaysLater,
-          onChanged: _handleChooseDaysLater,
-          title: Text('Wybiore dni później'),
-        ),
         AnimatedBuilder(
             animation: _controller.view,
             builder: (_, Widget child) {

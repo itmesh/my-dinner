@@ -29,22 +29,6 @@ class OrdersPage extends StatelessWidget {
         ),
         drawer: NavigationDrawer(),
         body: ListView(children: [
-          ...List.generate(
-              10,
-              (index) => DietCard(
-                    trailingIconType: TrailingIconType.arrow,
-                    onTap: () {
-                      Navigator.of(context)
-                          .push(OrderDetailsPage.routeWithParams(index));
-                    },
-                    diet: Diet(
-                      calories: 4000,
-                      name: 'Dieta sportowa',
-                      dietCounts: 14,
-                      address: Address(),
-                      remarks: 'Dieta bardzo dobra ale za słona',
-                    ),
-                  )).toList(),
           SizedBox(
             height: 88.0,
           )
