@@ -15,12 +15,12 @@ class InitialMyDiet extends MyDietState {}
 class LoadingMyDiet extends MyDietState {}
 
 class LoadedMyDiet extends MyDietState {
-  final List<Diet> diets;
+  final DietDay dietDay;
 
-  LoadedMyDiet(this.diets);
+  LoadedMyDiet(this.dietDay);
 
   @override
-  List<Object> get props => [diets];
+  List<Object> get props => [dietDay];
 }
 
 class OrderedMyDiet extends MyDietState {

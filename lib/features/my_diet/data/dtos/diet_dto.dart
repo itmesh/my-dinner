@@ -1,27 +1,38 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:my_dinner/features/address/data/dtos/address_dto.dart';
-import 'package:my_dinner/features/my_diet/data/dtos/meal_dto.dart';
 
 part 'diet_dto.g.dart';
 
 @JsonSerializable()
-class DietDto {
+class DietSetDto {
+  final int id;
   final String name;
   final int calories;
-  final int dietCounts;
+  final String vendorName;
   final AddressDto address;
-  final String remarks;
-  final List<MealDto> meals;
 
-  DietDto({
+  DietSetDto({
+    this.id,
     this.name,
     this.calories,
-    this.dietCounts,
+    this.vendorName,
     this.address,
-    this.remarks,
-    this.meals,
   });
 
-  factory DietDto.fromJson(Map<String, dynamic> json) =>
-      _$DietDtoFromJson(json);
+  factory DietSetDto.fromJson(Map<String, dynamic> json) =>
+      _$DietSetDtoFromJson(json);
+}
+
+@JsonSerializable()
+class DietDayDto {
+  final List<DietSetDto> scheduledSets;
+  final List<DietSetDto> availableSets;
+
+  DietDayDto({
+    this.scheduledSets,
+    this.availableSets,
+  });
+
+  factory DietDayDto.fromJson(Map<String, dynamic> json) =>
+      _$DietDayDtoFromJson(json);
 }

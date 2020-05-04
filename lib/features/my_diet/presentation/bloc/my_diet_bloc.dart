@@ -42,12 +42,10 @@ class MyDietBloc extends Bloc<MyDietEvent, MyDietState> {
   }
 
   Stream<MyDietState> _eitherLoadedOrError(
-      Either<Failure, List<Diet>> either) async* {
+      Either<Failure, DietDay> either) async* {
     yield either.fold(
       (_) => Error(),
       (diets) => diets.isEmpty ? EmptyMyDiet() : LoadedMyDiet(diets),
     );
   }
-
-  String _mapFailureToMessage() {}
 }

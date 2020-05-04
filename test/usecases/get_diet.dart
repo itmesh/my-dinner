@@ -6,7 +6,7 @@ import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository_mock.dart';
 import 'package:my_dinner/features/my_diet/domain/usecases/get_diet.dart';
 
-final List<Diet> mockedDiets = [Diet(name: 'some diet')];
+final List<DietSet> mockedDiets = [DietSet(name: 'some diet')];
 
 main() {
   GetDiet getDiet;
@@ -17,7 +17,7 @@ main() {
     getDiet = GetDiet(myDietRepositoryMock);
   });
 
-  Future<List<Diet>> _callGetDiet() async {
+  Future<List<DietSet>> _callGetDiet() async {
     return (await getDiet(GetDietParams(DateTime.now()))).fold(
       (_) => null,
       (_) => mockedDiets,
@@ -29,7 +29,7 @@ main() {
     when(myDietRepositoryMock.getDiets(any))
         .thenAnswer((_) async => Right(mockedDiets));
     // act
-    List<Diet> receivedDiet = await _callGetDiet();
+    List<DietSet> receivedDiet = await _callGetDiet();
     // assert
     expect(receivedDiet, mockedDiets);
   });
@@ -39,7 +39,7 @@ main() {
     when(myDietRepositoryMock.getDiets(any))
         .thenAnswer((_) async => Left(Failure()));
     // act
-    List<Diet> receivedDiet = await _callGetDiet();
+    List<DietSet> receivedDiet = await _callGetDiet();
     // assert
     expect(receivedDiet, isNull);
   });

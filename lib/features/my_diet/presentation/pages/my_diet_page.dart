@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:my_dinner/core/services/date_service.dart';
 import 'package:my_dinner/core/services/injection.dart';
-import 'package:my_dinner/features/address/presentation/pages/address_details_page.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_event.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
-import 'package:my_dinner/features/my_diet/presentation/pages/meal_page.dart';
+import 'package:my_dinner/features/my_diet/presentation/widgets/available_diet_card.dart';
+import 'package:my_dinner/features/my_diet/presentation/widgets/scheduled_diet_card.dart';
 import 'package:my_dinner/features/new_order/presentation/pages/new_order_page.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/store.dart';
 import 'package:my_dinner/features/pick_diet/presentation/pages/diet_selector_page.dart';
@@ -75,17 +74,11 @@ class _MyDietPageState extends State<MyDietPage> {
           },
         ),
         drawer: NavigationDrawer(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: BlocBuilder(
           bloc: _bloc,
           builder: (_, __) {
             return _buildFloatingButton();
-          },
-        ),
-        bottomNavigationBar: BlocBuilder(
-          bloc: _bloc,
-          builder: (_, __) {
-            return _buildBottomBar();
           },
         ),
       ),
@@ -101,40 +94,6 @@ class _MyDietPageState extends State<MyDietPage> {
         },
         child: Icon(Icons.add),
         backgroundColor: Theme.of(context).primaryColor,
-      );
-    }
-
-    return SizedBox();
-  }
-
-  Widget _buildBottomBar() {
-    MyDietState state2 = _bloc.state;
-    if (state2 is LoadedMyDiet) {
-      LoadedMyDiet state = state2;
-      return BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        child: new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MaterialButton(
-                child: Text('Zmień adress'),
-                onPressed: () {
-                  Navigator.of(context).push(AddressDetailsPage.routeWithParams(
-                      address: state.diets[0].address));
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MaterialButton(
-                child: Text('Usuń diete'),
-                onPressed: () {},
-              ),
-            )
-          ],
-        ),
       );
     }
 
@@ -228,59 +187,24 @@ class _MyDietPageState extends State<MyDietPage> {
         itemCount: 3,
         itemBuilder: (context, position) {
           if (position != 1) return SizedBox();
-          return Center(
-            child: Card(
-              child: InkWell(
-                onTap: () {
-                  _bloc.add(OrderMyDiet(_calendarController.selectedDay));
-                },
-                child: SizedBox(
-                  height: 150,
-                  child: FractionallySizedBox(
-                    widthFactor: 0.7,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'Zamów',
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.add,
-                              size: 48.0,
-                              color:
-                                  IconTheme.of(context).color.withOpacity(0.3),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          return ListView(
+            children: <Widget>[
+              state.dietDay.scheduledSets.isNotEmpty
+                  ? ListTile(title: Text("Zaplanowane zestawy"))
+                  : SizedBox.shrink(),
+              ...state.dietDay.scheduledSets
+                  .map((diet) =>
+                      ScheduledDietCard(diet, _calendarController.selectedDay))
+                  .toList(),
+              state.dietDay.availableSets.isNotEmpty
+                  ? ListTile(title: Text("Kupione zestawy"))
+                  : SizedBox.shrink(),
+              ...state.dietDay.availableSets
+                  .map((diet) =>
+                      AvailableDietCard(diet, _calendarController.selectedDay))
+                  .toList(),
+            ],
           );
-// @todo: display meals list
-//          return ListView(
-//            children: <Widget>[
-//              ...state.diets[0].meals
-//                  .map((meal) => Card(
-//                        child: ListTile(
-//                          onTap: () {
-//                            Navigator.of(context)
-//                                .push(MealPage.routeWithParams(meal));
-//                          },
-//                          title: Text(meal.name),
-//                          subtitle: Text(meal.description),
-//                        ),
-//                      ))
-//                  .toList(),
-//              SizedBox(height: 32.0),
-//            ],
-//          );
         },
         onPageChanged: (index) {
           print(index);
