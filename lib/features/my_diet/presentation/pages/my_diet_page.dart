@@ -68,7 +68,10 @@ class _MyDietPageState extends State<MyDietPage> {
                   onDaySelected: () =>
                       _bloc.add(LoadMyDiet(_calendarController.selectedDay)),
                 ),
-                _mapStateToWidget(state),
+                BlocProvider<MyDietBloc>(
+                  create: (_) => _bloc,
+                  child: _mapStateToWidget(state),
+                ),
               ],
             );
           },
@@ -107,8 +110,6 @@ class _MyDietPageState extends State<MyDietPage> {
       return _loadingState();
     } else if (state is LoadedMyDiet) {
       return _loadedState(state);
-    } else if (state is OrderedMyDiet) {
-      return _orderedState(state);
     } else if (state is Error) {
       return _errorState();
     } else if (state is EmptyMyDiet) {
@@ -213,51 +214,6 @@ class _MyDietPageState extends State<MyDietPage> {
               Duration(days: index - 1),
             ),
             runCallback: true,
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _orderedState(OrderedMyDiet state) {
-    return Expanded(
-      child: PageView.builder(
-        itemCount: 3,
-        controller: PageController(initialPage: 1),
-        onPageChanged: (index) {
-          print(index);
-          _calendarController.setSelectedDay(
-            _calendarController.selectedDay.add(
-              Duration(days: index - 1),
-            ),
-            runCallback: true,
-          );
-        },
-        itemBuilder: (_, index) {
-          if (index != 1) return SizedBox();
-          return Center(
-            child: Card(
-              child: InkWell(
-                child: SizedBox(
-                  height: 150,
-                  child: FractionallySizedBox(
-                    widthFactor: 0.7,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'Zamówiony zestaw',
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                          Text(state.order.name),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
           );
         },
       ),

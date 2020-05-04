@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
-
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/utils/demo.dart';
 import 'package:my_dinner/features/my_diet/data/dtos/diet_dto.dart';
@@ -11,7 +10,7 @@ import 'package:my_dinner/features/my_diet/data/dtos/diet_order_dto.dart';
 abstract class MyDietApi {
   Future<DietDayDto> getDiets(DateTime day);
 
-  Future<DietOrderDto> orderDiet(DateTime day);
+  Future<DietSetOrderDto> orderDiet(int dietSetId, DateTime day);
 }
 
 @RegisterAs(MyDietApi)
@@ -25,7 +24,7 @@ class MyDietApiHttp implements MyDietApi {
   }
 
   @override
-  Future<DietOrderDto> orderDiet(DateTime day) {
+  Future<DietSetOrderDto> orderDiet(int dietSetId, DateTime day) {
     throw UnimplementedError();
   }
 }
@@ -47,9 +46,9 @@ class MyDietApiDemo implements MyDietApi {
   }
 
   @override
-  Future<DietOrderDto> orderDiet(DateTime day) async {
+  Future<DietSetOrderDto> orderDiet(int dietSetId, DateTime day) async {
     await DemoUtils.smallDelay;
-    String response = await rootBundle.loadString('assets/demo/order.json');
-    return DietOrderDto.fromJson(json.decode(response));
+    String response = await rootBundle.loadString('assets/demo/empty_object.json');
+    return DietSetOrderDto.fromJson(json.decode(response));
   }
 }

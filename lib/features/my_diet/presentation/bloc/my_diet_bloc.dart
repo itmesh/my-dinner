@@ -32,11 +32,16 @@ class MyDietBloc extends Bloc<MyDietEvent, MyDietState> {
           await getDiets(GetDietParams(event.selectedDay)));
     } else if (event is OrderMyDiet) {
       yield LoadingMyDiet();
-      Either<Failure, DietOrder> order =
-          await orderDiet(OrderDietParams(event.selectedDay));
-      yield order.fold(
-        (_) => Error(),
-        (order) => OrderedMyDiet(order),
+      Either<Failure, DietSetOrder> order =
+          await orderDiet(OrderDietParams(event.dietSet, event.selectedDay));
+      yield* order.fold(
+        (_) async* {
+          yield Error();
+        },
+        (_) async* {
+          yield* _eitherLoadedOrError(
+              await getDiets(GetDietParams(event.selectedDay)));
+        },
       );
     }
   }

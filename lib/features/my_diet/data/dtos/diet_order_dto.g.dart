@@ -6,13 +6,9 @@ part of 'diet_order_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DietOrderDto _$DietOrderDtoFromJson(Map<String, dynamic> json) {
-  return DietOrderDto(
-    name: json['name'] as String,
-  );
+DietSetOrderDto _$DietSetOrderDtoFromJson(Map<String, dynamic> json) {
+  return DietSetOrderDto();
 }
 
-Map<String, dynamic> _$DietOrderDtoToJson(DietOrderDto instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-    };
+Map<String, dynamic> _$DietSetOrderDtoToJson(DietSetOrderDto instance) =>
+    <String, dynamic>{};
