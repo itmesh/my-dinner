@@ -5,7 +5,7 @@ class Meal {
   final String name;
   final String description;
   final DateTime servingDate;
-  final Diet diet;
+  final DietSet diet;
 
   Meal({
     this.name,

@@ -13,9 +13,6 @@ MealDto _$MealDtoFromJson(Map<String, dynamic> json) {
     servingDate: json['servingDate'] == null
         ? null
         : DateTime.parse(json['servingDate'] as String),
-    diet: json['diet'] == null
-        ? null
-        : DietDto.fromJson(json['diet'] as Map<String, dynamic>),
   );
 }
 
@@ -23,5 +20,4 @@ Map<String, dynamic> _$MealDtoToJson(MealDto instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'servingDate': instance.servingDate?.toIso8601String(),
-      'diet': instance.diet,
     };

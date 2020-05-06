@@ -1,0 +1,16 @@
+{
+  "scheduledSets": [
+    {
+      "id": 1,
+      "name": "Nazwa diety 1",
+      "vendorName": "Dostawca 2"
+    }
+  ],
+  "availableSets": [
+    {
+      "id": 1,
+      "name": "Nazwa diety 2",
+      "vendorName": "Dostawca 2"
+    }
+  ]
+}

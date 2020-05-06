@@ -17,20 +17,20 @@ class MyDietRepositoryImp implements MyDietRepository {
 
   MyDietRepositoryImp(this.myDietApi);
 
-  Future<Either<Failure, List<Diet>>> getDiets(DateTime day) async {
+  Future<Either<Failure, DietDay>> getDiets(DateTime day) async {
     try {
-      List<DietDto> diets = await myDietApi.getDiets(day);
-      return Right(diets.map((dto) => Diet.fromDto(dto)).toList());
+      DietDayDto dietDayDto = await myDietApi.getDiets(day);
+      return Right(DietDay.fromDto(dietDayDto));
     } catch (e) {
       _log.error(e.toString());
       return Left(ApiFailure());
     }
   }
 
-  Future<Either<Failure, DietOrder>> orderDiet(DateTime day) async {
+  Future<Either<Failure, DietSetOrder>> orderDiet(DietSet dietSet, DateTime day) async {
     try {
-      DietOrderDto dto = await myDietApi.orderDiet(day);
-      return Right(DietOrder.fromDto(dto));
+      DietSetOrderDto dto = await myDietApi.orderDiet(dietSet.id, day);
+      return Right(DietSetOrder.fromDto(dto));
     } catch (e) {
       _log.error(e.toString());
       return Left(ApiFailure());

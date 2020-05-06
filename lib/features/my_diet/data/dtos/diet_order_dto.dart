@@ -3,13 +3,10 @@ import 'package:json_annotation/json_annotation.dart';
 part 'diet_order_dto.g.dart';
 
 @JsonSerializable()
-class DietOrderDto {
-  final String name;
+class DietSetOrderDto {
+  DietSetOrderDto();
 
-  DietOrderDto({
-    this.name,
-  });
+  factory DietSetOrderDto.fromJson(Map<String, dynamic> json) =>
+      _$DietSetOrderDtoFromJson(json);
 
-  factory DietOrderDto.fromJson(Map<String, dynamic> json) =>
-      _$DietOrderDtoFromJson(json);
 }

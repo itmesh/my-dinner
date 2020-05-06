@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_dinner/features/my_diet/domain/models/diet.dart';
-import 'package:my_dinner/features/my_diet/domain/models/diet_order.dart';
 
 abstract class MyDietState extends Equatable {
   @override
@@ -15,21 +14,12 @@ class InitialMyDiet extends MyDietState {}
 class LoadingMyDiet extends MyDietState {}
 
 class LoadedMyDiet extends MyDietState {
-  final List<Diet> diets;
+  final DietDay dietDay;
 
-  LoadedMyDiet(this.diets);
-
-  @override
-  List<Object> get props => [diets];
-}
-
-class OrderedMyDiet extends MyDietState {
-  final DietOrder order;
-
-  OrderedMyDiet(this.order);
+  LoadedMyDiet(this.dietDay);
 
   @override
-  List<Object> get props => [order];
+  List<Object> get props => [dietDay];
 }
 
 class EmptyMyDiet extends MyDietState {}
