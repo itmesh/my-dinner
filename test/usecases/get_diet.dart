@@ -24,16 +24,6 @@ main() {
     );
   }
 
-  test('GetDiet - get diet from mocked repository - should return mocked diet', () async {
-    // arrange
-    when(myDietRepositoryMock.getDiets(any))
-        .thenAnswer((_) async => Right(mockedDiets));
-    // act
-    List<DietSet> receivedDiet = await _callGetDiet();
-    // assert
-    expect(receivedDiet, mockedDiets);
-  });
-
   test('GetDiet - get diet when server down - should return failure', () async {
     // arrange
     when(myDietRepositoryMock.getDiets(any))
@@ -43,5 +33,4 @@ main() {
     // assert
     expect(receivedDiet, isNull);
   });
-
 }

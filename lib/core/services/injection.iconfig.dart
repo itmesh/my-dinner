@@ -30,7 +30,6 @@ import 'package:my_dinner/features/my_diet/data/repository/my_diet_repository_im
 import 'package:my_dinner/features/my_diet/domain/repositories/my_diet_repository.dart';
 import 'package:my_dinner/features/my_diet/domain/usecases/get_diet.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_state.dart';
-import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
 import 'package:my_dinner/features/profile/data/datasource/profile_api.dart';
 import 'package:my_dinner/features/profile/data/repository/profile_repository_imp.dart';
 import 'package:my_dinner/features/profile/domain/repositories/profile_repository.dart';
@@ -39,10 +38,15 @@ import 'package:my_dinner/features/pick_diet/data/datasource/pick_diet_api.dart'
 import 'package:my_dinner/features/pick_diet/data/repository/pick_diet_repository_imp.dart';
 import 'package:my_dinner/features/pick_diet/domain/repositories/pick_diet_repository.dart';
 import 'package:my_dinner/features/pick_diet/domain/usecases/get_offers.dart';
+import 'package:my_dinner/features/new_order/data/datasources/new_order_api.dart';
+import 'package:my_dinner/features/new_order/data/repositories/new_order_repository_imp.dart';
+import 'package:my_dinner/features/new_order/domain/repositories/new_order_repository.dart';
 import 'package:my_dinner/features/my_diet/presentation/bloc/my_diet_bloc.dart';
+import 'package:my_dinner/features/pick_diet/domain/usecases/get_companies.dart';
 import 'package:my_dinner/features/pick_diet/presentation/provider/diet_picker.dart';
 import 'package:my_dinner/features/profile/domain/usecases/get_profile.dart';
 import 'package:my_dinner/features/profile/domain/usecases/update_profile.dart';
+import 'package:my_dinner/features/new_order/domain/usecases/create_order.dart';
 import 'package:get_it/get_it.dart';
 
 void $initGetIt(GetIt g, {String environment}) {
@@ -140,7 +144,6 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerSingleton<GetDiet>(GetDiet(
     g<MyDietRepository>(),
   ));
-  g.registerSingleton<GetCompanies>(GetCompanies());
   if (environment == 'dev') {
     g.registerSingleton<ProfileApi>(ProfileHttpApi(
       g<MyHttpClient>(),
@@ -169,10 +172,27 @@ void $initGetIt(GetIt g, {String environment}) {
   g.registerSingleton<GetOffers>(GetOffers(
     g<PickDietRepository>(),
   ));
+  if (environment == 'dev') {
+    g.registerSingleton<NewOrderApi>(NewOrderHttpApi(
+      g<MyHttpClient>(),
+    ));
+  }
+  if (environment == 'demo') {
+    g.registerSingleton<NewOrderApi>(NewOrderDemoApi());
+  }
+  g.registerSingleton<NewOrderRepository>(NewOrderRepositoryImp(
+    g<NewOrderApi>(),
+  ));
+  g.registerSingleton<GetCompanies>(GetCompanies(
+    g<PickDietRepository>(),
+  ));
   g.registerSingleton<GetProfile>(GetProfile(
     g<ProfileRepository>(),
   ));
   g.registerSingleton<UpdateProfile>(UpdateProfile(
     g<ProfileRepository>(),
+  ));
+  g.registerSingleton<CreateOrder>(CreateOrder(
+    g<NewOrderRepository>(),
   ));
 }

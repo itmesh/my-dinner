@@ -20,15 +20,18 @@ class DietOffer {
 }
 
 class Calorie {
+  final int id;
   final int value;
   final List<Price> pricing;
 
   Calorie({
+    this.id,
     this.value,
     this.pricing,
   });
 
   factory Calorie.fromDto(CalorificDto dto) => Calorie(
+        id: dto.id,
         value: dto.value,
         pricing: dto.pricing.map((e) => Price.fromDto(e)).toList(),
       );

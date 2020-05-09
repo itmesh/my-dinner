@@ -3,13 +3,21 @@ import 'package:json_annotation/json_annotation.dart';
 part 'vendor_offer_dto.g.dart';
 
 @JsonSerializable()
-class VendorOfferDto {
-  final OfferDto diet;
+class VendorDto {
+  final String logo;
+  final String name;
+  final List<Payment> payments;
+  final List<OfferDto> diets;
 
-  VendorOfferDto(this.diet);
+  VendorDto({
+    this.logo,
+    this.name,
+    this.payments,
+    this.diets,
+  });
 
-  factory VendorOfferDto.fromJson(Map<String, dynamic> json) =>
-      _$VendorOfferDtoFromJson(json);
+  factory VendorDto.fromJson(Map<String, dynamic> json) =>
+      _$VendorDtoFromJson(json);
 }
 
 @JsonSerializable()
@@ -56,4 +64,9 @@ class PriceDto {
   );
   factory PriceDto.fromJson(Map<String, dynamic> json) =>
       _$PriceDtoFromJson(json);
+}
+
+enum Payment {
+  CASH,
+  TRANSFER,
 }

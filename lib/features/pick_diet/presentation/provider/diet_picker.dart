@@ -17,7 +17,6 @@ class DietPicker extends ChangeNotifier {
   final GetCompanies _getCompanies;
   final GetOffers _getOffers;
   final List<Company> _companies = [];
-  final List<DietOffer> _dietOffers = [];
   final List<StepStatus> _steps = [
     StepStatus(step: 0, active: true, state: StepState.editing),
     StepStatus(step: 1, active: false, state: StepState.disabled),
@@ -55,7 +54,7 @@ class DietPicker extends ChangeNotifier {
   UnmodifiableListView<StepStatus> get steps => UnmodifiableListView(_steps);
 
   UnmodifiableListView<DietOffer> get dietOffers =>
-      UnmodifiableListView(_dietOffers ?? []);
+      UnmodifiableListView(_selectedCompany?.availDiets ?? []);
 
   void nextStep() {}
 
@@ -72,7 +71,6 @@ class DietPicker extends ChangeNotifier {
   void selectCompany(Company company) async {
     _selectedCompany = company;
     _selectedDiet = null;
-    _dietOffers.clear();
     _calorie = null;
     _currentIndex += 1;
     _steps[0].active = false;
@@ -82,22 +80,7 @@ class DietPicker extends ChangeNotifier {
     _steps[2].active = false;
     _steps[2].state = StepState.disabled;
     notifyListeners();
-    setLoading(true);
-    _dietOffers.addAll(
-      _eitherOffersOrError(
-        await _getOffers(GetOfferParams(companyId: company.id)),
-      ),
-    );
-    setLoading(false);
   }
-
-  List<DietOffer> _eitherOffersOrError(
-    Either<Failure, List<DietOffer>> either,
-  ) =>
-      either.fold(
-        (_) => [],
-        (offers) => offers,
-      );
 
   void selectCompanyWithDiet(
     Company company,

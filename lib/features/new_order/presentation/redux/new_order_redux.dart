@@ -1,28 +1,32 @@
+import 'dart:async';
+
 import 'package:either_option/either_option.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/use_case.dart';
-import 'package:my_dinner/features/address/data/datasources/address_api.dart';
-import 'package:my_dinner/features/address/data/repositories/address_repository_imp.dart';
 import 'package:my_dinner/features/address/domain/models/address.dart';
 import 'package:my_dinner/features/address/domain/usecases/get_addresses.dart';
+import 'package:my_dinner/features/new_order/domain/usecases/create_order.dart';
 import 'package:my_dinner/features/new_order/presentation/redux/address_actions.dart';
 import 'package:my_dinner/features/pick_diet/domain/models/picked_diet.dart';
 import 'package:my_dinner/features/profile/domain/models/profile.dart';
 import 'package:my_dinner/features/profile/domain/usecases/get_profile.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 
 class NewOrderState {
   Profile profile;
   List<Address> addresses;
   PickedDiet pickedDiet;
   Address selectedAddress;
+  Completer completer;
 
   NewOrderState({
     this.profile,
     this.addresses,
     this.pickedDiet,
     this.selectedAddress,
+    this.completer,
   });
 
   NewOrderState.fromState(NewOrderState another) {
@@ -43,6 +47,8 @@ NewOrderState newOrderReducer(NewOrderState state, dynamic action) {
     profile: profileReducer(state.profile, action),
     addresses: addressesReducer(state.addresses, action),
     pickedDiet: pickedDietReducer(state.pickedDiet, action),
+    selectedAddress: state.selectedAddress,
+    completer: state.completer,
   );
 }
 
@@ -91,14 +97,27 @@ Profile _editProfile(Profile profile, EditProfile editProfile) {
   return editProfile.profile;
 }
 
-ThunkAction<NewOrderState> getAddresses = (Store<NewOrderState> state) async {
+ThunkAction<NewOrderState> getAddresses = (Store<NewOrderState> store) async {
   GetAddresses getAddresses = locator.get();
   Either either = await getAddresses(NoParams());
   List<Address> addresses = either.fold(
     (error) => [],
     (addresses) => addresses,
   );
-  state.dispatch(PutAddresses(addresses));
+  store.dispatch(PutAddresses(addresses));
+};
+
+ThunkAction<NewOrderState> createOrder = (Store<NewOrderState> store) async {
+  CreateOrder createOrder = locator.get();
+  NewOrderState state = store.state;
+  Either either = await createOrder(CreateOrderParams(
+    address: state.addresses[0],
+    calorie: state.pickedDiet.calorie,
+    remarks: state.pickedDiet.remarks,
+    dietCount: state.pickedDiet.setsCount,
+  ));
+  bool success = either.fold((_) => false, (_) => true);
+  state.completer.complete();
 };
 
 class AddressViewModel {

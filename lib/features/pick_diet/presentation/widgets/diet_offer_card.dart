@@ -66,7 +66,8 @@ class _DietOfferCardState extends State<DietOfferCard> {
                     ),
                     FlatButton(
                       child: Text('Pokaż\nwięcej'),
-                      onPressed: () => _showDialogWithDiet(),
+                      onPressed: () =>
+                          _showDialogWithDiet(widget.dietOffer.description),
                     ),
                   ],
                 ),
@@ -164,11 +165,11 @@ class _DietOfferCardState extends State<DietOfferCard> {
       return '${pricing[0].value} zł / dzień';
     } else {
       pricing.sort((val1, val2) => val1.value > val2.value ? 1 : -1);
-      return '${pricing.first.value} - ${pricing.last.value} zł / dzień';
+      return '${pricing.first.value.toStringAsFixed(2)} - ${pricing.last.value.toStringAsFixed(2)} zł / dzień';
     }
   }
 
-  void _showDialogWithDiet() {
+  void _showDialogWithDiet(String description) {
     showDialog(
       context: context,
       builder: (_) => Dialog(
@@ -176,7 +177,12 @@ class _DietOfferCardState extends State<DietOfferCard> {
           builder: (_, constraints) {
             print(constraints.maxHeight);
             print(constraints.maxWidth);
-            return Container();
+            return Container(
+              padding: EdgeInsets.all(24.0),
+              child: Text(
+                description,
+              ),
+            );
           },
         ),
       ),
