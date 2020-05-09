@@ -108,7 +108,7 @@ class AnchoredOverlay extends StatelessWidget {
             return new OverlayBuilder(
               showOverlay: showOverlay,
               overlayBuilder: (BuildContext overlayContext) {
-                RenderBox box = context.findRenderObject() as RenderBox;
+                RenderBox box = context.findRenderObject();
                 final center = box.size.center(
                     box.localToGlobal(const Offset(0.0, 0.0)));
 

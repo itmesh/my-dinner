@@ -6,18 +6,63 @@ part of 'vendor_offer_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-VendorOfferDto _$VendorOfferDtoFromJson(Map<String, dynamic> json) {
-  return VendorOfferDto(
-    json['diet'] == null
-        ? null
-        : OfferDto.fromJson(json['diet'] as Map<String, dynamic>),
+VendorDto _$VendorDtoFromJson(Map<String, dynamic> json) {
+  return VendorDto(
+    logo: json['logo'] as String,
+    name: json['name'] as String,
+    payments: (json['payments'] as List)
+        ?.map((e) => _$enumDecodeNullable(_$PaymentEnumMap, e))
+        ?.toList(),
+    diets: (json['diets'] as List)
+        ?.map((e) =>
+            e == null ? null : OfferDto.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
-Map<String, dynamic> _$VendorOfferDtoToJson(VendorOfferDto instance) =>
-    <String, dynamic>{
-      'diet': instance.diet,
+Map<String, dynamic> _$VendorDtoToJson(VendorDto instance) => <String, dynamic>{
+      'logo': instance.logo,
+      'name': instance.name,
+      'payments': instance.payments?.map((e) => _$PaymentEnumMap[e])?.toList(),
+      'diets': instance.diets,
     };
+
+T _$enumDecode<T>(
+  Map<T, dynamic> enumValues,
+  dynamic source, {
+  T unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError('A value must be provided. Supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+
+  final value = enumValues.entries
+      .singleWhere((e) => e.value == source, orElse: () => null)
+      ?.key;
+
+  if (value == null && unknownValue == null) {
+    throw ArgumentError('`$source` is not one of the supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+  return value ?? unknownValue;
+}
+
+T _$enumDecodeNullable<T>(
+  Map<T, dynamic> enumValues,
+  dynamic source, {
+  T unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+}
+
+const _$PaymentEnumMap = {
+  Payment.CASH: 'CASH',
+  Payment.TRANSFER: 'TRANSFER',
+};
 
 OfferDto _$OfferDtoFromJson(Map<String, dynamic> json) {
   return OfferDto(

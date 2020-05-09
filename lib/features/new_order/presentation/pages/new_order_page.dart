@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -36,6 +37,8 @@ class _NewOrderPageState extends State<NewOrderPage> {
         store: NewOrderRedux.store,
         child: StoreConnector<NewOrderState, NewOrderState>(
             onInit: (store) {
+              store.state.completer = Completer()
+                ..future.then((_) => Navigator.of(context).pop());
               store.dispatch(getProfile);
               store.dispatch(getAddresses);
             },
@@ -76,7 +79,10 @@ class _NewOrderPageState extends State<NewOrderPage> {
                             icon: Icon(Icons.playlist_add_check),
                             color: Theme.of(context).primaryColor,
                             textColor: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {
+                              StoreProvider.of<NewOrderState>(context)
+                                  .dispatch(createOrder);
+                            },
                           ),
                         ),
                       ],

@@ -13,7 +13,7 @@ class ScheduledDietCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(diet.name),
+        title: Text('fasdfadsfadafdssfda  asfd asfdasf daf sd'),
         subtitle: Text(diet.vendorName),
         trailing: Wrap(
           children: <Widget>[

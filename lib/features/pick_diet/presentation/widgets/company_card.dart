@@ -235,12 +235,12 @@ class _CompanyCardState extends State<CompanyCard>
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   left: 8.0),
-                                              child:
-                                                  Text(e.toString() + ' kcal'),
+                                              child: Text(
+                                                  e.value.toString() + ' kcal'),
                                             ),
                                             Row(
                                               children: <Widget>[
-                                                Text('21.00 zł - 22.20 zł'),
+                                                Text(_priceRange(e.pricing)),
                                                 SizedBox(width: 16.0),
                                                 Text(
                                                   'Wybierz',
@@ -275,6 +275,14 @@ class _CompanyCardState extends State<CompanyCard>
         ),
       ),
     );
+  }
+
+  String _priceRange(List<Price> pricing) {
+    double lowestPrice =
+        pricing.reduce((p1, p2) => p1.value < p2.value ? p1 : p2).value;
+    double highestPrice =
+        pricing.reduce((p1, p2) => p1.value > p2.value ? p1 : p2).value;
+    return '${lowestPrice.toStringAsFixed(2)} zł - ${highestPrice.toStringAsFixed(2)} zł';
   }
 
   void _showMoreChips() {
