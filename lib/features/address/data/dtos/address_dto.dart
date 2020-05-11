@@ -7,7 +7,7 @@ import 'package:my_dinner/core/services/json_converters.dart';
 part 'address_dto.g.dart';
 
 @HourDateTimeConverter()
-@JsonSerializable()
+@JsonSerializable(nullable: false)
 class AddressDto {
   final int id;
   final String street;
@@ -32,5 +32,5 @@ class AddressDto {
   factory AddressDto.fromJson(Map<String, dynamic> json) =>
       _$AddressDtoFromJson(json);
 
-  String toJson() => json.encode(_$AddressDtoToJson(this));
+  Map<String, dynamic> toJson() => _$AddressDtoToJson(this);
 }

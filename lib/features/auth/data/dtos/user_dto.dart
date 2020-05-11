@@ -17,5 +17,5 @@ class UserDto {
   factory UserDto.fromJson(Map<String, dynamic> json) =>
       _$UserDtoFromJson(json);
 
-  String toJson() => json.encode(_$UserDtoToJson(this));
+  Map<String, dynamic> toJson() => _$UserDtoToJson(this);
 }

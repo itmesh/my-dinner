@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'vendor_offer_dto.g.dart';
@@ -20,7 +22,7 @@ class VendorDto {
       _$VendorDtoFromJson(json);
 }
 
-@JsonSerializable()
+@JsonSerializable(nullable: false)
 class OfferDto {
   final int id;
   final String name;
@@ -44,13 +46,16 @@ class CalorificDto {
   final int value;
   final List<PriceDto> pricing;
 
-  CalorificDto(
+  CalorificDto({
     this.id,
     this.value,
     this.pricing,
-  );
+  });
+
   factory CalorificDto.fromJson(Map<String, dynamic> json) =>
       _$CalorificDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CalorificDtoToJson(this);
 }
 
 @JsonSerializable()
@@ -62,8 +67,11 @@ class PriceDto {
     this.price,
     this.appliesUpTo,
   );
+
   factory PriceDto.fromJson(Map<String, dynamic> json) =>
       _$PriceDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PriceDtoToJson(this);
 }
 
 enum Payment {

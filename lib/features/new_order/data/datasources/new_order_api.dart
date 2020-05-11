@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:injectable/injectable.dart';
 
 import 'package:my_dinner/core/services/injection.dart';
@@ -20,7 +22,7 @@ class NewOrderHttpApi extends NewOrderApi {
     print(newOrder.toJson());
     return _myHttpClient.post(
       path: '/client/order',
-      body: newOrder.toJson(),
+      body: json.encode(newOrder.toJson()),
       out: (value) => null,
     );
   }

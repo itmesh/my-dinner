@@ -36,7 +36,7 @@ class AddressHttpApi extends AddressApi {
   Future<AddressDto> createAddress(AddressDto address) {
     return client.post(
       path: '/client/address/',
-      body: address.toJson(),
+      body: json.encode(address.toJson()),
       out: (value) => AddressDto.fromJson(value),
     );
   }
@@ -45,7 +45,7 @@ class AddressHttpApi extends AddressApi {
   Future<AddressDto> updateAddress(AddressDto address) {
     return client.put(
       path: '/client/address/${address.id}',
-      body: address.toJson(),
+      body: json.encode(address.toJson()),
       out: (value) => null,
     );
   }

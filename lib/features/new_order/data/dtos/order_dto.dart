@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:my_dinner/core/services/json_converters.dart';
+import 'package:my_dinner/features/address/data/dtos/address_dto.dart';
+import 'package:my_dinner/features/pick_diet/data/dtos/vendor_offer_dto.dart';
 
 part 'order_dto.g.dart';
 
@@ -15,14 +17,14 @@ class OrderDto {
     this.deliveries,
   });
 
-  String toJson() => json.encode(_$OrderDtoToJson(this));
+  Map<String, dynamic> toJson() => _$OrderDtoToJson(this);
 }
 
 @HourDateTimeConverter()
-@JsonSerializable()
+@JsonSerializable(nullable: false)
 class DeliveryDto {
-  final int calorific;
-  final int deliveryAddress;
+  final CalorificDto calorific;
+  final AddressDto deliveryAddress;
   final DateTime deliveryDate;
 
   DeliveryDto({
@@ -34,5 +36,5 @@ class DeliveryDto {
   factory DeliveryDto.fromJson(Map<String, dynamic> json) =>
       _$DeliveryDtoFromJson(json);
 
-  String toJson() => json.encode(_$DeliveryDtoToJson(this));
+  Map<String, dynamic> toJson() => _$DeliveryDtoToJson(this);
 }

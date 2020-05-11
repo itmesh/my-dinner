@@ -23,8 +23,9 @@ Map<String, dynamic> _$OrderDtoToJson(OrderDto instance) => <String, dynamic>{
 
 DeliveryDto _$DeliveryDtoFromJson(Map<String, dynamic> json) {
   return DeliveryDto(
-    calorific: json['calorific'] as int,
-    deliveryAddress: json['address'] as int,
+    calorific: CalorificDto.fromJson(json['calorific'] as Map<String, dynamic>),
+    deliveryAddress:
+        AddressDto.fromJson(json['deliveryAddress'] as Map<String, dynamic>),
     deliveryDate:
         const HourDateTimeConverter().fromJson(json['deliveryDate'] as String),
   );

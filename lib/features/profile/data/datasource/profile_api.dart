@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:injectable/injectable.dart';
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/my_http_client.dart';
@@ -28,7 +30,7 @@ class ProfileHttpApi extends ProfileApi {
   Future<ClientDto> updateProfile(ClientDto clientDto) {
     return client.put(
       path: '/client',
-      body: clientDto.toJson(),
+      body: json.encode(clientDto.toJson()),
       out: (value) => null,
     );
   }

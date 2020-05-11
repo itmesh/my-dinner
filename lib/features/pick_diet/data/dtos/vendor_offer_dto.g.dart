@@ -70,9 +70,8 @@ OfferDto _$OfferDtoFromJson(Map<String, dynamic> json) {
     json['name'] as String,
     json['description'] as String,
     (json['calorificList'] as List)
-        ?.map((e) =>
-            e == null ? null : CalorificDto.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+        .map((e) => CalorificDto.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -85,9 +84,9 @@ Map<String, dynamic> _$OfferDtoToJson(OfferDto instance) => <String, dynamic>{
 
 CalorificDto _$CalorificDtoFromJson(Map<String, dynamic> json) {
   return CalorificDto(
-    json['id'] as int,
-    json['value'] as int,
-    (json['pricing'] as List)
+    id: json['id'] as int,
+    value: json['value'] as int,
+    pricing: (json['pricing'] as List)
         ?.map((e) =>
             e == null ? null : PriceDto.fromJson(e as Map<String, dynamic>))
         ?.toList(),

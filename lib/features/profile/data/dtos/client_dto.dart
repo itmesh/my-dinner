@@ -21,5 +21,5 @@ class ClientDto {
   factory ClientDto.fromJson(Map<String, dynamic> json) =>
       _$ClientDtoFromJson(json);
 
-  String toJson() => json.encode(_$ClientDtoToJson(this));
+  Map<String, dynamic> toJson() => _$ClientDtoToJson(this);
 }

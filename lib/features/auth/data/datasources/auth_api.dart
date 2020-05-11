@@ -27,7 +27,7 @@ class AuthApiHttp extends AuthApi {
   Future<LoginResponse> login(UserDto user) async {
     return client.post(
       path: '/login',
-      body: user.toJson(),
+      body: json.encode(user.toJson()),
       out: (value) => LoginResponse.fromJson(value),
     );
   }
@@ -36,7 +36,7 @@ class AuthApiHttp extends AuthApi {
   Future<RegisterResponse> register(UserDto user) async {
     return client.post(
       path: '/register/client',
-      body: user.toJson(),
+      body: json.encode(user.toJson()),
       out: (value) => RegisterResponse.fromJson(value),
     );
   }

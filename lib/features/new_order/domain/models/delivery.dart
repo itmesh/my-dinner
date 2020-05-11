@@ -1,4 +1,6 @@
+import 'package:my_dinner/features/address/data/dtos/address_dto.dart';
 import 'package:my_dinner/features/new_order/data/dtos/order_dto.dart';
+import 'package:my_dinner/features/pick_diet/data/dtos/vendor_offer_dto.dart';
 
 class Delivery {
   final int calorificId;
@@ -12,8 +14,8 @@ class Delivery {
   });
 
   DeliveryDto toDto() => DeliveryDto(
-        calorific: calorificId,
-    deliveryAddress: addressId,
+        calorific: CalorificDto(id: calorificId),
+        deliveryAddress: AddressDto(id: addressId),
         deliveryDate: deliveryHour,
       );
 }
