@@ -1,15 +1,15 @@
 [
   {
     "name": "Oh my food",
-    "logoURL": "https://catering-logo-images.s3.eu-central-1.amazonaws.com/catering-ohmyfood.png",
-    "availDiets": [
+    "logo": "https://catering-logo-images.s3.eu-central-1.amazonaws.com/catering-ohmyfood.png",
+    "diets": [
       {
         "name": "Fit Mama",
         "description": "Doskonale zdajemy sobie sprawę z tego jak ważne jest prawidłowe odżywianie w trakcie ciąży i karmienia piersią. Dlatego jeśli tak jak my uważasz, że Twojemu maluszkowi należy zapewnić wszystko co najlepsze, sprawdź co dla Ciebie przygotowaliśmy! FitMama to starannie zbilansowany plan żywieniowy, który ma za zadanie dostarczyć zwiększone ilości wapnia, żelaza, jodu, kwasu foliowego, kwasów omega-3 czyli wszystkich witamin i mikroelementów, na które wzrasta zapotrzebowanie w tym wyjątkowym czasie. 5 zróżnicowanych posiłków zapewnia odpowiednią podaż kalorii oraz składników odżywczych wspomagających rozwój ciąży i maluszka. W trosce o zdrowie i bezpieczeństwo Twojego dziecka w diecie FITMAMA wykluczamy surowe mięsa i ryby, surowe jaja, produkty z mleka niepasteryzowanego, oraz jak w każdej z naszych propozycji żywność wysokoprzetworzoną. Dostępne warianty kaloryczne: 1800, 2000, 2500 kcal. Jeśli masz pytania lub wątpliwości dotyczące diety FITMAMA skontaktuj się naszym dietetykiem.",
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -21,7 +21,7 @@
         "variants": [
           "Gluten Free"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -33,7 +33,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -45,7 +45,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -57,7 +57,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -69,7 +69,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -81,7 +81,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -96,15 +96,15 @@
   },
   {
     "name": "Catering dietetyczny Divine Food",
-    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-divinefood.png",
-    "availDiets": [
+    "logo": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-divinefood.png",
+    "diets": [
       {
         "name": "Fit Mama",
         "description": "Doskonale zdajemy sobie sprawę z tego jak ważne jest prawidłowe odżywianie w trakcie ciąży i karmienia piersią. Dlatego jeśli tak jak my uważasz, że Twojemu maluszkowi należy zapewnić wszystko co najlepsze, sprawdź co dla Ciebie przygotowaliśmy! FitMama to starannie zbilansowany plan żywieniowy, który ma za zadanie dostarczyć zwiększone ilości wapnia, żelaza, jodu, kwasu foliowego, kwasów omega-3 czyli wszystkich witamin i mikroelementów, na które wzrasta zapotrzebowanie w tym wyjątkowym czasie. 5 zróżnicowanych posiłków zapewnia odpowiednią podaż kalorii oraz składników odżywczych wspomagających rozwój ciąży i maluszka. W trosce o zdrowie i bezpieczeństwo Twojego dziecka w diecie FITMAMA wykluczamy surowe mięsa i ryby, surowe jaja, produkty z mleka niepasteryzowanego, oraz jak w każdej z naszych propozycji żywność wysokoprzetworzoną. Dostępne warianty kaloryczne: 1800, 2000, 2500 kcal. Jeśli masz pytania lub wątpliwości dotyczące diety FITMAMA skontaktuj się naszym dietetykiem.",
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -116,7 +116,7 @@
         "variants": [
           "Gluten Free"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -128,7 +128,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -140,7 +140,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -152,7 +152,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -164,7 +164,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -176,7 +176,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -191,15 +191,15 @@
   },
   {
     "name": "Love Catering",
-    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
-    "availDiets": [
+    "logo": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
+    "diets": [
       {
         "name": "Fit Mama",
         "description": "Doskonale zdajemy sobie sprawę z tego jak ważne jest prawidłowe odżywianie w trakcie ciąży i karmienia piersią. Dlatego jeśli tak jak my uważasz, że Twojemu maluszkowi należy zapewnić wszystko co najlepsze, sprawdź co dla Ciebie przygotowaliśmy! FitMama to starannie zbilansowany plan żywieniowy, który ma za zadanie dostarczyć zwiększone ilości wapnia, żelaza, jodu, kwasu foliowego, kwasów omega-3 czyli wszystkich witamin i mikroelementów, na które wzrasta zapotrzebowanie w tym wyjątkowym czasie. 5 zróżnicowanych posiłków zapewnia odpowiednią podaż kalorii oraz składników odżywczych wspomagających rozwój ciąży i maluszka. W trosce o zdrowie i bezpieczeństwo Twojego dziecka w diecie FITMAMA wykluczamy surowe mięsa i ryby, surowe jaja, produkty z mleka niepasteryzowanego, oraz jak w każdej z naszych propozycji żywność wysokoprzetworzoną. Dostępne warianty kaloryczne: 1800, 2000, 2500 kcal. Jeśli masz pytania lub wątpliwości dotyczące diety FITMAMA skontaktuj się naszym dietetykiem.",
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -211,7 +211,7 @@
         "variants": [
           "Gluten Free"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -223,7 +223,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -235,7 +235,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -247,7 +247,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -259,7 +259,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -271,7 +271,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -286,15 +286,15 @@
   },
   {
     "name": "Love Catering",
-    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
-    "availDiets": [
+    "logo": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
+    "diets": [
       {
         "name": "Fit Mama",
         "description": "Doskonale zdajemy sobie sprawę z tego jak ważne jest prawidłowe odżywianie w trakcie ciąży i karmienia piersią. Dlatego jeśli tak jak my uważasz, że Twojemu maluszkowi należy zapewnić wszystko co najlepsze, sprawdź co dla Ciebie przygotowaliśmy! FitMama to starannie zbilansowany plan żywieniowy, który ma za zadanie dostarczyć zwiększone ilości wapnia, żelaza, jodu, kwasu foliowego, kwasów omega-3 czyli wszystkich witamin i mikroelementów, na które wzrasta zapotrzebowanie w tym wyjątkowym czasie. 5 zróżnicowanych posiłków zapewnia odpowiednią podaż kalorii oraz składników odżywczych wspomagających rozwój ciąży i maluszka. W trosce o zdrowie i bezpieczeństwo Twojego dziecka w diecie FITMAMA wykluczamy surowe mięsa i ryby, surowe jaja, produkty z mleka niepasteryzowanego, oraz jak w każdej z naszych propozycji żywność wysokoprzetworzoną. Dostępne warianty kaloryczne: 1800, 2000, 2500 kcal. Jeśli masz pytania lub wątpliwości dotyczące diety FITMAMA skontaktuj się naszym dietetykiem.",
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -306,7 +306,7 @@
         "variants": [
           "Gluten Free"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -318,7 +318,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -330,7 +330,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -342,7 +342,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -354,7 +354,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -366,7 +366,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -381,15 +381,15 @@
   },
   {
     "name": "Love Catering",
-    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
-    "availDiets": [
+    "logo": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
+    "diets": [
       {
         "name": "Fit Mama",
         "description": "Doskonale zdajemy sobie sprawę z tego jak ważne jest prawidłowe odżywianie w trakcie ciąży i karmienia piersią. Dlatego jeśli tak jak my uważasz, że Twojemu maluszkowi należy zapewnić wszystko co najlepsze, sprawdź co dla Ciebie przygotowaliśmy! FitMama to starannie zbilansowany plan żywieniowy, który ma za zadanie dostarczyć zwiększone ilości wapnia, żelaza, jodu, kwasu foliowego, kwasów omega-3 czyli wszystkich witamin i mikroelementów, na które wzrasta zapotrzebowanie w tym wyjątkowym czasie. 5 zróżnicowanych posiłków zapewnia odpowiednią podaż kalorii oraz składników odżywczych wspomagających rozwój ciąży i maluszka. W trosce o zdrowie i bezpieczeństwo Twojego dziecka w diecie FITMAMA wykluczamy surowe mięsa i ryby, surowe jaja, produkty z mleka niepasteryzowanego, oraz jak w każdej z naszych propozycji żywność wysokoprzetworzoną. Dostępne warianty kaloryczne: 1800, 2000, 2500 kcal. Jeśli masz pytania lub wątpliwości dotyczące diety FITMAMA skontaktuj się naszym dietetykiem.",
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -401,7 +401,7 @@
         "variants": [
           "Gluten Free"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -413,7 +413,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -425,7 +425,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -437,7 +437,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -449,7 +449,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -461,7 +461,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -476,15 +476,15 @@
   },
   {
     "name": "Love Catering",
-    "logoURL": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
-    "availDiets": [
+    "logo": "https://s3.eu-central-1.amazonaws.com/catering-logo-images/catering-lovecatering.png",
+    "diets": [
       {
         "name": "Fit Mama",
         "description": "Doskonale zdajemy sobie sprawę z tego jak ważne jest prawidłowe odżywianie w trakcie ciąży i karmienia piersią. Dlatego jeśli tak jak my uważasz, że Twojemu maluszkowi należy zapewnić wszystko co najlepsze, sprawdź co dla Ciebie przygotowaliśmy! FitMama to starannie zbilansowany plan żywieniowy, który ma za zadanie dostarczyć zwiększone ilości wapnia, żelaza, jodu, kwasu foliowego, kwasów omega-3 czyli wszystkich witamin i mikroelementów, na które wzrasta zapotrzebowanie w tym wyjątkowym czasie. 5 zróżnicowanych posiłków zapewnia odpowiednią podaż kalorii oraz składników odżywczych wspomagających rozwój ciąży i maluszka. W trosce o zdrowie i bezpieczeństwo Twojego dziecka w diecie FITMAMA wykluczamy surowe mięsa i ryby, surowe jaja, produkty z mleka niepasteryzowanego, oraz jak w każdej z naszych propozycji żywność wysokoprzetworzoną. Dostępne warianty kaloryczne: 1800, 2000, 2500 kcal. Jeśli masz pytania lub wątpliwości dotyczące diety FITMAMA skontaktuj się naszym dietetykiem.",
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -496,7 +496,7 @@
         "variants": [
           "Gluten Free"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -508,7 +508,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -520,7 +520,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -532,7 +532,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -544,7 +544,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000
@@ -556,7 +556,7 @@
         "variants": [
           "5 posiłków"
         ],
-        "calorific": [
+        "calorificList": [
           1800,
           2500,
           3000

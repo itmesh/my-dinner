@@ -19,7 +19,7 @@ class PickDietRepositoryImp extends PickDietRepository {
 
   @override
   Future<Either<Failure, List<DietOffer>>> getOffers(int companyId) async {
-    throw UnimplementedError();
+    return Right([]);
   }
 
   @override

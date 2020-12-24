@@ -30,7 +30,7 @@ dependencies:
   flutter_rating_bar: ^3.0.1+1
   flutter_bloc: ^3.2.0
   injectable: ^0.2.2
-  provider: ^4.0.4
+  provider: ^4.1.2
   intl_translation: ^0.17.9
   equatable: ^1.1.0
   either_option: ^1.0.5

@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
 import 'package:my_dinner/core/services/injection.dart';
 import 'package:my_dinner/core/services/my_http_client.dart';
 import 'package:my_dinner/core/services/utils/api_helper.dart';
+import 'package:my_dinner/features/address/data/dtos/address_dto.dart';
 import 'package:my_dinner/features/pick_diet/data/dtos/vendor_offer_dto.dart';
 
 abstract class PickDietApi {
@@ -18,8 +22,8 @@ class PickDietHttpApi extends PickDietApi {
   PickDietHttpApi(this.client);
 
   @override
-  Future<List<OfferDto>> getOffers(int vendorId) {
-    throw UnimplementedError();
+  Future<List<OfferDto>> getOffers(int vendorId) async {
+    return [];
   }
 
   @override
@@ -40,7 +44,10 @@ class PickDietDemoApi extends PickDietApi {
   }
 
   @override
-  Future<List<VendorDto>> getVendors() {
-    throw UnimplementedError();
+  Future<List<VendorDto>> getVendors() async {
+    String response = await rootBundle.loadString('assets/demo/companies.json');
+    return jsonDecode(response)
+        .map<VendorDto>((e) => VendorDto.fromJson(e))
+        .toList();
   }
 }
